@@ -8,7 +8,6 @@ const authContext = React.createContext({
 });
 
 export const AuthContextProvider = ({ children }) => {
-  debugger;
   let [token, setToken] = useState(() => {
     const tkn = localStorage.getItem("token");
     return tkn !== "null" ? tkn : null;
