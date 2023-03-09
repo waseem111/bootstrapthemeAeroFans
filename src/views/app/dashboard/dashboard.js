@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 
-import Header from './Header';
-import LeftSideBar from './LeftSideBar';
-import '../Styles/DashboardStyle.css';
+import Header from '../../layout/header';
+import LeftSideBar from '../../layout/leftsidebar';
+import './dashboard.css';
 
 
 const Dashboard = () => {
