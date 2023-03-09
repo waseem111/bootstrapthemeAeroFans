@@ -1,6 +1,7 @@
-import React from 'react'
-
+import React, { useEffect, useContext } from "react";
+import authContext from "../../auth-context";
 const Header = () => {
+    const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
   return (
 <>
 <header className="l-header">
@@ -88,7 +89,7 @@ const Header = () => {
                         <li><a href="#">Ab.Waseem</a></li>
                         <li><a href="#">Profile</a></li>
                         <li className="divider"></li>
-                        <li><a href="#">Logout</a></li>
+                        <li><button  onClick={() => logout()} >Logout</button></li>
                     </ul>
                 </div>
             </div>
