@@ -4,7 +4,8 @@ import './login.css';
 const Login = () => {
     return (
         <>
-            <section className="ftco-section">
+        
+            <section className="ftco-section login-page">
                 <div className="container">
                     <div className="row justify-content-center">
                         <div className="col-md-6 col-lg-4">

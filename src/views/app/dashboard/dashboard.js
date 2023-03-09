@@ -105,7 +105,7 @@ const Dashboard = () => {
                                     </select>
                                 </div>
                                 <div className="form-group col-md-12 text-center">
-                                    <button type="submit" className="btn btn-primary">Search</button>
+                                    <button type="submit" className="btn btn-primary" style={{marginRight: "20px"}}>Search</button>
                                     <button type="button" className="btn btn-info">Reset</button>
                                 </div>
 

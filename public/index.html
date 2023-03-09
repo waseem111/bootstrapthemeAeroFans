@@ -19,8 +19,71 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <!-- <link rel="stylesheet" href="assets/css/style.css"> -->
    <!-- <link rel="stylesheet" href="assets/css/dashboard.css">  -->
+   <style>
+    .sidebar-is-expanded .icon2 {
+        display: none;
+    }
+
+    .sidebar-is-reduced .icon1 {
+        display: none;
+    }
+    nav ul li a{
+position: relative;
+list-style-type: none;
+display: block;
+width: 100%;
+border-left: 3px solid transparent;
+}
+nav ul li.active a{
+color: cyan;
+background: #1e1e1e;
+border-left-color: cyan;
+}
+nav ul li a:hover{
+background: #1e1e1e;
+}
+nav ul ul{
+padding: 0;
+position: static;
+display: none;
+}
+nav ul .feat-show.show{
+display: block;
+}
+nav ul .serv-show.show1{
+display: block;
+}
+nav ul ul li{
+line-height: 42px;
+border-top: none;
+}
+nav ul ul li a{
+color: #e6e6e6;
+padding-left: 80px;
+}
+nav ul li.active ul li a{
+color: #e6e6e6;
+background: #1b1b1b;
+border-left-color: transparent;
+}
+nav ul ul li a:hover{
+color: #9ec023!important;
+background: #1e1e1e!important;
+}
+nav ul li a span{
+position: absolute;
+top: 50%;
+right: 20px;
+transform: translateY(-50%);
+font-size: 22px;
+transition: transform 0.4s;
+}
+nav ul li a span.rotate{
+transform: translateY(-50%) rotate(-180deg);
+}
+</style>
   </head>
-  <body>
+  <body class="sidebar-is-reduced">
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
@@ -28,5 +91,91 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="assets/js/main.js"></script>
     <script src="assets/js/dashboardStyle.js"></script>
+    <script>
+      "use strict";
+  
+      var Dashboard = function() {
+          var global = {
+              tooltipOptions: {
+                  placement: "right"
+              },
+              menuClass: ".c-menu"
+          };
+  
+          var menuChangeActive = function menuChangeActive(el) {
+              var hasSubmenu = $(el).hasClass("has-submenu");
+              $(global.menuClass + " .is-active").removeClass("is-active");
+              $(el).addClass("is-active");
+  
+              // if (hasSubmenu) {
+              // 	$(el).find("ul").slideDown();
+              // }
+          };
+  
+          var sidebarChangeWidth = function sidebarChangeWidth() {
+            debugger;
+              var $menuItemsTitle = $("li .menu-item__title");
+  
+              $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
+              $(".hamburger-toggle").toggleClass("is-opened");
+  
+              if ($("body").hasClass("sidebar-is-expanded")) {
+                  $('[data-toggle="tooltip"]').tooltip("destroy");
+              } else {
+                  $('[data-toggle="tooltip"]').tooltip(global.tooltipOptions);
+              }
+          };
+  
+          return {
+              init: function init() {
+                debugger;
+                  $(".js-hamburger").on("click", sidebarChangeWidth);
+  
+                  $(".js-menu li").on("click", function(e) {
+                      menuChangeActive(e.currentTarget);
+                  });
+  
+                  $('[data-toggle="tooltip"]').tooltip(global.tooltipOptions);
+              }
+          };
+      }();
+  
+      Dashboard.init();
+
+
+
+
+      $('.btn').click(function(){
+    $(this).toggleClass("click");
+    $('.sidebar').toggleClass("show");
+  });
+      $('.Employees-btn').click(function(){
+    $('nav ul .Employees-show').toggleClass("show");
+    $('nav ul .first').toggleClass("rotate");
+  });
+      
+  $('.Customers-btn').click(function(){
+    $('nav ul .Customers-show').toggleClass("show");
+    $('nav ul .first').toggleClass("rotate");
+  });
+      $('.Projects-btn').click(function(){
+    $('nav ul .Projects-show').toggleClass("show");
+    $('nav ul .first').toggleClass("rotate");
+  });
+   
+       $('.Quotations-btn').click(function(){
+    $('nav ul .Quotations-show').toggleClass("show");
+    $('nav ul .first').toggleClass("rotate");
+  }); 
+      
+      $('.Lookups-btn').click(function(){
+    $('nav ul .Lookups-show').toggleClass("show");
+    $('nav ul .first').toggleClass("rotate");
+  });
+  
+  $('nav ul li').click(function(){
+    $(this).addClass("active").siblings().removeClass("active");
+  });
+  </script>
   </body>
 </html>

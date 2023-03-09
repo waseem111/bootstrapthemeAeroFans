@@ -19,6 +19,7 @@ function App() {
         {token && (
           <>
             <Route path="/dashboard" element={<Dashboard />} />
+            {/* <Route path="/login" element={<Login />} /> */}
           </>
         )}
         <Route
