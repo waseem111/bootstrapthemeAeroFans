@@ -117,8 +117,8 @@ const LeftSideBar = () => {
                                 </ul>
                             </li>
 
-                            <li className={location?.pathname == "/fandata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
-                                <NavLink to="/fandata">
+                            <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
+                                <NavLink to="/fansdata">
                                     <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
                                         <div className="c-menu-item__title"><span>Fan Data </span></div>
                                     </div>
