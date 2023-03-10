@@ -401,6 +401,7 @@ html, body {
   .sidebar-is-expanded .c-menu > ul .c-menu__item .c-menu-item__title {
     left: 0px;
     opacity: 1;
+    padding-right: 50px;
   }
   .c-menu > ul .c-menu__item .c-menu__submenu {
     background-color: #051835;
@@ -719,7 +720,7 @@ border-top: none;
 }
 nav ul ul li a{
 color: #e6e6e6;
-padding-left: 80px;
+padding-left: 0;
 }
 nav ul li.active ul li a{
 color: #e6e6e6;

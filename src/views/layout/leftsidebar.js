@@ -26,14 +26,15 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/dashboard" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/dashboard">
                                     <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
-                                        <div className="c-menu-item__title"><span>Dashboard </span></div>
+                                        <div className="c-menu-item__title" style={{marginRight: "50px"}}><span>Dashboard </span></div>
                                     </div>
                                 </NavLink>
                             </li>
                             <li className={(location?.pathname == "/addemployee" || location?.pathname == "/employees") ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Employees" onClick={() => openSubmenu("Employees-show")}>
                                 
-                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                    <div className="c-menu__item__inner"><i class="fa fa-address-card" aria-hidden="true"></i>
+
                                         <div className="c-menu-item__title"><span>Employees </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
                                     <ul className="Employees-show submenu">
@@ -73,7 +74,8 @@ const LeftSideBar = () => {
                                 location?.pathname == "/addunit" || location?.pathname == "/units" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Projects" onClick={() => openSubmenu("Projects-show")}>
                                 
-                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                    <div className="c-menu__item__inner"><i class="fa fa-outdent" aria-hidden="true"></i>
+
                                         <div className="c-menu-item__title"><span>Projects </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
                                     <ul className="Projects-show submenu">
@@ -102,7 +104,8 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Quotations" onClick={() => openSubmenu("Quotations-show")}>
                                 
-                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                    <div className="c-menu__item__inner"><i class="fa fa-file-text" aria-hidden="true"></i>
+
                                         <div className="c-menu-item__title"><span>Quotations </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
                                     <ul className="Quotations-show submenu">
@@ -124,8 +127,9 @@ const LeftSideBar = () => {
                           
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/fansdata">
-                                    <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
-                                        <div className="c-menu-item__title"><span>Fan Data </span></div>
+                                    <div className="c-menu__item__inner"><i class="fa fa-database" aria-hidden="true"></i>
+
+                                        <div className="c-menu-item__title" style={{marginRight: "50px"}}><span>Fan Data </span></div>
                                     </div>
                                 </NavLink>
                             </li>
@@ -133,7 +137,8 @@ const LeftSideBar = () => {
 
                             <li className={location?.pathname == "/fans" || location?.pathname == "/unitconversions" || location?.pathname == "/roleprivileges" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Lookups" onClick={() => openSubmenu("Lookups-show")}>
-                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                    <div className="c-menu__item__inner"><i class="fa fa-search" aria-hidden="true"></i>
+
                                         <div className="c-menu-item__title"><span>Lookups </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
                                     <ul className="Lookups-show submenu">
