@@ -1,12 +1,23 @@
 import React, { useEffect, useContext } from "react";
 import authContext from "../../auth-context";
+import $ from 'jquery'; 
 const Header = () => {
     const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
+    var global = {
+        tooltipOptions: {
+            placement: "right"
+        },
+        menuClass: ".c-menu"
+    };
+   function sidebarChangeWidth() {
+          $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
+          $(".hamburger-toggle").toggleClass("is-opened");
+      };
   return (
 <>
 <header className="l-header">
     <div className="l-header__inner clearfix">
-        <div className="c-header-icon js-hamburger">
+        <div className="c-header-icon js-hamburger" onClick={sidebarChangeWidth}>
             <div className="hamburger-toggle"><span className="bar-top"></span><span className="bar-mid"></span><span className="bar-bot"></span></div>
         </div>
 
