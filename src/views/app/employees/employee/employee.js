@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
-import Header from '../../../../layout/header';
-import LeftSideBar from '../../../../layout/leftsidebar';
-import '../../../../../App.css';
+import Header from '../../../layout/header';
+import LeftSideBar from '../../../layout/leftsidebar';
 const Employees = () => {
     return (
         <>
@@ -10,9 +9,7 @@ const Employees = () => {
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
                     <h1 className="page-title">Employees</h1>
-                   
-
-                    
+                
                 </div>
             </main>
         </>
