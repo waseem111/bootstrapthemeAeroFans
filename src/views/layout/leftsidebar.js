@@ -32,10 +32,11 @@ const LeftSideBar = () => {
                             </li>
                             <li className={(location?.pathname == "/addemployee" || location?.pathname == "/employees") ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Employees" onClick={() => openSubmenu("Employees-show")}>
-                                <div className="c-menu_item_inner"><i className='fas fa-user-tie'></i>
-                                    <div className="c-menu-item__title"><span>Employees  </span> <i className="fa fa-caret-down first"></i></div>
-                                </div>
-                                <ul className="Employees-show submenu">
+                                
+                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                        <div className="c-menu-item__title"><span>Employees </span>   <i className="fa fa-caret-down first"></i></div>
+                                    </div>
+                                    <ul className="Employees-show submenu">
                                     <li>
                                         <NavLink to="/addemployee">
                                             Add Employee
@@ -48,33 +49,34 @@ const LeftSideBar = () => {
                                     </li>
                                 </ul>
                             </li>
-
                             <li className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Customers-show")}>
-                                <div className="c-menu_item_inner"><i className='fas fa-user-tie'></i>
-                                    <div className="c-menu-item__title"><span>Customers  </span> <i className="fa fa-caret-down first"></i></div>
-                                </div>
-                                <ul className="Customers-show submenu">
-                                    <li>
-                                        <NavLink to="/addcustomer">
-                                            Add Customer
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/customers">
-                                            List of Customers
-                                        </NavLink>
-                                    </li>
-                                </ul>
+                                
+                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                        <div className="c-menu-item__title"><span>Customers </span>   <i className="fa fa-caret-down first"></i></div>
+                                    </div>
+                                    <ul className="Customers-show submenu">
+                                        <li>
+                                            <NavLink to="/addcustomer">
+                                                Add Customer
+                                            </NavLink>
+                                        </li>
+                                        <li>
+                                            <NavLink to="/customers">
+                                                List of Customers
+                                            </NavLink>
+                                        </li>
+                                    </ul>
                             </li>
-
+                            
                             <li className={location?.pathname == "/addproject" || location?.pathname == "/projects" ||
                                 location?.pathname == "/addunit" || location?.pathname == "/units" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
-                                data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Projects-show")}>
-                                <div className="c-menu_item_inner"><i className='fas fa-user-tie'></i>
-                                    <div className="c-menu-item__title"><span>Projects  </span> <i className="fa fa-caret-down first"></i></div>
-                                </div>
-                                <ul className="Projects-show submenu">
+                                data-toggle="tooltip" title="Projects" onClick={() => openSubmenu("Projects-show")}>
+                                
+                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                        <div className="c-menu-item__title"><span>Projects </span>   <i className="fa fa-caret-down first"></i></div>
+                                    </div>
+                                    <ul className="Projects-show submenu">
                                     <li>
                                         <NavLink to="/addproject">
                                             Add Project
@@ -97,13 +99,13 @@ const LeftSideBar = () => {
                                     </li>
                                 </ul>
                             </li>
-
                             <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
-                                data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Quotations-show")}>
-                                <div className="c-menu_item_inner"><i className='fas fa-user-tie'></i>
-                                    <div className="c-menu-item__title"><span>Quotations  </span> <i className="fa fa-caret-down first"></i></div>
-                                </div>
-                                <ul className="Quotations-show submenu">
+                                data-toggle="tooltip" title="Quotations" onClick={() => openSubmenu("Quotations-show")}>
+                                
+                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                        <div className="c-menu-item__title"><span>Quotations </span>   <i className="fa fa-caret-down first"></i></div>
+                                    </div>
+                                    <ul className="Quotations-show submenu">
                                     <li>
                                         <NavLink to="/createquotation">
                                             Create Quotation
@@ -117,6 +119,9 @@ const LeftSideBar = () => {
                                 </ul>
                             </li>
 
+                            
+
+                          
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/fansdata">
                                     <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
@@ -126,13 +131,12 @@ const LeftSideBar = () => {
                             </li>
 
 
-
                             <li className={location?.pathname == "/fans" || location?.pathname == "/unitconversions" || location?.pathname == "/roleprivileges" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
-                                data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Lookups-show")}>
-                                <div className="c-menu_item_inner"><i className='fas fa-user-tie'></i>
-                                    <div className="c-menu-item__title"><span>Lookups  </span> <i className="fa fa-caret-down first"></i></div>
-                                </div>
-                                <ul className="Lookups-show submenu">
+                                data-toggle="tooltip" title="Lookups" onClick={() => openSubmenu("Lookups-show")}>
+                                    <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
+                                        <div className="c-menu-item__title"><span>Lookups </span>   <i className="fa fa-caret-down first"></i></div>
+                                    </div>
+                                    <ul className="Lookups-show submenu">
                                     <li>
                                         <NavLink to="/fans">
                                             Fans
@@ -150,7 +154,6 @@ const LeftSideBar = () => {
                                     </li>
                                 </ul>
                             </li>
-
 
 
                         </ul>

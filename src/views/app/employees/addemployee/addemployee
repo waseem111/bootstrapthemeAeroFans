@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import './addemployee.css';
-const Addemployee = () => {
+const Addemployees = () => {
     return (
         <>
             <Header />
@@ -17,4 +17,4 @@ const Addemployee = () => {
     )
 };
 
-export default Addemployee;
+export default Addemployees;
