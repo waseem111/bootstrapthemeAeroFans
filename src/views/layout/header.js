@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import authContext from "../../auth-context";
 import $ from 'jquery';
-import toast, { Toaster } from "react-hot-toast";
 const Header = () => {
     const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
     function sidebarChangeWidth() {

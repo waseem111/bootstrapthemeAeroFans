@@ -2,7 +2,6 @@ import React, { useState,useEffect } from 'react';
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
-import toast, { Toaster } from "react-hot-toast";
 import Notify from '../../../components/notify/notify';
 import './addemployee.css';
 const Addemployees = () => {
