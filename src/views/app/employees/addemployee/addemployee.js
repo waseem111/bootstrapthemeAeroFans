@@ -5,6 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
 import './addemployee.css';
 import EmployeeForm from '../../../components/forms/employeeform';
+import EmployeeService from '../../../services/employeeservices';
 const AddEmployee = () => {
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
@@ -16,14 +17,20 @@ const AddEmployee = () => {
     formState: { errors },
   } = useForm({ mode: "all" });
 
-  const submit = (data) => {
-    setNotify((prev) => ({
-      ...prev, options: {
-        type: "success",
-        message: " This is a success alert with"
-      }, visible: true
-    }));
-    reset();
+  const submit = async (obj) => {
+    await EmployeeService.addemployee(obj)
+    .then((data) => {
+      setNotify((prev) => ({
+        ...prev, options: {
+          type: "success",
+          message: " This is a success alert with"
+        }, visible: true
+      }));
+      reset();
+    })
+    .catch((err) => {
+      console.log("addemployee error ------------> ", err);
+    });
   };
 
 
