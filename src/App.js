@@ -7,7 +7,8 @@ import Fansdata from "./views/app/fansdata/fansdata"
 import Addcustomer from "./views/app/customers/addcustomer/addcustomer";
 import Customers from "./views/app/customers/customers/customers";
 import Employees from "./views/app/employees/employee/employee";
-import Addemployees from "./views/app/employees/addemployee/addemployee";
+import AddEmployee from "./views/app/employees/addemployee/addemployee";
+import EditEmployee from "./views/app/employees/editemployee/editemployee";
 import Addunits from "./views/app/projects/addunits/addunits";
 import Units from "./views/app/projects/units/units";
 import Addproject from "./views/app/projects/projects/Projects";
@@ -34,7 +35,8 @@ function App() {
           <>
             <Route path="/dashboard" element={<Dashboard />} />
 
-            <Route path="/addemployee" element={<Addemployees />} />
+            <Route path="/addemployee" element={<AddEmployee />} />
+            <Route path="/editemployee/:emp_id" element={<EditEmployee />} />
             <Route path="/employees" element={<Employees />} />
 
             <Route path="/addcustomer" element={<Addcustomer />} />

@@ -14,19 +14,3 @@ const Notify = (props) => {
 
 export default Notify
 
-
-// import React, { useEffect, useState } from 'react';
-
-// const Message = ({ variant, children }) => {
-//   const [alert, setAlert] = useState(true);
-      
-//   useEffect(() => {
-//     setTimeout(() => {
-//       setAlert(false);
-//     }, 3000);
-//   }, []);     
-    
-//   return (
-//     {alert && <div className={`alert alert-${variant}`}>{children}</div>}
-//   )
-// }
