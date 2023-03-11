@@ -9,7 +9,7 @@ const Projects = () => {
             <LeftSideBar />
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
-                    <h1 className="page-title">Add Project</h1>
+                    <h1 className="page-title">Projects</h1>
                    
 
                     

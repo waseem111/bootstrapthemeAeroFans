@@ -4,11 +4,15 @@ import $ from 'jquery';
 const LeftSideBar = () => {
     const location = useLocation();
     function openSubmenu(c) {
+        if($("body").hasClass("sidebar-is-reduced")){
+            $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
+         }
         var elems = document.querySelectorAll(".submenu");
         [].forEach.call(elems, function (el) {
             el.classList.remove("show");
         });
         $("." + c).toggleClass("show");
+       
     }
 
     return (
@@ -32,19 +36,17 @@ const LeftSideBar = () => {
                             </li>
                             <li className={(location?.pathname == "/addemployee" || location?.pathname == "/employees") ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Employees" onClick={() => openSubmenu("Employees-show")}>
-                                
                                     <div className="c-menu__item__inner"><i class="fa fa-address-card" aria-hidden="true"></i>
-
-                                        <div className="c-menu-item__title"><span>Employees </span>   <i className="fa fa-caret-down first"></i></div>
+                                    <div className="c-menu-item__title"><span>Employees </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
-                                    <ul className="Employees-show submenu">
+                                    <ul className={location?.pathname == "/addemployee" || location?.pathname == "/employees" ? "Employees-show submenu show" : "Employees-show submenu"}>
                                     <li>
-                                        <NavLink to="/addemployee">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addemployee">
                                             Add Employee
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/employees">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/employees">
                                             List of Employees
                                         </NavLink>
                                     </li>
@@ -52,18 +54,17 @@ const LeftSideBar = () => {
                             </li>
                             <li className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Customers-show")}>
-                                
                                     <div className="c-menu__item__inner"><i className="fa fa fa-users" aria-hidden="true"></i>
                                         <div className="c-menu-item__title"><span>Customers </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
-                                    <ul className="Customers-show submenu">
+                                    <ul className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "Customers-show submenu show" : "Customers-show submenu"}>
                                         <li>
-                                            <NavLink to="/addcustomer">
+                                            <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addcustomer">
                                                 Add Customer
                                             </NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to="/customers">
+                                            <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/customers">
                                                 List of Customers
                                             </NavLink>
                                         </li>
@@ -73,29 +74,27 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/addproject" || location?.pathname == "/projects" ||
                                 location?.pathname == "/addunit" || location?.pathname == "/units" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Projects" onClick={() => openSubmenu("Projects-show")}>
-                                
                                     <div className="c-menu__item__inner"><i class="fa fa-outdent" aria-hidden="true"></i>
-
                                         <div className="c-menu-item__title"><span>Projects </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
-                                    <ul className="Projects-show submenu">
+                                    <ul className={location?.pathname == "/addproject" || location?.pathname == "/projects" || location?.pathname == "/addunit" || location?.pathname == "/units"? "Projects-show submenu show" : "Projects-show submenu"}>
                                     <li>
-                                        <NavLink to="/addproject">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addproject">
                                             Add Project
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/projects">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/projects">
                                             List of Projects
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/addunit">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addunit">
                                             Add Unit
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/units">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/units">
                                             List of Units
                                         </NavLink>
                                     </li>
@@ -103,19 +102,17 @@ const LeftSideBar = () => {
                             </li>
                             <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Quotations" onClick={() => openSubmenu("Quotations-show")}>
-                                
                                     <div className="c-menu__item__inner"><i class="fa fa-file-text" aria-hidden="true"></i>
-
                                         <div className="c-menu-item__title"><span>Quotations </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
-                                    <ul className="Quotations-show submenu">
+                                    <ul className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "Quotations-show submenu show" : "Quotations-show submenu"}>
                                     <li>
-                                        <NavLink to="/createquotation">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/createquotation">
                                             Create Quotation
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/quotations">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/quotations">
                                             List of Quotations
                                         </NavLink>
                                     </li>
@@ -128,32 +125,28 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/fansdata">
                                     <div className="c-menu__item__inner"><i class="fa fa-database" aria-hidden="true"></i>
-
                                         <div className="c-menu-item__title" style={{marginRight: "50px"}}><span>Fan Data </span></div>
                                     </div>
                                 </NavLink>
                             </li>
-
-
                             <li className={location?.pathname == "/fans" || location?.pathname == "/unitconversions" || location?.pathname == "/roleprivileges" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Lookups" onClick={() => openSubmenu("Lookups-show")}>
                                     <div className="c-menu__item__inner"><i class="fa fa-search" aria-hidden="true"></i>
-
                                         <div className="c-menu-item__title"><span>Lookups </span>   <i className="fa fa-caret-down first"></i></div>
                                     </div>
-                                    <ul className="Lookups-show submenu">
+                                    <ul className={location?.pathname == "/fans" || location?.pathname == "/unitconversions"  || location?.pathname == "/roleprivileges"? "Lookups-show submenu show" : "Lookups-show submenu"}>
                                     <li>
-                                        <NavLink to="/fans">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/fans">
                                             Fans
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/unitconversions">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/unitconversions">
                                             Unit Conversions
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink to="/roleprivileges">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/roleprivileges">
                                             Roles & Privileges
                                         </NavLink>
                                     </li>
