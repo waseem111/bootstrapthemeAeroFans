@@ -21,7 +21,7 @@ const Header = () => {
 
 
         <div className="header-icons-group">
-            <div className="c-header-icon basket">
+            {/* <div className="c-header-icon basket">
                 <div className="btn-group pull-right top-head-dropdown">
                     <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div className="c-header-icon basket">
@@ -89,7 +89,7 @@ const Header = () => {
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> */}
             <div className="c-header-icon logout">
                 <div className="btn-group">
                     <img src="https://www.nicepng.com/png/detail/128-1280406_view-user-icon-png-user-circle-icon-png.png" className="dropdown-toggle" data-toggle="dropdown" style={{width: "20px"}} />
@@ -98,7 +98,7 @@ const Header = () => {
                         <li><a href="#">Ab.Waseem</a></li>
                         <li><a href="#">Profile</a></li>
                         <li className="divider"></li>
-                        <li><button  onClick={() => logout()} >Logout</button></li>
+                        <li  onClick={() => logout()}><a href="javascript:void(0)">Logout</a></li>
                     </ul>
                 </div>
             </div>

@@ -25,9 +25,7 @@ body {
   color: #c3c3c3;
 }
 
-nav li a {
-  color: #fff
-}
+
 
 h1 {
   font-size: 24px;
@@ -468,7 +466,7 @@ h3 {
 
 main.l-main {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   padding: 70px 0 0 70px;
   -webkit-transition: padding 0.5s ease-in-out;
   -moz-transition: padding 0.5s ease-in-out;
@@ -500,6 +498,7 @@ main.l-main .page-title {
   margin-top: 0;
   margin-bottom: 25px;
   font-family: sans-serif;
+  text-align: left;
 }
 
 .sidebar-is-expanded main.l-main {
@@ -793,7 +792,11 @@ label {
   display: none;
 }
 
-nav ul li a {
+
+nav.c-menu  li a {
+  color: #fff
+}
+nav.c-menu ul li a {
   position: relative;
   list-style-type: none;
   display: block;
@@ -801,53 +804,53 @@ nav ul li a {
   border-left: 3px solid transparent;
 }
 
-nav ul li.active a {
+nav.c-menu ul li.active a {
   color: cyan;
   background: #1e1e1e;
   border-left-color: cyan;
 }
 
-nav ul li a:hover {
+nav.c-menu ul li a:hover {
   background: #1e1e1e;
 }
 
-nav ul ul {
+nav.c-menu ul ul {
   padding: 0;
   background-color: #000;
   position: static;
   display: none;
 }
 
-nav ul .feat-show.show {
+nav.c-menu ul .feat-show.show {
   display: block;
 }
 
-nav ul .serv-show.show1 {
+nav.c-menu ul .serv-show.show1 {
   display: block;
 }
 
-nav ul ul li {
+nav.c-menu ul ul li {
   line-height: 42px;
   border-top: none;
 }
 
-nav ul ul li a {
+nav.c-menu ul ul li a {
   color: #e6e6e6;
   padding-left: 0;
 }
 
-nav ul li.active ul li a {
+nav.c-menu ul li.active ul li a {
   color: #e6e6e6;
   background: #1b1b1b;
   border-left-color: transparent;
 }
 
-nav ul ul li a:hover {
+nav.c-menu ul ul li a:hover {
   color: #9ec023 !important;
   background: #1e1e1e !important;
 }
 
-nav ul li a span {
+nav.c-menu ul li a span {
   position: absolute;
   top: 50%;
   right: 20px;
@@ -856,11 +859,11 @@ nav ul li a span {
   transition: transform 0.4s;
 }
 
-nav ul li a span.rotate {
+nav.c-menu ul li a span.rotate {
   transform: translateY(-50%) rotate(-180deg);
 }
 
-nav ul ul li a.link-active {
+nav.c-menu ul ul li a.link-active {
   color: #9ec023 !important;
   background: #1e1e1e !important;
-}
+} 
