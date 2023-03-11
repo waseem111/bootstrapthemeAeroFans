@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import { Link, useNavigate, NavLink } from "react-router-dom";
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 const Employees = () => {
@@ -90,7 +91,9 @@ const Employees = () => {
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <th scope="row">1</th>
+                                        <th scope="row">
+                                        <NavLink  to="/editemployee/1">1</NavLink>
+                                        </th>
                                         <td>Mark</td>
                                         <td>Otto</td>
                                         <td>@mdo</td>
