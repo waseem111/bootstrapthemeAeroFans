@@ -46,7 +46,7 @@ const AddEmployee = () => {
               <form>
                 <EmployeeForm register={register} errors={errors} />
                 <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center" }}>
-                  <button type="submit" className="btn btn-primary" onClick={handleSubmit(submit)}>Submit</button>
+                  <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>
                   <button type="button" className="btn btn-danger">Cancel</button>
                 </div>
               </form>

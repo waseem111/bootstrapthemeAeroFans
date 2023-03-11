@@ -30,7 +30,7 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/dashboard" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/dashboard">
                                     <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
-                                        <div className="c-menu-item__title" style={{marginRight: "50px"}}><span>Dashboard </span></div>
+                                        <div className="c-menu-item__title"><span>Dashboard </span></div>
                                     </div>
                                 </NavLink>
                             </li>
@@ -125,7 +125,7 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/fansdata">
                                     <div className="c-menu__item__inner"><i className="fa fa-database" aria-hidden="true"></i>
-                                        <div className="c-menu-item__title" style={{marginRight: "50px"}}><span>Fan Data </span></div>
+                                        <div className="c-menu-item__title"><span>Fan Data </span></div>
                                     </div>
                                 </NavLink>
                             </li>
