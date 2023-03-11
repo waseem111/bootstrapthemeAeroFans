@@ -96,7 +96,7 @@ const Header = () => {
                                     <li><a href="#">Ab.Waseem</a></li>
                                     <li><a href="#">Profile</a></li>
                                     <li className="divider"></li>
-                                    <li onClick={() => logout()}><a href="javascript:void(0)">Logout</a></li>
+                                    <li onClick={() => logout()}><a href="">Logout</a></li>
                                 </ul>
                             </div>
                         </div>
