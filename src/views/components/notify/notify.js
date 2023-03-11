@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 const Notify = (props) => {
-   
-    const { type, message, duration = 3000 } = props?.options;
+
+    const { type, message } = props?.options;
 
     return (
         <>
-        <div className={`alert alert-${type}`} role="alert">
+            <div className={`alert alert-${type}`} role="alert">
                 {message}
             </div>
         </>

@@ -26,6 +26,26 @@ const EmployeeForm = (props) => {
                     )}
 
                 </div>
+                <div className="form-group col-md-6">
+                  <label >Last Name</label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    name="last_name"
+                    {...register("last_name", {
+                      required: {
+                        value: true,
+                      },
+                    })}
+                  />
+                  {errors.last_name &&
+                    errors.last_name.type == "required" && (
+                      <span className='error-text'>
+                        Last name is a required field
+                      </span>
+                    )}
+
+                </div>
                 <div className="form-group col-md-4 ">
                   <label>Role</label>
                   <select
@@ -53,3 +73,5 @@ const EmployeeForm = (props) => {
 }
 
 export default EmployeeForm
+
+

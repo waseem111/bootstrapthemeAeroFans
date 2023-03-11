@@ -6,7 +6,7 @@ import Dashboard from "./views/app/dashboard/dashboard";
 import Fansdata from "./views/app/fansdata/fansdata"
 import Addcustomer from "./views/app/customers/addcustomer/addcustomer";
 import Customers from "./views/app/customers/customers/customers";
-import Employees from "./views/app/employees/employee/employee";
+import Employees from "./views/app/employees/employees/employees";
 import AddEmployee from "./views/app/employees/addemployee/addemployee";
 import EditEmployee from "./views/app/employees/editemployee/editemployee";
 import Addunits from "./views/app/projects/addunits/addunits";

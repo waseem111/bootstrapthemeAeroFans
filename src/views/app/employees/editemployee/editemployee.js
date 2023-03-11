@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
@@ -21,6 +21,7 @@ const EditEmployee = () => {
 
 
   useEffect(() => {
+    //api call
     setTimeout(() => setEmployee({ first_name: 'Test', role_id: 1 }), 1000);
   }, []);
 
