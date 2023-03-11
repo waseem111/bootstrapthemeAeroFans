@@ -20,13 +20,24 @@ const AddEmployee = () => {
   const submit = async (obj) => {
     await EmployeeService.addemployee(obj)
     .then((data) => {
-      setNotify((prev) => ({
-        ...prev, options: {
-          type: "success",
-          message: " This is a success alert with"
-        }, visible: true
-      }));
-      reset();
+      if(data.data.is_success){
+        setNotify((prev) => ({
+          ...prev, options: {
+            type: "success",
+            message: data?.data?.message
+          }, visible: true
+        }));
+        reset();
+      }
+      else{
+        setNotify((prev) => ({
+          ...prev, options: {
+            type: "danger",
+            message: data?.data?.message 
+          }, visible: true
+        }));
+      }
+        
     })
     .catch((err) => {
       console.log("addemployee error ------------> ", err);
