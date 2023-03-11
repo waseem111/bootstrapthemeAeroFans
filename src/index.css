@@ -461,7 +461,7 @@ h3 {
 .sidebar-is-expanded .c-menu>ul .c-menu__item .c-menu-item__title {
   left: 0px;
   opacity: 1;
-  padding-right: 50px;
+  padding-right: 10px;
 }
 
 .c-menu>ul .c-menu__item .c-menu__submenu {
@@ -872,7 +872,7 @@ nav.c-menu ul ul li a:hover {
 }
 
 nav.c-menu ul li a span {
-  position: absolute;
+ 
   top: 50%;
   right: 20px;
   transform: translateY(-50%);

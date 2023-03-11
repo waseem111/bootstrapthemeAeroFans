@@ -31,9 +31,8 @@ const LeftSideBar = () => {
                         <ul className="u-list">
                             <li className={location?.pathname == "/dashboard" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/dashboard">
-                                    <div className="c-menu__item__inner">
-                                        <FontAwesomeIcon icon={faTachometerAlt} />
-                                        <div className="c-menu-item__title" style={{ marginRight: "50px" }}><span>Dashboard </span></div>
+                                    <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
+                                        <div className="c-menu-item__title"><span>Dashboard </span></div>
                                     </div>
                                 </NavLink>
                             </li>
@@ -61,7 +60,7 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Customers-show")}>
                                 <div className="c-menu__item__inner">
-                                <FontAwesomeIcon icon={faUsers}/>
+                                    <FontAwesomeIcon icon={faUsers} />
                                     <div className="c-menu-item__title"><span>Customers </span>   <FontAwesomeIcon icon={faCaretDown} /></div>
                                 </div>
                                 <ul className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "Customers-show submenu show" : "Customers-show submenu"}>
@@ -82,7 +81,7 @@ const LeftSideBar = () => {
                                 location?.pathname == "/addunit" || location?.pathname == "/units" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Projects" onClick={() => openSubmenu("Projects-show")}>
                                 <div className="c-menu__item__inner">
-                                <FontAwesomeIcon icon={faProjectDiagram} />
+                                    <FontAwesomeIcon icon={faProjectDiagram} />
                                     <div className="c-menu-item__title"><span>Projects </span>  <FontAwesomeIcon icon={faCaretDown} /></div>
                                 </div>
                                 <ul className={location?.pathname == "/addproject" || location?.pathname == "/projects" || location?.pathname == "/addunit" || location?.pathname == "/units" ? "Projects-show submenu show" : "Projects-show submenu"}>
@@ -111,7 +110,7 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Quotations" onClick={() => openSubmenu("Quotations-show")}>
                                 <div className="c-menu__item__inner">
-                                <FontAwesomeIcon icon={faFileAlt} />
+                                    <FontAwesomeIcon icon={faFileAlt} />
                                     <div className="c-menu-item__title"><span>Quotations </span>  <FontAwesomeIcon icon={faCaretDown} /></div>
                                 </div>
                                 <ul className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "Quotations-show submenu show" : "Quotations-show submenu"}>
@@ -134,8 +133,7 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/fansdata">
                                     <div className="c-menu__item__inner">
-                                    <FontAwesomeIcon icon={faDatabase} />
-                                        <i className="fa fa-database" aria-hidden="true"></i>
+                                        <FontAwesomeIcon icon={faDatabase} />
                                         <div className="c-menu-item__title" style={{ marginRight: "50px" }}><span>Fan Data </span></div>
                                     </div>
                                 </NavLink>
@@ -143,8 +141,8 @@ const LeftSideBar = () => {
                             <li className={location?.pathname == "/fans" || location?.pathname == "/unitconversions" || location?.pathname == "/roleprivileges" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Lookups" onClick={() => openSubmenu("Lookups-show")}>
                                 <div className="c-menu__item__inner">
-                                
-                                <FontAwesomeIcon icon={faList} />
+
+                                    <FontAwesomeIcon icon={faList} />
                                     <div className="c-menu-item__title"><span>Lookups </span> <FontAwesomeIcon icon={faCaretDown} /></div>
                                 </div>
                                 <ul className={location?.pathname == "/fans" || location?.pathname == "/unitconversions" || location?.pathname == "/roleprivileges" ? "Lookups-show submenu show" : "Lookups-show submenu"}>
