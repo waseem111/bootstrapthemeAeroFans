@@ -30,6 +30,12 @@ const AddEmployee = () => {
     })
     .catch((err) => {
       console.log("addemployee error ------------> ", err);
+      setNotify((prev) => ({
+        ...prev, options: {
+          type: "danger",
+          message: err?.message
+        }, visible: true
+      }));
     });
   };
 
