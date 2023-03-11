@@ -836,7 +836,7 @@ nav.c-menu ul ul li {
 
 nav.c-menu ul ul li a {
   color: #e6e6e6;
-  padding-left: 0;
+  padding-left: 2rem;
 }
 
 nav.c-menu ul li.active ul li a {
@@ -866,4 +866,9 @@ nav.c-menu ul li a span.rotate {
 nav.c-menu ul ul li a.link-active {
   color: #9ec023 !important;
   background: #1e1e1e !important;
-} 
+}
+
+.error-text{
+  color: #dc3545!important;
+  font-size: 12px;
+}

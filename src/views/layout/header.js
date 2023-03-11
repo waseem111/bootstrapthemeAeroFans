@@ -1,27 +1,26 @@
 import React, { useEffect, useContext } from "react";
 import authContext from "../../auth-context";
-import $ from 'jquery'; 
+import $ from 'jquery';
+import toast, { Toaster } from "react-hot-toast";
 const Header = () => {
     const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
-   function sidebarChangeWidth() {
-          $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
-          $(".hamburger-toggle").toggleClass("is-opened");
-          var elems = document.querySelectorAll(".submenu");
+    function sidebarChangeWidth() {
+        $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
+        $(".hamburger-toggle").toggleClass("is-opened");
+        var elems = document.querySelectorAll(".submenu");
         [].forEach.call(elems, function (el) {
             el.classList.remove("show");
         });
-      };
-  return (
-<>
-<header className="l-header">
-    <div className="l-header__inner clearfix">
-        <div className="c-header-icon js-hamburger" onClick={sidebarChangeWidth}>
-            <div className="hamburger-toggle is-opened"><span className="bar-top"></span><span className="bar-mid"></span><span className="bar-bot"></span></div>
-        </div>
-
-
-        <div className="header-icons-group">
-            {/* <div className="c-header-icon basket">
+    };
+    return (
+        <>
+            <header className="l-header">
+                <div className="l-header__inner clearfix">
+                    <div className="c-header-icon js-hamburger" onClick={sidebarChangeWidth}>
+                        <div className="hamburger-toggle is-opened"><span className="bar-top"></span><span className="bar-mid"></span><span className="bar-bot"></span></div>
+                    </div>
+                    <div className="header-icons-group">
+                        {/* <div className="c-header-icon basket">
                 <div className="btn-group pull-right top-head-dropdown">
                     <a className="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <div className="c-header-icon basket">
@@ -90,24 +89,25 @@ const Header = () => {
                     </ul>
                 </div>
             </div> */}
-            <div className="c-header-icon logout">
-                <div className="btn-group">
-                    <img src="https://www.nicepng.com/png/detail/128-1280406_view-user-icon-png-user-circle-icon-png.png" className="dropdown-toggle" data-toggle="dropdown" style={{width: "20px"}} />
+                        <div className="c-header-icon logout">
+                            <div className="btn-group">
+                                <img src="https://www.nicepng.com/png/detail/128-1280406_view-user-icon-png-user-circle-icon-png.png" className="dropdown-toggle" data-toggle="dropdown" style={{ width: "20px" }} />
 
-                    <ul className="dropdown-menu" role="menu" style={{left: "unset",right: 0}}>
-                        <li><a href="#">Ab.Waseem</a></li>
-                        <li><a href="#">Profile</a></li>
-                        <li className="divider"></li>
-                        <li  onClick={() => logout()}><a href="javascript:void(0)">Logout</a></li>
-                    </ul>
+                                <ul className="dropdown-menu" role="menu" style={{ left: "unset", right: 0 }}>
+                                    <li><a href="#">Ab.Waseem</a></li>
+                                    <li><a href="#">Profile</a></li>
+                                    <li className="divider"></li>
+                                    <li onClick={() => logout()}><a href="javascript:void(0)">Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
-
-        </div>
-    </div>
-</header>
-</>
-  )
+            </header>
+            
+        </>
+    )
 }
 
 export default Header
