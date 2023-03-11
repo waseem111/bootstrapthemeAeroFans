@@ -31,7 +31,8 @@ const LeftSideBar = () => {
                         <ul className="u-list">
                             <li className={location?.pathname == "/dashboard" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/dashboard">
-                                    <div className="c-menu__item__inner"><i className="fa fa-tachometer" aria-hidden="true"></i>
+                                    <div className="c-menu__item__inner">
+                                    <FontAwesomeIcon icon={faTachometerAlt} />
                                         <div className="c-menu-item__title"><span>Dashboard </span></div>
                                     </div>
                                 </NavLink>

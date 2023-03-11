@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import Header from '../../layout/header';
 import LeftSideBar from '../../layout/leftsidebar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faProjectDiagram, faUsers, faFileAlt } from '@fortawesome/fontawesome-free-solid'
 import './dashboard.css';
 const Dashboard = () => {
     return (
@@ -17,7 +19,7 @@ const Dashboard = () => {
                                     <div className="card-body">
                                         <div className="media d-flex">
                                             <div className="align-self-center">
-                                                <i className="fa fa-users primary font-large-2 float-left"></i>
+                                                <FontAwesomeIcon icon={faUsers} className="primary font-large-2 float-left" />
                                             </div>
                                             <div className="media-body text-right">
                                                 <h3>278</h3>
@@ -34,7 +36,7 @@ const Dashboard = () => {
                                     <div className="card-body">
                                         <div className="media d-flex">
                                             <div className="align-self-center">
-                                                <i className="fa fa-outdent warning font-large-2 float-left"></i>
+                                                <FontAwesomeIcon icon={faProjectDiagram} className="warning font-large-2 float-left" />
                                             </div>
                                             <div className="media-body text-right">
                                                 <h3>156</h3>
@@ -51,7 +53,7 @@ const Dashboard = () => {
                                     <div className="card-body">
                                         <div className="media d-flex">
                                             <div className="align-self-center">
-                                                <i className="fa fa fa-file-text font-large-2 float-left"></i>
+                                                <FontAwesomeIcon icon={faFileAlt} className="font-large-2 float-left" />
                                             </div>
                                             <div className="media-body text-right">
                                                 <h3>64</h3>
@@ -62,9 +64,9 @@ const Dashboard = () => {
                                 </div>
                             </div>
                         </div>
-                       
+
                     </div>
-                    
+
 
                     <div className="alert alert-primary" role="alert">
                         This is a primary alert with <a href="#" className="alert-link">an example link</a>. Give it a click if you like.
