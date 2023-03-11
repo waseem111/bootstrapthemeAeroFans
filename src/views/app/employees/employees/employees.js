@@ -1,5 +1,7 @@
 import React, { Fragment } from 'react';
 import { Link, useNavigate, NavLink } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEdit, faTrash } from '@fortawesome/fontawesome-free-solid'
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 const Employees = () => {
@@ -86,7 +88,7 @@ const Employees = () => {
                                         <th scope="col">#</th>
                                         <th scope="col">First</th>
                                         <th scope="col">Last</th>
-                                        <th scope="col">Handle</th>
+                                        <th scope="col">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -96,7 +98,11 @@ const Employees = () => {
                                         </th>
                                         <td>Mark</td>
                                         <td>Otto</td>
-                                        <td>@mdo</td>
+                                        <td>
+                                        <button className='btn btn-primary mr-10'><FontAwesomeIcon icon={faEdit} /></button>
+                                        <button className='btn btn-danger'><FontAwesomeIcon icon={faTrash} /></button>
+                                        
+                                        </td>
                                     </tr>
                                     <tr>
                                         <th scope="row">2</th>
