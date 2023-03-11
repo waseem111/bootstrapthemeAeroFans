@@ -188,6 +188,11 @@ h3 {
   line-height: 40px;
 }
 
+.c-header-icon svg {
+  font-size: 18px;
+  line-height: 40px;
+}
+
 .c-header-icon--in-circle {
   border: 1px solid #d0d0d0;
   border-radius: 100%;
@@ -392,6 +397,22 @@ h3 {
   -ms-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
+}
+
+.c-menu>ul .c-menu__item svg {
+  flex: 0 0 70px;
+  font-size: 18px;
+  font-weight: normal;
+  text-align: center;
+  -webkit-transition: all 0.5s ease-in-out;
+  -moz-transition: all 0.5s ease-in-out;
+  -ms-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+}
+
+.c-menu>ul .c-menu__item.is-active .c-menu__item__inner svg {
+  color: #000;
 }
 
 .c-menu>ul .c-menu__item .c-menu-item__expand {
