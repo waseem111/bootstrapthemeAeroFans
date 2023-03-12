@@ -5,10 +5,11 @@ import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
 import EmployeeForm from '../../../components/forms/employeeform';
+import EmployeeService from '../../../services/employeeservices';
 
 const EditEmployee = () => {
-  const { empid } = useParams();
-  const [employee, setEmployee] = useState({ first_name: 'Test', role_id: 1 });
+  const { id } = useParams();
+  const [employee, setEmployee] = useState(null);
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
     register,
@@ -19,15 +20,61 @@ const EditEmployee = () => {
     formState: { errors },
   } = useForm({ mode: "all" });
 
+  const getemployeebyid_ = async () => {
+    await EmployeeService.getemployeebyid(id)
+    .then(
+      (data) => {
+        debugger;
+      },
+      (err) => {
+        
+      }
+    );
+  };
 
-  useEffect(() => {
-    //api call
-    setTimeout(() => setEmployee({ first_name: 'Test', role_id: 1 }), 1000);
-  }, []);
+  // const getemployeebyid_ = async () => {
+  //   await EmployeeService.getemployeebyid(id)
+  //   .then((resp) => {
+  //     debugger;
+  //     if(resp.data.is_success){
+  //       setEmployee(
+  //         resp?.data?.data
+  //       )
+  //     }
+  //     else{
+  //       setNotify((prev) => ({
+  //         ...prev, options: {
+  //           type: "danger",
+  //           message: resp?.data?.message 
+  //         }, visible: true
+  //       }));
+  //     }
+        
+  //   })
+  //   .catch((err) => {
+  //     console.log("getemployeebyid error ------------> ", err);
+  //     setNotify((prev) => ({
+  //       ...prev, options: {
+  //         type: "danger",
+  //         message: err?.message
+  //       }, visible: true
+  //     }));
+  //   });
+  // };
 
+  //api call
   useEffect(() => {
-    reset(employee);
-  }, [employee]);
+    debugger;
+    getemployeebyid_();}, []);
+
+  // useEffect(() => {
+    
+  //   if(employee){
+  //     debugger;
+  //     reset(employee);
+  //   }
+    
+  // }, [employee]);
 
   const submit = (data) => {
     setNotify((prev) => ({
@@ -41,11 +88,11 @@ const EditEmployee = () => {
 
 
 
-  useEffect(() => {
-    if (notify.visible) {
-      setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
-    }
-  }, [notify]);
+  // useEffect(() => {
+  //   if (notify.visible) {
+  //     setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
+  //   }
+  // }, [notify]);
 
   return (
     <>

@@ -36,7 +36,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
 
             <Route path="/addemployee" element={<AddEmployee />} />
-            <Route path="/editemployee/:emp_id" element={<EditEmployee />} />
+            <Route path="/editemployee/:id" element={<EditEmployee />} />
             <Route path="/employees" element={<Employees />} />
 
             <Route path="/addcustomer" element={<Addcustomer />} />

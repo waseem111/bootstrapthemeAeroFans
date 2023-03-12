@@ -26,7 +26,8 @@ EmployeeService.getemployees = () =>
         })
         .catch((error) => { return error });
 
-EmployeeService.getemployeebyid = (id) =>
+EmployeeService.getemployeebyid = (id) => {
+    
     axios
         .get(
             `${endpoints.getemployeebyid}${id}`,
@@ -36,6 +37,8 @@ EmployeeService.getemployeebyid = (id) =>
             return response;
         })
         .catch((error) => { return error });
+}
+    
 
 
 EmployeeService.addemployee = (obj) =>
