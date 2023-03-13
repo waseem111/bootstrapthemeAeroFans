@@ -27,7 +27,7 @@ const EditEmployee = () => {
         debugger;
       },
       (err) => {
-        
+        debugger;
       }
     );
   };
@@ -64,7 +64,6 @@ const EditEmployee = () => {
 
   //api call
   useEffect(() => {
-    debugger;
     getemployeebyid_();}, []);
 
   // useEffect(() => {

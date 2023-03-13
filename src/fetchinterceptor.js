@@ -51,11 +51,39 @@ FetchInterceptor.interceptors.request.use(
 // API respone interceptor
 FetchInterceptor.interceptors.response.use(
   (response) => {
-    return Promise.resolve(response);
+    debugger;
+    return Promise.resolve(response.data);
      
   },
   (error) => {
-    Promise.reject(error);
+    let responseObj = {
+        "is_success" : false,
+        "message" : "",
+        "description" : ""
+    };
+
+    if (error.response.status === 401) {
+      window.location.replace("/unauthorize");
+    }
+    else if (error.response.status === 403) {
+      responseObj.message = "Unauthorized access";
+      responseObj.description = "Please login again";
+    }
+    else if (error.response.status === 404) {
+      responseObj.message = "Not Found";
+    }
+    else if (error.response.status === 500) {
+      responseObj.message = "Internal Server Error";
+    }
+    else if (error.response.status === 508) {
+      responseObj.message = "Time Out";
+    }
+    else
+    {
+      responseObj.message = "Something went wrong, please try again...!";
+    }
+    
+    return Promise.reject(responseObj);
   }
 );
 

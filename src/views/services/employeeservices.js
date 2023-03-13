@@ -37,6 +37,7 @@ EmployeeService.getemployeebyid = (id) =>
       return data;
     })
     .catch((err) => {
+        debugger;
       return Promise.reject(err);
     });
 
