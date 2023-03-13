@@ -1,71 +1,57 @@
 import { endpoints } from "../constants/endpoints";
-import axios from "axios";
 import fetch from "../../fetchinterceptor";
-let config = {
-    headers: {
-        APICODE: "token",
-        headers: {
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS,HEAD",
-            "Accept-Language": "en-US,en;q=0.5",
-            "Content-Type": "application/json",
-        },
-    },
-};
+
 
 const EmployeeService = {};
 
-EmployeeService.getemployees = () =>
-    axios
-        .get(
-            `${endpoints.editemployee}`,
-            config
-        )
-        .then((response) => {
-            return response;
+EmployeeService.getemployees = (id) =>
+    fetch({
+        url: `${endpoints.getemployees}`,
+        method: "get",
+    })
+        .then((data) => {
+            return data;
         })
-        .catch((error) => { return error });
+        .catch((err) => {
+            return err;
+        });
+
 
 
 EmployeeService.getemployeebyid = (id) =>
-  fetch({
-    url: `${endpoints.getemployeebyid}${id}`,
-    method: "get",
-  })
-    .then((data) => {
-      return data;
+    fetch({
+        url: `${endpoints.getemployeebyid}${id}`,
+        method: "get",
     })
-    .catch((err) => {
-        debugger;
-      return Promise.reject(err);
-    });
-
-    
-EmployeeService.addemployee = (obj) =>
-    axios
-        .post(
-            `${endpoints.addemployee}`,
-            obj,
-            config
-        )
-        .then((response) => {
-            return response;
+        .then((data) => {
+            return data;
         })
-        .catch((error) => { return error });
+        .catch((err) => {
+            return err;
+        });
+
+
+EmployeeService.addemployee = (obj) =>
+    fetch
+        .post(`${endpoints.addemployee}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
 
 EmployeeService.editemployee = (obj) =>
-    axios
-        .post(
-            `${endpoints.editemployee}`,
-            obj,
-            config
-        )
-        .then((response) => {
-            return response;
+    fetch
+        .post(`${endpoints.editemployee}`, obj)
+        .then((data) => {
+            return data;
         })
-        .catch((error) => { return error });
+        .catch((err) => {
+            return err;
+        });
+
 
 
 export default EmployeeService;
