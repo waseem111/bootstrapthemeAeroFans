@@ -23,7 +23,7 @@ const EditEmployee = () => {
   const getemployeebyid = async () => {
     await EmployeeService.getemployeebyid(id)
       .then(
-        (data) => {
+        (resp) => {
           if (resp.data.is_success) {
             setEmployee(
               resp?.data?.data
