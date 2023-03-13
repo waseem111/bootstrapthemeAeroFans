@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const EmployeeForm = (props) => {
    
-    const { register, errors } = props;
+    const { register, errors, mode='add' } = props;
 
     return (
         <>
@@ -88,26 +88,32 @@ const EmployeeForm = (props) => {
                     )}
 
                 </div>
-                <div className="form-group col-md-4">
-                  <label >Password</label>
-                  <input
-                    className="form-control"
-                    type="password"
-                    name="password"
-                    {...register("password", {
-                      required: {
-                        value: true,
-                      },
-                    })}
-                  />
-                  {errors.password &&
-                    errors.password.type == "required" && (
-                      <span className='error-text'>
-                        Password is a required field
-                      </span>
-                    )}
+                {mode == "add" &&
+                <>
+                  <div className="form-group col-md-4">
+                    <label >Password</label>
+                    <input
+                      className="form-control"
+                      type="password"
+                      name="password"
+                      {...register("password", {
+                        required: {
+                          value: true,
+                        },
+                      })}
+                    />
+                    {errors.password &&
+                      errors.password.type == "required" && (
+                        <span className='error-text'>
+                          Password is a required field
+                        </span>
+                      )}
 
-                </div>
+                  </div>
+                </>
+                }
+
+                
                 <div className="form-group col-md-4 ">
                   <label>Role</label>
                   <select

@@ -24,16 +24,16 @@ const EditEmployee = () => {
     await EmployeeService.getemployeebyid(id)
       .then(
         (resp) => {
-          if (resp.data.is_success) {
+          if (resp.is_success) {
             setEmployee(
-              resp?.data?.data
+              resp?.data
             )
           }
           else {
             setNotify((prev) => ({
               ...prev, options: {
                 type: "danger",
-                message: resp?.data?.message
+                message: resp?.message
               }, visible: true
             }));
           }
@@ -89,9 +89,9 @@ const EditEmployee = () => {
           <div className="page-content">
             {employee &&
               <form>
-                <EmployeeForm register={register} errors={errors} />
-                <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center" }}>
-                  <button type="submit" className="btn btn-primary" onClick={handleSubmit(submit)}>Edit</button>
+                <EmployeeForm register={register} errors={errors} mode={"edit"} />
+                <div className="form-button-group">
+                  <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Edit</button>
                   <button type="button" className="btn btn-danger">Cancel</button>
                 </div>
               </form>

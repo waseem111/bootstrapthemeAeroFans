@@ -74,7 +74,7 @@ const AddEmployee = () => {
           <div className="page-content">
               <form>
                 <EmployeeForm register={register} errors={errors} />
-                <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center" }}>
+                <div className="form-button-group">
                   <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>
                   <button type="button" className="btn btn-danger" onClick={()=>{cancel();}}>Cancel</button>
                 </div>
