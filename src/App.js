@@ -11,7 +11,7 @@ import AddEmployee from "./views/app/employees/addemployee/addemployee";
 import EditEmployee from "./views/app/employees/editemployee/editemployee";
 import Addunits from "./views/app/projects/addunits/addunits";
 import Units from "./views/app/projects/units/units";
-import Addproject from "./views/app/projects/projects/Projects";
+import Addproject from "./views/app/projects/addprojects/addprojects";
 import Fans from "./views/app/lookups/fans/fans";
 import Unitconversions from "./views/app/lookups/unitconversions/unitconversions";
 import Roleprivileges from "./views/app/lookups/roleprivileges/roleprivileges";

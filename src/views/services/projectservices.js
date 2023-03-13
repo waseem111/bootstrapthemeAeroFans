@@ -13,12 +13,12 @@ let config = {
     },
 };
 
-const EmployeeService = {};
+const ProjectService = {};
 
-EmployeeService.getemployees = () =>
+ProjectService.getproject = () =>
     axios
         .get(
-            `${endpoints.editemployee}`,
+            `${endpoints.getprojects}`,
             config
         )
         .then((response) => {
@@ -26,11 +26,11 @@ EmployeeService.getemployees = () =>
         })
         .catch((error) => { return error });
 
-EmployeeService.getemployeebyid = (id) => {
+ProjectService.getprojectbyid = (id) => {
     
     axios
         .get(
-            `${endpoints.getemployeebyid}${id}`,
+            `${endpoints.getprojectbyid}${id}`,
             config
         )
         .then((response) => {
@@ -39,10 +39,10 @@ EmployeeService.getemployeebyid = (id) => {
         .catch((error) => { return error });
 }
     
-EmployeeService.addemployee = (obj) =>
+ProjectService.addproject = (obj) =>
     axios
         .post(
-            `${endpoints.addemployee}`,
+            `${endpoints.addproject}`,
             obj,
             config
         )
@@ -52,10 +52,10 @@ EmployeeService.addemployee = (obj) =>
         .catch((error) => { return error });
 
 
-EmployeeService.editemployee = (obj) =>
+ProjectService.editproject = (obj) =>
     axios
         .post(
-            `${endpoints.editemployee}`,
+            `${endpoints.editproject}`,
             obj,
             config
         )
@@ -65,4 +65,4 @@ EmployeeService.editemployee = (obj) =>
         .catch((error) => { return error });
 
 
-export default EmployeeService;
+export default ProjectService;
