@@ -1,5 +1,6 @@
 import { endpoints } from "../constants/endpoints";
 import axios from "axios";
+import fetch from "../../fetchinterceptor";
 let config = {
     headers: {
         APICODE: "token",
@@ -26,18 +27,19 @@ EmployeeService.getemployees = () =>
         })
         .catch((error) => { return error });
 
-EmployeeService.getemployeebyid = (id) => {
-    
-    axios
-        .get(
-            `${endpoints.getemployeebyid}${id}`,
-            config
-        )
-        .then((response) => {
-            return response;
-        })
-        .catch((error) => { return error });
-}
+
+EmployeeService.getemployeebyid = (id) =>
+  fetch({
+    url: `${endpoints.getemployeebyid}${id}`,
+    method: "get",
+  })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      return Promise.reject(err);
+    });
+
     
 EmployeeService.addemployee = (obj) =>
     axios
