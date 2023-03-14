@@ -4,8 +4,8 @@ import authContext from "./auth-context";
 import Login from "./views/auth/login/login";
 import Dashboard from "./views/app/dashboard/dashboard";
 import Fansdata from "./views/app/fansdata/fansdata"
-import Addcustomer from "./views/app/customers/addcustomer/addcustomer";
-import Customers from "./views/app/customers/customers/customers";
+import Addcustomer from "./views/app/customers/addcompany/addcompany";
+import Customers from "./views/app/customers/company/company";
 import Employees from "./views/app/employees/employees/employees";
 import AddEmployee from "./views/app/employees/addemployee/addemployee";
 import EditEmployee from "./views/app/employees/editemployee/editemployee";

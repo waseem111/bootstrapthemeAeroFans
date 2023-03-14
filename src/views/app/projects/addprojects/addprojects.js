@@ -22,11 +22,11 @@ const Addproject = () => {
   const submit = async (obj) => {
     await ProjectService.addproject(obj)
     .then((data) => {
-      if(data.data.is_success){
+      if(data.is_success){
         setNotify((prev) => ({
           ...prev, options: {
             type: "success",
-            message: data?.data?.message
+            message: data?.message
           }, visible: true
         }));
         reset();
@@ -35,7 +35,7 @@ const Addproject = () => {
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",
-            message: data?.data?.message 
+            message: data?.message 
           }, visible: true
         }));
       }

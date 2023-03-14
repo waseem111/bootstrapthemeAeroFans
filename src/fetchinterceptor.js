@@ -51,9 +51,7 @@ FetchInterceptor.interceptors.request.use(
 // API respone interceptor
 FetchInterceptor.interceptors.response.use(
   (response) => {
-    debugger;
-    return Promise.resolve(response.data);
-     
+    return Promise.resolve(response.data); 
   },
   (error) => {
     let responseObj = {

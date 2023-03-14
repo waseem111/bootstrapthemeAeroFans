@@ -62,17 +62,17 @@ const LeftSideBar = () => {
                                 data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Customers-show")}>
                                 <div className="c-menu__item__inner">
                                     <FontAwesomeIcon icon={faUsers} />
-                                    <div className="c-menu-item__title"><span>Customers </span>   <FontAwesomeIcon icon={faCaretDown} /></div>
+                                    <div className="c-menu-item__title"><span>Company </span>   <FontAwesomeIcon icon={faCaretDown} /></div>
                                 </div>
                                 <ul className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "Customers-show submenu show" : "Customers-show submenu"}>
                                     <li>
                                         <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addcustomer">
-                                            Add Customer
+                                            Add Company
                                         </NavLink>
                                     </li>
                                     <li>
                                         <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/customers">
-                                            List of Customers
+                                            List of Company
                                         </NavLink>
                                     </li>
                                 </ul>

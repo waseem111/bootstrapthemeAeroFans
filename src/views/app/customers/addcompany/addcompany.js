@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
-import './addemployee.css';
-import EmployeeForm from '../../../components/forms/employeeform';
-import EmployeeService from '../../../services/employeeservices';
+import CompanyForm from '../../../components/forms/companyform';
+import CompanyService from '../../../services/companyservices';
+const Addcompany = () => {
 
-const AddEmployee = () => {
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
     register,
@@ -19,7 +18,7 @@ const AddEmployee = () => {
   } = useForm({ mode: "all" });
 
   const submit = async (obj) => {
-    await EmployeeService.addemployee(obj)
+    await CompanyService.addcompany(obj)
     .then((data) => {
       if(data.is_success){
         setNotify((prev) => ({
@@ -41,7 +40,7 @@ const AddEmployee = () => {
         
     })
     .catch((err) => {
-      console.log("addemployee error ------------> ", err);
+      console.log("addcompany error ------------> ", err);
       setNotify((prev) => ({
         ...prev, options: {
           type: "danger",
@@ -64,27 +63,26 @@ const AddEmployee = () => {
   }, [notify]);
 
   return (
-    <>
-      <Header />
-      <LeftSideBar />
-      <main className="l-main">
-        <div className="content-wrapper content-wrapper--with-bg">
-          <h1 className="page-title">Add Employee</h1>
-          {notify?.visible && <Notify options={notify?.options} />}
-          <div className="page-content">
-              <form>
-                <EmployeeForm register={register} errors={errors} />
-                <div className="form-button-group">
-                  <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>
-                  <button type="button" className="btn btn-danger" onClick={()=>{cancel();}}>Cancel</button>
-                </div>
-              </form>
-          </div>
-        </div>
-
-      </main>
-    </>
+      <>
+          <Header />
+          <LeftSideBar />
+          <main className="l-main">
+            <div className="content-wrapper content-wrapper--with-bg">
+              <h1 className="page-title">Add Company</h1>
+              {notify?.visible && <Notify options={notify?.options} />}
+              <div className="page-content">
+                <form>
+                  <CompanyForm register={register} errors={errors} />
+                  <div className="form-button-group">
+                    <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>
+                    <button type="button" className="btn btn-danger" onClick={()=>{cancel();}}>Cancel</button>
+                  </div>
+                </form>  
+              </div>
+            </div>
+          </main>
+      </>
   )
 };
 
-export default AddEmployee;
+export default Addcompany;

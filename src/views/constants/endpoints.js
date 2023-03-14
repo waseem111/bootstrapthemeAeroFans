@@ -14,4 +14,18 @@ export const endpoints = {
     editproject:  global.api_url + "project/edit/:id",
     deleteproject:  global.api_url + "project/delete/:id",
 
+    //company
+    getcompanies: global.api_url + "companies",
+    getcompanybyid: global.api_url + "company/",
+    addcompany:  global.api_url + "company/create",
+    editcompany:  global.api_url + "company/edit/:id",
+    deletecompany:  global.api_url + "company/delete/:id",
+
+    //company unit
+    getunits: global.api_url + "units",
+    getunitbyid: global.api_url + "unit/",
+    addunit:  global.api_url + "unit/create",
+    editunit:  global.api_url + "unit/edit/:id",
+    deleteunit:  global.api_url + "unit/delete/:id",
+
 }
