@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams, useNavigate, NavLink } from "react-router-dom";
+import { useParams,useNavigate, NavLink } from "react-router-dom";
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
-import EmployeeForm from '../../../components/forms/employeeform';
-import EmployeeService from '../../../services/employeeservices';
+import CompanyForm from '../../../components/forms/companyform';
+import CompanyService from '../../../services/companyservices';
 import authContext from '../../../../auth-context';
-const EditEmployee = () => {
+const EditCompany = () => {
   const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
   const navigate = useNavigate();
   const { id } = useParams();
-  const [employee, setEmployee] = useState(null);
+  const [company, setCompany] = useState(null);
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
     register,
@@ -22,12 +22,12 @@ const EditEmployee = () => {
     formState: { errors },
   } = useForm({ mode: "all" });
 
-  const getemployeebyid = async () => {
-    await EmployeeService.getemployeebyid(id)
+  const getcompanybyid = async () => {
+    await CompanyService.getcompanybyid(id)
       .then(
         (resp) => {
           if (resp.is_success) {
-            setEmployee(
+            setCompany(
               resp?.data
             )
           }
@@ -53,48 +53,48 @@ const EditEmployee = () => {
 
   //api call
   useEffect(() => {
-    getemployeebyid();
+    getcompanybyid();
   }, []);
 
   useEffect(() => {
-    if (employee) {
-      reset(employee);
+    if (company) {
+      reset(company);
     }
-  }, [employee]);
+  }, [company]);
 
   const submit = async (obj) => {
     obj.updated_by = loggedInUser?.emp_id;
-    await EmployeeService.editemployee(obj)
-      .then((resp) => {
-        if (resp.is_success) {
-          getemployeebyid();
-          setNotify((prev) => ({
-            ...prev, options: {
-              type: "success",
-              message: resp?.message
-            }, visible: true
-          }));
-          reset();
-        }
-        else {
-          setNotify((prev) => ({
-            ...prev, options: {
-              type: "danger",
-              message: resp?.message
-            }, visible: true
-          }));
-        }
-
-      })
-      .catch((err) => {
-        console.log("editemployee error ------------> ", err);
+    await CompanyService.editcompany(obj)
+    .then((resp) => {
+      if(resp.is_success){
+        getcompanybyid();
+        setNotify((prev) => ({
+          ...prev, options: {
+            type: "success",
+            message: resp?.message
+          }, visible: true
+        }));
+        reset();
+      }
+      else{
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",
-            message: err?.message
+            message: resp?.message 
           }, visible: true
         }));
-      });
+      }
+        
+    })
+    .catch((err) => {
+      console.log("editcompany error ------------> ", err);
+      setNotify((prev) => ({
+        ...prev, options: {
+          type: "danger",
+          message: err?.message
+        }, visible: true
+      }));
+    });
   };
 
 
@@ -109,23 +109,23 @@ const EditEmployee = () => {
       <Header />
       <LeftSideBar />
       <main className="l-main">
-        <nav aria-label="breadcrumb" className="container-fluid" style={{ marginTop: "20px" }}>
+      <nav aria-label="breadcrumb" className="container-fluid" style={{ marginTop: "20px" }}>
           <ol className="breadcrumb">
             <li className="breadcrumb-item "><NavLink to="/dashboard" >Dashboard</NavLink></li>
             <li className="breadcrumb-item"><NavLink to="/employees" >Employees</NavLink></li>
-            <li className="breadcrumb-item active" aria-current="page">{employee?.emp_no}</li>
+            <li className="breadcrumb-item active" aria-current="page">{company?.com_no}</li>
           </ol>
         </nav>
         <div className="content-wrapper content-wrapper--with-bg">
-          <h1 className="page-title">Edit Employee</h1>
+          <h1 className="page-title">Edit Company</h1>
           {notify?.visible && <Notify options={notify?.options} />}
           <div className="page-content">
-            {employee &&
+            {company &&
               <form>
-                <EmployeeForm register={register} errors={errors} mode={"edit"} />
+                <CompanyForm register={register} errors={errors} mode={"edit"} />
                 <div className="form-button-group">
                   <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Update</button>
-                  <button type="button" className="btn btn-danger" onClick={() => navigate('/employees')}>Cancel</button>
+                  <button type="button" className="btn btn-danger" onClick={() => navigate('/companies')}>Cancel</button>
                 </div>
               </form>
             }
@@ -137,4 +137,4 @@ const EditEmployee = () => {
   )
 };
 
-export default EditEmployee;
+export default EditCompany;

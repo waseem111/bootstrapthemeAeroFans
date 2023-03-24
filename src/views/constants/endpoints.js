@@ -2,10 +2,11 @@ import { global } from "./global"
 
 export const endpoints = {
     //employees
+    login: global.api_url + "employee/login",
     getemployees: global.api_url + "employees",
     getemployeebyid: global.api_url + "employee/",
     addemployee:  global.api_url + "employee/create",
-    editemployee:  global.api_url + "employee/edit/:id",
+    editemployee:  global.api_url + "employee/edit",
     deleteemployee:  global.api_url + "employee/delete/:id",
     //projects
     getprojects: global.api_url + "projects",
@@ -18,8 +19,15 @@ export const endpoints = {
     getcompanies: global.api_url + "companies",
     getcompanybyid: global.api_url + "company/",
     addcompany:  global.api_url + "company/create",
-    editcompany:  global.api_url + "company/edit/:id",
+    editcompany:  global.api_url + "company/edit",
     deletecompany:  global.api_url + "company/delete/:id",
+
+      //company
+      getbranches: global.api_url + "branches",
+      getbranchbyid: global.api_url + "branch/",
+      addbranch:  global.api_url + "branch/create",
+      editbranch:  global.api_url + "branch/edit",
+      deletebranch:  global.api_url + "branch/delete/:id",
 
     //company unit
     getunits: global.api_url + "units",

@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
-import './addemployee.css';
-import EmployeeForm from '../../../components/forms/employeeform';
-import EmployeeService from '../../../services/employeeservices';
+import CompanyService from '../../../services/companyservices';
 import authContext from '../../../../auth-context';
-const AddEmployee = () => {
+import BranchForm from '../../../components/forms/branchform';
+
+const AddBranch = () => {
   const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
@@ -19,9 +19,12 @@ const AddEmployee = () => {
     formState: { errors },
   } = useForm({ mode: "all" });
 
+  const [lookupCompanies, setLookupCompanies] = useState([]);
+
   const submit = async (obj) => {
     obj.created_by = loggedInUser?.emp_id;
-    await EmployeeService.addemployee(obj)
+    console.log(obj);
+    await CompanyService.addbranch(obj)
       .then((data) => {
         if (data.is_success) {
           setNotify((prev) => ({
@@ -43,7 +46,7 @@ const AddEmployee = () => {
 
       })
       .catch((err) => {
-        console.log("addemployee error ------------> ", err);
+        console.log("addcompany error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",
@@ -54,10 +57,44 @@ const AddEmployee = () => {
   };
 
 
+  const getcompanies = async () => {
+    await CompanyService.getcompanies({
+      size: 9999,
+      page: 1,
+    })
+      .then(
+        (resp) => {
+          if (resp.is_success) {
+            setLookupCompanies(resp?.data);
+          }
+          else {
+            setNotify((prev) => ({
+              ...prev, options: {
+                type: "danger",
+                message: resp?.message
+              }, visible: true
+            }));
+          }
+        },
+        (err) => {
+          setNotify((prev) => ({
+            ...prev, options: {
+              type: "danger",
+              message: err?.message
+            }, visible: true
+          }));
+        }
+      );
+  };
+
   const cancel = () => {
     reset();
   };
 
+
+  useEffect(() => {
+    getcompanies();
+  }, []);
 
   useEffect(() => {
     if (notify.visible) {
@@ -71,11 +108,11 @@ const AddEmployee = () => {
       <LeftSideBar />
       <main className="l-main">
         <div className="content-wrapper content-wrapper--with-bg">
-          <h1 className="page-title">Add Employee</h1>
+          <h1 className="page-title">Add Branch</h1>
           {notify?.visible && <Notify options={notify?.options} />}
           <div className="page-content">
-            <form autoComplete='off'>
-              <EmployeeForm register={register} errors={errors} />
+            <form>
+              <BranchForm register={register} errors={errors} lookupCompanies={lookupCompanies} />
               <div className="form-button-group">
                 <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>
                 <button type="button" className="btn btn-danger" onClick={() => { cancel(); }}>Cancel</button>
@@ -83,10 +120,9 @@ const AddEmployee = () => {
             </form>
           </div>
         </div>
-
       </main>
     </>
   )
 };
 
-export default AddEmployee;
+export default AddBranch;

@@ -4,10 +4,11 @@ import fetch from "../../fetchinterceptor";
 
 const CompanyService = {};
 
-CompanyService.getcompany = (id) =>
+CompanyService.getcompanies = (query) =>
     fetch({
-        url: `${endpoints.getcompany}`,
+        url: `${endpoints.getcompanies}`,
         method: "get",
+        params: query,
     })
         .then((data) => {
             return data;
@@ -44,7 +45,7 @@ CompanyService.addcompany = (obj) =>
 
 CompanyService.editcompany = (obj) =>
     fetch
-        .post(`${endpoints.editcompany}`, obj)
+        .put(`${endpoints.editcompany}`, obj)
         .then((data) => {
             return data;
         })
@@ -52,6 +53,57 @@ CompanyService.editcompany = (obj) =>
             return err;
         });
 
+
+
+
+CompanyService.getbranches = (query) =>
+    fetch({
+        url: `${endpoints.getbranches}`,
+        method: "get",
+        params: query,
+    })
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+
+
+CompanyService.getbranchbyid = (id) =>
+    fetch({
+        url: `${endpoints.getbranchbyid}${id}`,
+        method: "get",
+    })
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+
+CompanyService.addbranch = (obj) =>
+    fetch
+        .post(`${endpoints.addbranch}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+
+CompanyService.editbranch = (obj) =>
+    fetch
+        .put(`${endpoints.editbranch}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
 
 export default CompanyService;

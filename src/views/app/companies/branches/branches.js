@@ -1,27 +1,3 @@
-// import React, { Fragment } from 'react';
-// import Header from '../../../layout/header';
-// import LeftSideBar from '../../../layout/leftsidebar';
-// import '../../../../App.css';
-// const Projects = () => {
-//     return (
-//         <>
-//             <Header />
-//             <LeftSideBar />
-//             <main className="l-main">
-//                 <div className="content-wrapper content-wrapper--with-bg">
-//                     <h1 className="page-title">Projects</h1>
-
-
-
-//                 </div>
-//             </main>
-//         </>
-//     )
-// };
-
-// export default Projects;
-
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -31,9 +7,8 @@ import LeftSideBar from '../../../layout/leftsidebar';
 import CompanyService from '../../../services/companyservices';
 import Notify from '../../../components/notify/notify';
 import { Table } from "antd";
-import ProjectService from '../../../services/projectservices';
 
-const Projects = () => {
+const Branches = () => {
     const navigate = useNavigate();
     const { id } = useParams();
 
@@ -89,11 +64,9 @@ const Projects = () => {
     });
 
     const [lookupCompanies, setLookupCompanies] = useState([]);
-    const [branches, setBranches] = useState([]);
-    const [lookupBranches, setLookupBranches] = useState([]);
 
-    const fetch = async (params = {}, id) => {
-        await ProjectService.getprojects({
+    const fetch = async (params = {}) => {
+        await CompanyService.getbranches({
             ...params,
         })
             .then(
@@ -161,35 +134,6 @@ const Projects = () => {
             );
     };
 
-    const getbranches = async () => {
-        await CompanyService.getbranches({
-            size: 9999,
-            page: 1,
-        })
-            .then(
-                (resp) => {
-                    if (resp.is_success) {
-                        setBranches(resp?.data);
-                    }
-                    else {
-                        setNotify((prev) => ({
-                            ...prev, options: {
-                                type: "danger",
-                                message: resp?.message
-                            }, visible: true
-                        }));
-                    }
-                },
-                (err) => {
-                    setNotify((prev) => ({
-                        ...prev, options: {
-                            type: "danger",
-                            message: err?.message
-                        }, visible: true
-                    }));
-                }
-            );
-    };
 
     const handleTableChange = (pagination, filters, sorter) => {
         const pager = { ...listData.pagination };
@@ -223,12 +167,12 @@ const Projects = () => {
     const handleCompanyFilter = (e) => {
         const filters = { ...listData.filter };
         filters.com_id = e.target.value;
-        setListData((prev) => ({
+          setListData((prev) => ({
             ...prev,
             tableChange: true,
             filter: filters,
-        }));
-
+          }));
+    
     }
 
 
@@ -236,7 +180,7 @@ const Projects = () => {
         Promise.all([
             getcompanies(),
         ]).then(() => {
-            if (id) {
+            if(id){
                 const filters = { ...listData.filter };
                 filters.com_id = id;
                 fetch({
@@ -248,7 +192,7 @@ const Projects = () => {
                     ...filters,
                 });
             }
-            else {
+            else{
                 fetch({
                     size: 10,
                     page: 1,
@@ -274,9 +218,9 @@ const Projects = () => {
             <LeftSideBar />
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
-                    <h1 className="page-title">Projects</h1>
+                    <h1 className="page-title">Branches</h1>
                     <div className="page-content">
-                        <div className="row">
+                    {!id && <div className="row">
                             <div className="form-group col-md-4 ">
                                 <label>Company</label>
                                 <select
@@ -293,29 +237,39 @@ const Projects = () => {
                                     ))}
                                 </select>
                             </div>
+                        </div>}
+                        {id && <div className="row">
                             <div className="form-group col-md-4 ">
-                                <label>Branch</label>
+                                <label>Company</label>
                                 <select
                                     className="form-control"
-                                    defaultValue=""
-                                    name="cb_id"
+                                    disabled={true}
+                                    value={id}
+                                    name="com_id"
                                     onChange={(e) => handleCompanyFilter(e)}
                                 >
-                                    <option value="" >Select Company</option>
-                                    {lookupBranches?.map((elm) => (
-                                        <option key={elm.cb_id} value={elm.cb_id}>
-                                            {elm.com_branch_name}
+                                    <option value="" disabled>Select Company</option>
+                                    {lookupCompanies?.map((elm) => (
+                                        <option key={elm.com_id} value={elm.com_id}>
+                                            {elm.com_name}
                                         </option>
                                     ))}
                                 </select>
                             </div>
-                        </div>
+                        </div>}
+
 
                         <Table
                             columns={columns}
                             rowKey={new Date().getTime()}
                             dataSource={listData.data}
                             pagination={listData.pagination}
+                            // pagination={{
+                            //     pageSizeOptions: ['10', '50', '100'],
+                            //     showSizeChanger: true,
+                            //     pageSize: 10,
+                            //     ...listData.pagination
+                            //     }}
                             onChange={handleTableChange}
                         />
                     </div>
@@ -326,4 +280,4 @@ const Projects = () => {
     )
 };
 
-export default Projects;
+export default Branches;

@@ -1,12 +1,13 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
 import CompanyForm from '../../../components/forms/companyform';
 import CompanyService from '../../../services/companyservices';
-const Addcompany = () => {
-
+import authContext from '../../../../auth-context';
+const AddCompany = () => {
+  const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
     register,
@@ -18,6 +19,7 @@ const Addcompany = () => {
   } = useForm({ mode: "all" });
 
   const submit = async (obj) => {
+    obj.created_by = loggedInUser?.emp_id;
     await CompanyService.addcompany(obj)
     .then((data) => {
       if(data.is_success){
@@ -85,4 +87,4 @@ const Addcompany = () => {
   )
 };
 
-export default Addcompany;
+export default AddCompany;

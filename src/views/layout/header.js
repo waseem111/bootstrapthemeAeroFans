@@ -1,8 +1,15 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
+import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
 import authContext from "../../auth-context";
+
 import $ from 'jquery';
 const Header = () => {
-    const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
+    const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
+    const [openAccount, setOpenAccount] = useState(false);
+    function openMyAccount() {
+        setOpenAccount(!openAccount);
+    }
+
     function sidebarChangeWidth() {
         $("body").toggleClass("sidebar-is-reduced sidebar-is-expanded");
         $(".hamburger-toggle").toggleClass("is-opened");
@@ -11,6 +18,28 @@ const Header = () => {
             el.classList.remove("show");
         });
     };
+
+
+    const [clickedOutside, setClickedOutside] = useState(false);
+    const myRef = useRef();
+
+    const handleClickOutside = e => {
+        if (!myRef.current.contains(e.target)) {
+            setClickedOutside(true);
+            setOpenAccount(false);
+        }
+    };
+
+    const handleClickInside = () => {
+        setClickedOutside(false);
+        setOpenAccount(!openAccount);
+    }
+
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    });
+
     return (
         <>
             <header className="l-header">
@@ -88,13 +117,20 @@ const Header = () => {
                     </ul>
                 </div>
             </div> */}
-                        <div className="c-header-icon logout">
-                            <div className="btn-group">
-                                <img src="https://www.nicepng.com/png/detail/128-1280406_view-user-icon-png-user-circle-icon-png.png" className="dropdown-toggle" data-toggle="dropdown" style={{ width: "20px" }} />
+
+                        <div className="c-header-icon logout" ref={myRef} onClick={handleClickInside}>
+                            <div className={openAccount ? "btn-group open" : "btn-group"} >
+                                <div className="dropdown-toggle">
+                                    <img src="https://www.nicepng.com/png/detail/128-1280406_view-user-icon-png-user-circle-icon-png.png" className="dropdown-toggle" data-toggle="dropdown" style={{ width: "20px" }} />
+                                    <span> Hi, {loggedInUser?.first_name}</span>
+                                </div>
+
 
                                 <ul className="dropdown-menu" role="menu" style={{ left: "unset", right: 0 }}>
-                                    <li><a href="#">Ab.Waseem</a></li>
-                                    <li><a href="#">Profile</a></li>
+                                    <li> <NavLink to="/dashboard">
+                                        <span>Profile</span>
+                                    </NavLink></li>
+
                                     <li className="divider"></li>
                                     <li onClick={() => logout()}><a href="">Logout</a></li>
                                 </ul>
@@ -104,9 +140,9 @@ const Header = () => {
                     </div>
                 </div>
             </header>
-            
+
         </>
     )
 }
 
-export default Header
+export default Header;

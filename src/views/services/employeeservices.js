@@ -4,10 +4,23 @@ import fetch from "../../fetchinterceptor";
 
 const EmployeeService = {};
 
-EmployeeService.getemployees = (id) =>
+EmployeeService.login = (obj) =>
+    fetch
+        .post(`${endpoints.login}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+
+
+EmployeeService.getemployees = (query) =>
     fetch({
         url: `${endpoints.getemployees}`,
         method: "get",
+        params: query,
     })
         .then((data) => {
             return data;
@@ -44,7 +57,7 @@ EmployeeService.addemployee = (obj) =>
 
 EmployeeService.editemployee = (obj) =>
     fetch
-        .post(`${endpoints.editemployee}`, obj)
+        .put(`${endpoints.editemployee}`, obj)
         .then((data) => {
             return data;
         })

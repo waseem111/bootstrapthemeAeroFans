@@ -58,21 +58,33 @@ const LeftSideBar = () => {
                                     </li>
                                 </ul>
                             </li>
-                            <li className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
+                            <li className={location?.pathname == "/addcompany" || location?.pathname == "/companies" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Customers" onClick={() => openSubmenu("Customers-show")}>
                                 <div className="c-menu__item__inner">
                                     <FontAwesomeIcon icon={faUsers} />
-                                    <div className="c-menu-item__title"><span>Company </span>   <FontAwesomeIcon icon={faCaretDown} /></div>
+                                    <div className="c-menu-item__title"><span>Companies </span>   <FontAwesomeIcon icon={faCaretDown} /></div>
                                 </div>
-                                <ul className={location?.pathname == "/addcustomer" || location?.pathname == "/customers" ? "Customers-show submenu show" : "Customers-show submenu"}>
+                                <ul className={location?.pathname == "/addcompany" || location?.pathname == "/companies" 
+                                || location?.pathname == "/addbranch" || location?.pathname.includes("/branches")
+                                ? "Customers-show submenu show" : "Customers-show submenu"}>
                                     <li>
-                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addcustomer">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addcompany">
                                             Add Company
                                         </NavLink>
                                     </li>
                                     <li>
-                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/customers">
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/companies">
                                             List of Company
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addbranch">
+                                            Add Branch
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/branches">
+                                            List of Branches
                                         </NavLink>
                                     </li>
                                 </ul>

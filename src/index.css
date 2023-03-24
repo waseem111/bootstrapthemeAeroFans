@@ -168,6 +168,7 @@ h3 {
 
 .header-icons-group .c-header-icon:last-child {
   border-right: 0;
+  width: 180px;
 }
 
 .c-header-icon {

@@ -3,21 +3,21 @@ import fetch from "../../fetchinterceptor";
 
 const ProjectService = {};
 
-ProjectService.getproject = () =>
-
+ProjectService.getprojects = (query) =>
     fetch({
-            url: `${endpoints.getprojects}`,
-            method: "get",
+        url: `${endpoints.getprojects}`,
+        method: "get",
+        params: query,
+    })
+        .then((data) => {
+            return data;
         })
-            .then((data) => {
-                return data;
-            })
-            .catch((err) => {
-                return err;
-            });
+        .catch((err) => {
+            return err;
+        });
 
-ProjectService.getprojectbyid = (id) => 
-    
+ProjectService.getprojectbyid = (id) =>
+
     fetch({
         url: `${endpoints.getprojectbyid}${id}`,
         method: "get",
@@ -29,7 +29,7 @@ ProjectService.getprojectbyid = (id) =>
             return err;
         });
 
-    
+
 ProjectService.addproject = (obj) =>
 
     fetch
@@ -43,7 +43,7 @@ ProjectService.addproject = (obj) =>
 
 
 ProjectService.editproject = (obj) =>
-    
+
     fetch
         .post(`${endpoints.editproject}`, obj)
         .then((data) => {

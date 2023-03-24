@@ -4,43 +4,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTrash } from '@fortawesome/fontawesome-free-solid'
 import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
-import EmployeeService from '../../../services/employeeservices';
+import CompanyService from '../../../services/companyservices';
 import Notify from '../../../components/notify/notify';
 import { Table } from "antd";
-const Employees = () => {
+const Company = () => {
     const navigate = useNavigate();
     const [notify, setNotify] = useState({ options: [], visible: false });
 
     const columns = [
         {
-            title: 'Emp #',
-            dataIndex: 'emp_no',
-            key: 'emp_no',
+            title: 'Company #',
+            dataIndex: 'com_no',
+            key: 'com_no',
             sorter: true
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
-            sorter: true
-        },
-        {
-            title: 'Email',
-            dataIndex: 'email',
-            key: 'email',
-        },
-        {
-            title: 'Role',
-            dataIndex: 'role_name',
-            key: 'role_name',
+            title: 'Company Name',
+            dataIndex: 'com_name',
+            key: 'com_name',
             sorter: true
         },
         {
             title: 'Action',
-            dataIndex: 'emp_id',
-            key: 'emp_id',
+            dataIndex: 'com_id',
+            key: 'com_id',
             render: (record) => <>
-                <button className='btn btn-primary mr-10' onClick={() => navigate('/editemployee/' + record)}><FontAwesomeIcon icon={faEdit} /></button>
+                <button className='btn btn-primary mr-10' onClick={() => navigate('/editcompany/' + record)} ><FontAwesomeIcon icon={faEdit}  /></button>
                 <button className='btn btn-danger'><FontAwesomeIcon icon={faTrash} /></button>
             </>,
         },
@@ -58,12 +47,11 @@ const Employees = () => {
 
 
     const fetch = async (params = {}) => {
-        await EmployeeService.getemployees({
+        await CompanyService.getcompanies({
             ...params,
         })
             .then(
                 (resp) => {
-                    debugger;
                     if (resp.is_success) {
                         const pagination = { ...listData.pagination };
                         pagination.total = resp?.count;
@@ -140,16 +128,14 @@ const Employees = () => {
             setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
         }
     }, [notify]);
-
-
-
     return (
         <>
             <Header />
             <LeftSideBar />
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
-                    <h1 className="page-title">Employees</h1>
+                    <h1 className="page-title">Companies</h1>
+
                     <div className="page-content">
                         <Table
                             columns={columns}
@@ -159,10 +145,11 @@ const Employees = () => {
                             onChange={handleTableChange}
                         />
                     </div>
+
                 </div>
             </main>
         </>
     )
 };
 
-export default Employees;
+export default Company;

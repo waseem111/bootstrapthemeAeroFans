@@ -5,6 +5,23 @@ const EmployeeForm = (props) => {
 
     return (
         <>
+
+{mode == "edit" &&
+                <div className="row">
+                  <div className="form-group col-md-4">
+                    <label >Employee No</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="emp_no"
+                      disabled={true}
+                      {...register("emp_no", {
+                      })}
+                    />
+                  </div>
+                </div>
+                }
+
               <div className="row">
                 <div className="form-group col-md-4">
                   <label >First Name</label>
@@ -64,6 +81,8 @@ const EmployeeForm = (props) => {
                     className="form-control"
                     type="text"
                     name="email"
+                    autoComplete="new-email"
+                    disabled={mode=="edit" ? true: false}
                     {...register("email", {
                       required: {
                         value: true,
@@ -96,6 +115,7 @@ const EmployeeForm = (props) => {
                       className="form-control"
                       type="password"
                       name="password"
+                      autoComplete="new-password"
                       {...register("password", {
                         required: {
                           value: true,
@@ -108,7 +128,6 @@ const EmployeeForm = (props) => {
                           Password is a required field
                         </span>
                       )}
-
                   </div>
                 </>
                 }
@@ -123,8 +142,7 @@ const EmployeeForm = (props) => {
                     {...register("role_id", { required: true })}
                   >
                     <option value="" disabled>Select Role</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Sales</option>
+                    <option value="1">Sales</option>
                   </select>
                   {errors.role_id &&
                     errors.role_id.type == "required" && (

@@ -23,7 +23,7 @@ const Dashboard = () => {
                                             </div>
                                             <div className="media-body text-right">
                                                 <h3>278</h3>
-                                                <span>Customers</span>
+                                                <span>Companies</span>
                                             </div>
                                         </div>
                                     </div>

@@ -6,6 +6,20 @@ const CompanyForm = (props) => {
     return (
         <>
             <div className="row">
+            {mode == "edit" &&
+                  <div className="form-group col-md-4">
+                    <label >Company No</label>
+                    <input
+                      className="form-control"
+                      type="text"
+                      name="com_no"
+                      disabled={true}
+                      {...register("com_no", {
+                      })}
+                    />
+                  </div>
+                }
+
                 <div className="form-group col-md-4">
                   <label >Company Name</label>
                   <input
@@ -26,8 +40,6 @@ const CompanyForm = (props) => {
                     )}
 
                 </div>
-
-                
               </div>
         </>
     )
