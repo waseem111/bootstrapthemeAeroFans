@@ -10,7 +10,29 @@ const Dashboard = () => {
         <>
             <Header />
             <LeftSideBar />
-            <div className='loader-outer-main'>
+             {/* <div className='loader-outer-main'>
+            <div className='loader-inner-main'>
+                    <Vortex
+  visible={true}
+  height="90"
+  width="90"
+  ariaLabel="vortex-loading"
+  wrapperStyle={{}}
+  wrapperClass="vortex-wrapper"
+  colors={['#1c3e52', '#1c3e52', '#1c3e52', '#1c3e52', '#1c3e52', '#1c3e52']}
+/>
+</div>
+            </div>  */}
+            
+            <main className="l-main">
+                <div className="content-wrapper content-wrapper--with-bg">
+                    <h1 className="page-title">Dashboard</h1>
+                    <div className="row">
+                        <div className="col-xl-4 col-sm-4 col-12">
+                            <div className="card">
+                                <div className="card-content">
+                                    <div className="card-body">
+                                    <div className='loader-outer-main'>
             <div className='loader-inner-main'>
                     <Vortex
   visible={true}
@@ -23,15 +45,6 @@ const Dashboard = () => {
 />
 </div>
             </div>
-            
-            <main className="l-main">
-                <div className="content-wrapper content-wrapper--with-bg">
-                    <h1 className="page-title">Dashboard</h1>
-                    <div className="row">
-                        <div className="col-xl-4 col-sm-4 col-12">
-                            <div className="card">
-                                <div className="card-content">
-                                    <div className="card-body">
                                         <div className="media d-flex">
                                             <div className="align-self-center">
                                                 <FontAwesomeIcon icon={faUsers} className="primary font-large-2 float-left" />
