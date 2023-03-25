@@ -4,11 +4,13 @@ import LeftSideBar from '../../layout/leftsidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faProjectDiagram, faUsers, faFileAlt } from '@fortawesome/fontawesome-free-solid'
 import './dashboard.css';
+import { Vortex } from 'react-loader-spinner';
 const Dashboard = () => {
     return (
         <>
             <Header />
             <LeftSideBar />
+
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
                     <h1 className="page-title">Dashboard</h1>
@@ -66,7 +68,15 @@ const Dashboard = () => {
                         </div>
 
                     </div>
-
+                    <Vortex
+  visible={true}
+  height="80"
+  width="80"
+  ariaLabel="vortex-loading"
+  wrapperStyle={{}}
+  wrapperClass="vortex-wrapper"
+  colors={['red', 'green', 'blue', 'yellow', 'orange', 'purple']}
+/>
 
                     <div className="alert alert-primary" role="alert">
                         This is a primary alert with <a href="#" className="alert-link">an example link</a>. Give it a click if you like.
