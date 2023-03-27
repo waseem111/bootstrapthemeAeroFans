@@ -108,7 +108,7 @@ const LeftSideBar = () => {
                                             List of Projects
                                         </NavLink>
                                     </li>
-                                    <li>
+                                    {/* <li>
                                         <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addunit">
                                             Add Unit
                                         </NavLink>
@@ -117,7 +117,7 @@ const LeftSideBar = () => {
                                         <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/units">
                                             List of Units
                                         </NavLink>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </li>
                             <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}

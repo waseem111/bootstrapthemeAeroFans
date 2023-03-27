@@ -53,7 +53,15 @@ CompanyService.editcompany = (obj) =>
             return err;
         });
 
-
+CompanyService.deletecompany = (id) =>
+    fetch
+        .get(`${endpoints.deletecompany}${id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
 
 CompanyService.getbranches = (query) =>
@@ -105,5 +113,15 @@ CompanyService.editbranch = (obj) =>
             return err;
         });
 
+
+        CompanyService.deletebranch = (id) =>
+    fetch
+        .get(`${endpoints.deletebranch}${id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
 export default CompanyService;

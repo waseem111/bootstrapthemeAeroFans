@@ -56,7 +56,6 @@ const EditBranch = () => {
   };
 
   const getbranchbyid = async () => {
-    debugger;
     await CompanyService.getbranchbyid(id)
       .then(
         (resp) => {

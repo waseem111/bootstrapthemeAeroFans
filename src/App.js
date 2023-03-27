@@ -12,7 +12,7 @@ import AddEmployee from "./views/app/employees/addemployee/addemployee";
 import EditEmployee from "./views/app/employees/editemployee/editemployee";
 import Addunits from "./views/app/projects/addunits/addunits";
 import Units from "./views/app/projects/units/units";
-import Addproject from "./views/app/projects/addprojects/addprojects";
+import Addproject from "./views/app/projects/addproject/addproject";
 import Fans from "./views/app/lookups/fans/fans";
 import Unitconversions from "./views/app/lookups/unitconversions/unitconversions";
 import Roleprivileges from "./views/app/lookups/roleprivileges/roleprivileges";
@@ -23,6 +23,8 @@ import Quotations from "./views/app/quotations/quotations/quotations";
 import AddBranch from "./views/app/companies/addbranch/addbranch";
 import Branches from "./views/app/companies/branches/branches";
 import EditBranch from "./views/app/companies/editbranch/editbranch";
+import EditProject from "./views/app/projects/editproject/editproject";
+
 
 function App() {
   const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
@@ -55,6 +57,7 @@ function App() {
 
             <Route path="/addproject" element={<Addproject />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/editproject/:id" element={<EditProject />} />
             <Route path="/addunit" element={<Addunits />} />
             <Route path="/units" element={<Units />} />
             

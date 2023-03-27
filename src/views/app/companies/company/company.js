@@ -7,6 +7,9 @@ import LeftSideBar from '../../../layout/leftsidebar';
 import CompanyService from '../../../services/companyservices';
 import Notify from '../../../components/notify/notify';
 import { Table } from "antd";
+import Confirmation from '../../../components/confirmation/confirmation';
+import Modal from "react-modal";
+Modal.setAppElement("#root");
 const Company = () => {
     const navigate = useNavigate();
     const [notify, setNotify] = useState({ options: [], visible: false });
@@ -30,7 +33,7 @@ const Company = () => {
             key: 'com_id',
             render: (record) => <>
                 <button className='btn btn-primary mr-10' onClick={() => navigate('/editcompany/' + record)} ><FontAwesomeIcon icon={faEdit}  /></button>
-                <button className='btn btn-danger'><FontAwesomeIcon icon={faTrash} /></button>
+                <button className='btn btn-danger' onClick={() =>{setSelectedId(record);}} ><FontAwesomeIcon icon={faTrash} /></button>
             </>,
         },
     ];
@@ -128,6 +131,59 @@ const Company = () => {
             setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
         }
     }, [notify]);
+
+    const [selectedId, setSelectedId] = useState(null);
+    useEffect(() => {
+        if(selectedId)
+            setIsOpen(true);
+    }, [selectedId]);
+    const [isOpen, setIsOpen] = useState(false);
+    function toggleModal() {
+        setIsOpen(!isOpen);
+    }
+    const handleDelete = async () => {
+        await CompanyService.deletecompany(selectedId)
+          .then((resp) => {
+            if (resp.is_success) {
+                setSelectedId(null);
+                setIsOpen(false);
+                fetch({
+                    size: 10,
+                    page: 1,
+                    search: listData.search,
+                    sortField: listData.sortField,
+                    sortOrder: listData.sortOrder,
+                    ...listData.filter,
+                });
+              setNotify((prev) => ({
+                ...prev, options: {
+                  type: "success",
+                  message: resp?.message
+                }, visible: true
+              }));
+            }
+            else {
+                setSelectedId(null);
+              setNotify((prev) => ({
+                ...prev, options: {
+                  type: "danger",
+                  message: resp?.message
+                }, visible: true
+              }));
+            }
+    
+          })
+          .catch((err) => {
+            setSelectedId(null);
+            setNotify((prev) => ({
+              ...prev, options: {
+                type: "danger",
+                message: err?.message
+              }, visible: true
+            }));
+          });
+      };
+
     return (
         <>
             <Header />
@@ -148,6 +204,15 @@ const Company = () => {
 
                 </div>
             </main>
+            <Modal
+                isOpen={isOpen}
+                onRequestClose={toggleModal}
+                contentLabel="My dialog"
+                className="mymodal"
+                overlayClassName="myoverlay"
+            >
+                <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
+            </Modal>
         </>
     )
 };

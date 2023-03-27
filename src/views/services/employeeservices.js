@@ -65,6 +65,16 @@ EmployeeService.editemployee = (obj) =>
             return err;
         });
 
+EmployeeService.deleteemployee = (id) =>
+    fetch
+        .get(`${endpoints.deleteemployee}${id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
 
 
 export default EmployeeService;

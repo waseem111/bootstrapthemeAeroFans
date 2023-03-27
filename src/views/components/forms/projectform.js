@@ -33,6 +33,7 @@ const ProjectForm = (props) => {
             defaultValue=""
             id="com_id"
             name="com_id"
+            disabled={mode== 'edit'? true: false}
             {...register("com_id", {
               required: {
                 value: true,
@@ -59,6 +60,7 @@ const ProjectForm = (props) => {
           <select
             className="form-control"
             defaultValue=""
+            disabled={mode== 'edit'? true: false}
             name="cb_id"
             {...register("cb_id", {
               required: {

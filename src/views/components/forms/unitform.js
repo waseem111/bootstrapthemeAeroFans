@@ -6,28 +6,7 @@ const UnitForm = (props) => {
     return (
         <>
               <div className="row">
-
-                <div className="form-group col-md-4 ">
-                  <label>Project</label>
-                  <select
-                    className="form-control"
-                    defaultValue=""
-                    name="proj_id"
-                    {...register("proj_id", { required: true })}
-                  >
-                    <option value="" disabled>Select project</option>
-                    <option value="1">project 1</option>
-                    <option value="2">project 2</option>
-                  </select>
-                  {errors.proj_id &&
-                    errors.proj_id.type == "required" && (
-                      <span className='error-text'>
-                        project is a required field
-                      </span>
-                    )}
-                </div>
-
-                <div className="form-group col-md-4">
+                <div className="form-group col-md-6">
                   <label >Unit Name</label>
                   <input
                     className="form-control"
@@ -45,45 +24,62 @@ const UnitForm = (props) => {
                         Unit name is a required field
                       </span>
                     )}
-
                 </div>
 
-                <div className="form-group col-md-4 ">
-                  <label>Company</label>
-                  <select
+                <div className="form-group col-md-6">
+                  <label>Airflow</label>
+                  <input
                     className="form-control"
-                    defaultValue=""
-                    name="com_id"
-                    {...register("com_id", { required: true })}
-                  >
-                    <option value="" disabled>Select Company</option>
-                    <option value="1">Company 1</option>
-                    <option value="2">Company 2</option>
-                  </select>
-                  {errors.com_id &&
-                    errors.com_id.type == "required" && (
+                    type="text"
+                    name="airflow"
+                    {...register("airflow", {
+                      pattern:{
+                        value: /^[0-9]+$/,
+                      },
+                      required: {
+                        value: true,
+                      },
+                    })}
+                  />
+                  {errors.airflow &&
+                    errors.airflow.type == "required" && (
                       <span className='error-text'>
-                        Company is a required field
+                        Airflow is a required field
+                      </span>
+                    )}
+                    {errors.airflow &&
+                    errors.airflow.type === "pattern" && (
+                      <span className='error-text'>
+                        Invalid Airflow
                       </span>
                     )}
                 </div>
 
-                <div className="form-group col-md-4 ">
-                  <label>Branch</label>
-                  <select
+                <div className="form-group col-md-6">
+                  <label >Pressure</label>
+                  <input
                     className="form-control"
-                    defaultValue=""
-                    name="cb_id"
-                    {...register("cb_id", { required: true })}
-                  >
-                    <option value="" disabled>Select Branch</option>
-                    <option value="1">Branch 1</option>
-                    <option value="2">Branch 2</option>
-                  </select>
-                  {errors.cb_id &&
-                    errors.cb_id.type == "required" && (
+                    type="number"
+                    name="pressure"
+                    {...register("pressure", {
+                      pattern:{
+                        value: /^[0-9]+$/,
+                      },
+                      required: {
+                        value: true,
+                      },
+                    })}
+                  />
+                  {errors.pressure &&
+                    errors.pressure.type == "required" && (
                       <span className='error-text'>
-                        Branch is a required field
+                        Pressure is a required field
+                      </span>
+                    )}
+                    {errors.pressure &&
+                    errors.pressure.type === "pattern" && (
+                      <span className='error-text'>
+                        Invalid Pressure
                       </span>
                     )}
                 </div>

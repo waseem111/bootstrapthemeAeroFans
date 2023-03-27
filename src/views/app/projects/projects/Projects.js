@@ -1,27 +1,3 @@
-// import React, { Fragment } from 'react';
-// import Header from '../../../layout/header';
-// import LeftSideBar from '../../../layout/leftsidebar';
-// import '../../../../App.css';
-// const Projects = () => {
-//     return (
-//         <>
-//             <Header />
-//             <LeftSideBar />
-//             <main className="l-main">
-//                 <div className="content-wrapper content-wrapper--with-bg">
-//                     <h1 className="page-title">Projects</h1>
-
-
-
-//                 </div>
-//             </main>
-//         </>
-//     )
-// };
-
-// export default Projects;
-
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -32,7 +8,9 @@ import CompanyService from '../../../services/companyservices';
 import Notify from '../../../components/notify/notify';
 import { Table } from "antd";
 import ProjectService from '../../../services/projectservices';
-
+import Confirmation from '../../../components/confirmation/confirmation';
+import Modal from "react-modal";
+Modal.setAppElement("#root");
 const Projects = () => {
     const navigate = useNavigate();
     const { id } = useParams();
@@ -41,39 +19,34 @@ const Projects = () => {
 
     const columns = [
         {
-            title: 'Branch #',
-            dataIndex: 'cb_no',
-            key: 'cb_no',
+            title: 'Project #',
+            dataIndex: 'proj_no',
+            key: 'proj_no',
             sorter: true
         },
         {
-            title: 'Branch Name',
-            dataIndex: 'com_branch_name',
-            key: 'com_branch_name',
+            title: 'Project Name',
+            dataIndex: 'proj_name',
+            key: 'proj_name',
             sorter: true
         },
         {
-            title: 'Contact Name',
-            dataIndex: 'primary_contact_name',
-            key: 'primary_contact_name',
+            title: 'Company',
+            dataIndex: 'com_name',
+            key: 'com_name',
         },
         {
-            title: 'Contact Phone No',
-            dataIndex: 'primary_contact_phone_no',
-            key: 'primary_contact_phone_no',
-        },
-        {
-            title: 'Contact Email',
-            dataIndex: 'primary_contact_email',
-            key: 'primary_contact_email',
+            title: 'Units',
+            dataIndex: 'count',
+            key: 'count',
         },
         {
             title: 'Action',
-            dataIndex: 'cb_id',
-            key: 'cb_id',
+            dataIndex: 'proj_id',
+            key: 'proj_id',
             render: (record) => <>
-                <button className='btn btn-primary mr-10' onClick={() => navigate('/editbranch/' + record)} ><FontAwesomeIcon icon={faEdit} /></button>
-                <button className='btn btn-danger'><FontAwesomeIcon icon={faTrash} /></button>
+                <button className='btn btn-primary mr-10' onClick={() => navigate('/editproject/' + record)} ><FontAwesomeIcon icon={faEdit} /></button>
+                <button className='btn btn-danger' onClick={() =>{setSelectedId(record);}} ><FontAwesomeIcon icon={faTrash} /></button>
             </>,
         },
     ];
@@ -99,7 +72,6 @@ const Projects = () => {
             .then(
                 (resp) => {
                     if (resp.is_success) {
-                        debugger;
                         const pagination = { ...listData.pagination };
                         pagination.total = resp?.count;
                         pagination.current = resp?.current_page;
@@ -207,7 +179,6 @@ const Projects = () => {
 
     useEffect(() => {
         if (listData.tableChange) {
-            debugger;
             fetch({
                 size: listData.pagination.pageSize,
                 page: listData.pagination.current,
@@ -268,6 +239,59 @@ const Projects = () => {
             setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
         }
     }, [notify]);
+
+    const [selectedId, setSelectedId] = useState(null);
+    useEffect(() => {
+        if(selectedId)
+            setIsOpen(true);
+    }, [selectedId]);
+    const [isOpen, setIsOpen] = useState(false);
+    function toggleModal() {
+        setIsOpen(!isOpen);
+    }
+    const handleDelete = async () => {
+        await ProjectService.deleteproject(selectedId)
+          .then((resp) => {
+            if (resp.is_success) {
+                setSelectedId(null);
+                setIsOpen(false);
+                fetch({
+                    size: 10,
+                    page: 1,
+                    search: listData.search,
+                    sortField: listData.sortField,
+                    sortOrder: listData.sortOrder,
+                    ...listData.filter,
+                });
+              setNotify((prev) => ({
+                ...prev, options: {
+                  type: "success",
+                  message: resp?.message
+                }, visible: true
+              }));
+            }
+            else {
+                setSelectedId(null);
+              setNotify((prev) => ({
+                ...prev, options: {
+                  type: "danger",
+                  message: resp?.message
+                }, visible: true
+              }));
+            }
+    
+          })
+          .catch((err) => {
+            setSelectedId(null);
+            setNotify((prev) => ({
+              ...prev, options: {
+                type: "danger",
+                message: err?.message
+              }, visible: true
+            }));
+          });
+      };
+
     return (
         <>
             <Header />
@@ -322,6 +346,15 @@ const Projects = () => {
 
                 </div>
             </main>
+            <Modal
+                isOpen={isOpen}
+                onRequestClose={toggleModal}
+                contentLabel="My dialog"
+                className="mymodal"
+                overlayClassName="myoverlay"
+            >
+                <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
+            </Modal>
         </>
     )
 };

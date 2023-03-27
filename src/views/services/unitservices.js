@@ -44,7 +44,7 @@ UnitService.addunit = (obj) =>
 
 UnitService.editunit = (obj) =>
     fetch
-        .post(`${endpoints.editunit}`, obj)
+        .put(`${endpoints.editunit}`, obj)
         .then((data) => {
             return data;
         })
@@ -52,6 +52,26 @@ UnitService.editunit = (obj) =>
             return err;
         });
 
+
+UnitService.bulkaddunit = (obj) =>
+    fetch
+        .post(`${endpoints.bulkaddunit}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+        UnitService.deleteunit = (id) =>
+        fetch
+            .get(`${endpoints.deleteunit}${id}`)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
 
 
 export default UnitService;

@@ -43,9 +43,8 @@ ProjectService.addproject = (obj) =>
 
 
 ProjectService.editproject = (obj) =>
-
     fetch
-        .post(`${endpoints.editproject}`, obj)
+        .put(`${endpoints.editproject}`, obj)
         .then((data) => {
             return data;
         })
@@ -53,5 +52,26 @@ ProjectService.editproject = (obj) =>
             return err;
         });
 
+ProjectService.getunitsbyprojectid = (id) =>
+    fetch({
+        url: `${endpoints.getunitsbyprojectid}${id}`,
+        method: "get",
+    })
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+        ProjectService.deleteproject = (id) =>
+        fetch
+            .get(`${endpoints.deleteproject}${id}`)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
 
 export default ProjectService;

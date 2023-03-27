@@ -6,11 +6,15 @@ import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import EmployeeService from '../../../services/employeeservices';
 import Notify from '../../../components/notify/notify';
+import Modal from "react-modal";
 import { Table } from "antd";
+import Confirmation from '../../../components/confirmation/confirmation';
+Modal.setAppElement("#root");
+
 const Employees = () => {
     const navigate = useNavigate();
     const [notify, setNotify] = useState({ options: [], visible: false });
-
+    
     const columns = [
         {
             title: 'Emp #',
@@ -41,7 +45,7 @@ const Employees = () => {
             key: 'emp_id',
             render: (record) => <>
                 <button className='btn btn-primary mr-10' onClick={() => navigate('/editemployee/' + record)}><FontAwesomeIcon icon={faEdit} /></button>
-                <button className='btn btn-danger'><FontAwesomeIcon icon={faTrash} /></button>
+                <button className='btn btn-danger' onClick={() =>{setSelectedId(record);}} ><FontAwesomeIcon icon={faTrash} /></button>
             </>,
         },
     ];
@@ -63,7 +67,6 @@ const Employees = () => {
         })
             .then(
                 (resp) => {
-                    debugger;
                     if (resp.is_success) {
                         const pagination = { ...listData.pagination };
                         pagination.total = resp?.count;
@@ -137,11 +140,66 @@ const Employees = () => {
 
     useEffect(() => {
         if (notify.visible) {
-            setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
+            setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false }));  
+            
+        }, 3000);
+           
         }
     }, [notify]);
 
 
+    const [selectedId, setSelectedId] = useState(null);
+    useEffect(() => {
+        if(selectedId)
+            setIsOpen(true);
+    }, [selectedId]);
+    
+    const [isOpen, setIsOpen] = useState(false);
+    function toggleModal() {
+        setIsOpen(!isOpen);
+    }
+    const handleDelete = async () => {
+        await EmployeeService.deleteemployee(selectedId)
+          .then((resp) => {
+            if (resp.is_success) {
+                setSelectedId(null);
+                setIsOpen(false);
+                fetch({
+                    size: 10,
+                    page: 1,
+                    search: listData.search,
+                    sortField: listData.sortField,
+                    sortOrder: listData.sortOrder,
+                    ...listData.filter,
+                });
+              setNotify((prev) => ({
+                ...prev, options: {
+                  type: "success",
+                  message: resp?.message
+                }, visible: true
+              }));
+            }
+            else {
+                setSelectedId(null);
+              setNotify((prev) => ({
+                ...prev, options: {
+                  type: "danger",
+                  message: resp?.message
+                }, visible: true
+              }));
+            }
+    
+          })
+          .catch((err) => {
+            setSelectedId(null);
+            setNotify((prev) => ({
+              ...prev, options: {
+                type: "danger",
+                message: err?.message
+              }, visible: true
+            }));
+          });
+      };
 
     return (
         <>
@@ -161,6 +219,15 @@ const Employees = () => {
                     </div>
                 </div>
             </main>
+            <Modal
+                isOpen={isOpen}
+                onRequestClose={toggleModal}
+                contentLabel="My dialog"
+                className="mymodal"
+                overlayClassName="myoverlay"
+            >
+                <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
+            </Modal>
         </>
     )
 };
