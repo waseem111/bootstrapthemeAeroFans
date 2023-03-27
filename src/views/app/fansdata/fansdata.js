@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import Header from '../../layout/header';
 import LeftSideBar from '../../layout/leftsidebar';
-import './fansdata.css';
 const Fansdata = () => {
     return (
         <>

@@ -3,7 +3,6 @@ import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
-import './addemployee.css';
 import EmployeeForm from '../../../components/forms/employeeform';
 import EmployeeService from '../../../services/employeeservices';
 import authContext from '../../../../auth-context';

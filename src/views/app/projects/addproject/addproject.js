@@ -3,7 +3,6 @@ import Header from '../../../layout/header';
 import LeftSideBar from '../../../layout/leftsidebar';
 import { useForm, Controller, set } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
-import './addproject.css';
 import ProjectForm from '../../../components/forms/projectform';
 import ProjectService from '../../../services/projectservices';
 import CompanyService from '../../../services/companyservices';
