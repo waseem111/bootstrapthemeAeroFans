@@ -50,6 +50,7 @@ const Company = () => {
 
 
     const fetch = async (params = {}) => {
+        setListData((prev) => ({ ...prev, loading: true }));
         await CompanyService.getcompanies({
             ...params,
         })
@@ -62,6 +63,7 @@ const Company = () => {
                         setListData((prev) => ({
                             ...prev,
                             data: resp?.data,
+                            loading: false,
                             pagination: pagination,
                         }));
                     }
@@ -199,6 +201,7 @@ const Company = () => {
                             dataSource={listData.data}
                             pagination={listData.pagination}
                             onChange={handleTableChange}
+                            loading={listData.loading}
                         />
                     </div>
 

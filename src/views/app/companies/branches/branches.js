@@ -68,6 +68,7 @@ const Branches = () => {
     const [lookupCompanies, setLookupCompanies] = useState([]);
 
     const fetch = async (params = {}) => {
+        setListData((prev) => ({ ...prev, loading: true }));
         await CompanyService.getbranches({
             ...params,
         })
@@ -81,6 +82,7 @@ const Branches = () => {
                         setListData((prev) => ({
                             ...prev,
                             data: resp?.data,
+                            loading: false,
                             pagination: pagination,
                         }));
                     }
@@ -317,6 +319,7 @@ const Branches = () => {
                             rowKey={new Date().getTime()}
                             dataSource={listData.data}
                             pagination={listData.pagination}
+                            loading={listData.loading}
                             // pagination={{
                             //     pageSizeOptions: ['10', '50', '100'],
                             //     showSizeChanger: true,

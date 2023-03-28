@@ -165,12 +165,14 @@ const EditProject = () => {
     });
 
     const getunitsbyprojectid = async () => {
+        setListData((prev) => ({ ...prev, loading: true }));
         await ProjectService.getunitsbyprojectid(id)
             .then(
                 (resp) => {
                     if (resp.is_success) {
                         setListData((prev) => ({
                             ...prev,
+                            loading: false,
                             data: resp?.data,
                         }));
                     }
@@ -433,7 +435,7 @@ const EditProject = () => {
                                 style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }}>Upload Units</button>
                         </div>
                         <div style={{ marginTop: "20px" }}>
-                            {project && <Units columns={columns} listData={listData} />}
+                            <Units columns={columns} listData={listData} />
                         </div>
                         {/* <div className="form-button-group" style={{ marginTop: "20px" }}>
                                     <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Update</button>

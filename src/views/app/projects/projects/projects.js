@@ -66,6 +66,7 @@ const Projects = () => {
     const [lookupBranches, setLookupBranches] = useState([]);
 
     const fetch = async (params = {}, id) => {
+        setListData((prev) => ({ ...prev, loading: true }));
         await ProjectService.getprojects({
             ...params,
         })
@@ -79,6 +80,7 @@ const Projects = () => {
                         setListData((prev) => ({
                             ...prev,
                             data: resp?.data,
+                            loading: false,
                             pagination: pagination,
                         }));
                     }
@@ -341,6 +343,7 @@ const Projects = () => {
                             dataSource={listData.data}
                             pagination={listData.pagination}
                             onChange={handleTableChange}
+                            loading={listData.loading}
                         />
                     </div>
 

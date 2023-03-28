@@ -10,6 +10,7 @@ const Units = (props) => {
                     columns={columns}
                     rowKey={new Date().getTime()}
                     dataSource={listData?.data}
+                    loading={listData.loading}
                     pagination={false} 
                     scroll={{y:400}}
                 />

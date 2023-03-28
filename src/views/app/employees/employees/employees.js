@@ -62,6 +62,7 @@ const Employees = () => {
 
 
     const fetch = async (params = {}) => {
+        setListData((prev) => ({ ...prev, loading: true }));
         await EmployeeService.getemployees({
             ...params,
         })
@@ -74,6 +75,7 @@ const Employees = () => {
                         setListData((prev) => ({
                             ...prev,
                             data: resp?.data,
+                            loading: false,
                             pagination: pagination,
                         }));
                     }
@@ -215,6 +217,7 @@ const Employees = () => {
                             dataSource={listData.data}
                             pagination={listData.pagination}
                             onChange={handleTableChange}
+                            loading={listData.loading}
                         />
                     </div>
                 </div>
