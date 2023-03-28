@@ -38,4 +38,7 @@ export const endpoints = {
     editunit:  global.api_url + "unit/edit",
     deleteunit:  global.api_url + "unit/delete/",
 
+    //company unit
+    getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
+
 }
