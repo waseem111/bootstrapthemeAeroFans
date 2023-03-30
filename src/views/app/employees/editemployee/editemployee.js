@@ -7,6 +7,11 @@ import Notify from '../../../components/notify/notify';
 import EmployeeForm from '../../../components/forms/employeeform';
 import EmployeeService from '../../../services/employeeservices';
 import authContext from '../../../../auth-context';
+import Confirmation from '../../../components/confirmation/confirmation';
+import Modal from "react-modal";
+import ChangePassword from '../changepassword/changepassword';
+Modal.setAppElement("#root");
+
 const EditEmployee = () => {
   const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
   const navigate = useNavigate();
@@ -62,6 +67,21 @@ const EditEmployee = () => {
     }
   }, [employee]);
 
+  const [selectedId, setSelectedId] = useState(null);
+    useEffect(() => {
+        if(selectedId)
+            setIsOpen(true);
+    }, [selectedId]);
+    
+    const [isOpen, setIsOpen] = useState(false);
+    function toggleModal() {
+        setIsOpen(!isOpen);
+    }
+
+  const handleChangepassword = (e) => {
+    toggleModal()
+  }
+
   const submit = async (obj) => {
     obj.updated_by = loggedInUser?.emp_id;
     await EmployeeService.editemployee(obj)
@@ -104,6 +124,11 @@ const EditEmployee = () => {
     }
   }, [notify]);
 
+  const handleChangePasswordSubmit = () => {
+    setIsOpen(false);
+    getemployeebyid();
+}
+
   return (
     <>
       <Header />
@@ -125,7 +150,8 @@ const EditEmployee = () => {
                 <EmployeeForm register={register} errors={errors} mode={"edit"} />
                 <div className="form-button-group">
                   <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Update</button>
-                  <button type="button" className="btn btn-danger" onClick={() => navigate('/employees')}>Cancel</button>
+                  <button type="button" className="btn btn-danger mr-10" onClick={() => navigate('/employees')}>Cancel</button>
+                  {loggedInUser?.role_id == 0 && <button type="button" className="btn btn-warning" onClick={handleChangepassword}>Change Password</button>}
                 </div>
               </form>
             }
@@ -133,6 +159,16 @@ const EditEmployee = () => {
         </div>
 
       </main>
+      <Modal
+          isOpen={isOpen}
+          onRequestClose={toggleModal}
+          contentLabel="My dialog"
+          className="mymodal"
+          overlayClassName="myoverlay"
+          
+      >
+        <ChangePassword employee={employee} loggedInUser={loggedInUser} onClose={toggleModal} onSubmit={handleChangePasswordSubmit} />
+      </Modal>
     </>
   )
 };
