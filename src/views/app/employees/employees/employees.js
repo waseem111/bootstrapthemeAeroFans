@@ -80,15 +80,11 @@ const Employees = () => {
                         }));
                     }
                     else {
-                        setNotify((prev) => ({
-                            ...prev, options: {
-                                type: "danger",
-                                message: resp?.message
-                            }, visible: true
-                        }));
+                        setListData((prev) => ({ ...prev, data: [], loading: false }));
                     }
                 },
                 (err) => {
+                    setListData((prev) => ({ ...prev, data: [], loading: false }));
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",

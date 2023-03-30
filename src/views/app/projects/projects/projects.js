@@ -85,6 +85,7 @@ const Projects = () => {
                         }));
                     }
                     else {
+                        setListData((prev) => ({ ...prev, data: [], loading: false }));
                         setNotify((prev) => ({
                             ...prev, options: {
                                 type: "danger",
@@ -94,6 +95,7 @@ const Projects = () => {
                     }
                 },
                 (err) => {
+                    setListData((prev) => ({ ...prev, data: [], loading: false }));
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",

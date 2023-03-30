@@ -4,7 +4,7 @@ import Notify from '../../../components/notify/notify';
 import UnitForm from '../../../components/forms/unitform';
 import UnitService from '../../../services/unitservices';
 const Addunits = (props) => {
-  const { project =null,loggedInUser=null, onClose, onSubmit } = props;
+  const { project =null,loggedInUser=null, unit=null, lookupUnitConversion=null, onClose, onSubmit } = props;
 
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
@@ -66,6 +66,13 @@ const Addunits = (props) => {
     }
   }, [notify]);
 
+  useEffect(() => {
+    if (unit) {
+        unit.unit_name = null;
+        reset(unit);
+    }
+}, []);
+
   return (
     <>
       <div className="modal-header">
@@ -75,7 +82,7 @@ const Addunits = (props) => {
       <form>
         <div className="modal-body">
           {notify?.visible && <Notify options={notify?.options} />}
-          <UnitForm register={register} errors={errors} />
+          <UnitForm register={register} errors={errors} lookupUnitConversion={lookupUnitConversion} />
         </div>
         <div className="modal-footer">
           <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>

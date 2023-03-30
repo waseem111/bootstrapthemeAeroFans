@@ -3,6 +3,7 @@ import Header from '../../layout/header';
 import LeftSideBar from '../../layout/leftsidebar';
 import { Table } from "antd";
 import FansDataService from '../../services/fansdataservice';
+import Notify from '../../components/notify/notify';
 const Fansdata = () => {
     const columns = [
         {
@@ -97,7 +98,7 @@ const Fansdata = () => {
         tableChange: false,
     });
 
-
+    const [notify, setNotify] = useState({ options: [], visible: false });
     const getrecordsbyairflowpressure = async (params = {}, id) => {
         setListData((prev) => ({ ...prev, loading: true }));
         await FansDataService.getrecordsbyairflowpressure({
@@ -112,12 +113,13 @@ const Fansdata = () => {
                     }));
                 },
                 (err) => {
-                    // setNotify((prev) => ({
-                    //     ...prev, options: {
-                    //         type: "danger",
-                    //         message: err?.message
-                    //     }, visible: true
-                    // }));
+                    setListData((prev) => ({ ...prev, data: [], loading: false }));
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
                 }
             );
     };
@@ -129,6 +131,11 @@ const Fansdata = () => {
         })
     }, []);
 
+    useEffect(() => {
+        if (notify.visible) {
+            setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
+        }
+    }, [notify]);
 
     return (
         <>

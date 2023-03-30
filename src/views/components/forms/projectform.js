@@ -82,6 +82,18 @@ const ProjectForm = (props) => {
               </span>
             )}
         </div>
+       {mode== 'edit' && <div className="form-group col-md-4">
+          <label >Units</label>
+          <input
+            className="form-control"
+            type="text"
+            name="count"
+            disabled={true}
+            {...register("count", {
+              
+            })}
+          />
+        </div>}
       </div>
     </>
   )

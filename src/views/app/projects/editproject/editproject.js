@@ -12,11 +12,12 @@ import Units from '../units/units';
 import Modal from "react-modal";
 import Addunits from '../addunits/addunits';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEdit, faTrash } from '@fortawesome/fontawesome-free-solid'
+import { faClone, faEdit, faTrash } from '@fortawesome/fontawesome-free-solid'
 import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import EditUnit from '../editunit/editunit';
 import Confirmation from '../../../components/confirmation/confirmation';
+import LookupService from '../../../services/lookupservices';
 
 Modal.setAppElement("#root")
 
@@ -27,6 +28,7 @@ const EditProject = () => {
     const [project, setProject] = useState(null);
     const [notify, setNotify] = useState({ options: [], visible: false });
     const [lookupCompanies, setLookupCompanies] = useState([]);
+    const [lookupUnitConversion, setLookupUnitConversion] = useState([]);
     const [unit, setUnit] = useState([]);
     const [lookupBranches, setLookupBranches] = useState([]);
     const {
@@ -136,20 +138,23 @@ const EditProject = () => {
         },
         {
             title: 'Air Flow',
-            dataIndex: 'airflow',
+            //dataIndex: 'airflow',
             key: 'airflow',
+            render: (record) => (`${record?.airflow} ${record?.airflow_unit ? record?.airflow_unit : ''}`),
         },
         {
             title: 'Pressure',
-            dataIndex: 'pressure',
+            //dataIndex: 'pressure',
             key: 'pressure',
+            render: (record) => (`${record?.pressure} ${record?.pressure_unit ? record?.pressure_unit : ''}`),
         },
         {
             title: 'Action',
             key: 'pu_id',
             render: (record) => <>
                 <button className='btn btn-primary mr-10' onClick={() => editToggleModal("edit", record)} ><FontAwesomeIcon icon={faEdit} /></button>
-                <button className='btn btn-danger' onClick={() =>{setSelectedId(record.pu_id);}} ><FontAwesomeIcon icon={faTrash} /></button>
+                <button className='btn btn-danger mr-10' onClick={() =>{setSelectedId(record);toggleModal("delete")}} ><FontAwesomeIcon icon={faTrash} /></button>
+                <button className='btn btn-info' onClick={() =>{setUnit(JSON.parse(JSON.stringify(record)));toggleModal('single');}} ><FontAwesomeIcon icon={faClone} /></button>
             </>,
         },
     ];
@@ -176,8 +181,12 @@ const EditProject = () => {
                             data: resp?.data,
                         }));
                     }
+                    else{
+                        setListData((prev) => ({ ...prev, data: [], loading: false }));
+                    }
                 },
                 (err) => {
+                    setListData((prev) => ({ ...prev, loading: false }));
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",
@@ -185,6 +194,33 @@ const EditProject = () => {
                         }, visible: true
                     }));
                 }
+            );
+    };
+
+    const getunitconversions = async () => {
+        await LookupService.getunitconversions()
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        setLookupUnitConversion(resp?.data);
+                    }
+                    else {
+                        setNotify((prev) => ({
+                          ...prev, options: {
+                            type: "danger",
+                            message: resp?.message
+                          }, visible: true
+                        }));
+                      }
+                    },
+                    (err) => {
+                      setNotify((prev) => ({
+                        ...prev, options: {
+                          type: "danger",
+                          message: err?.message
+                        }, visible: true
+                      }));
+                    }
             );
     };
 
@@ -240,6 +276,7 @@ const EditProject = () => {
         Promise.all([
             getcompanies(),
             getbranches(),
+            getunitconversions(),
         ]).then(() => {
             getprojectbyid();
             getunitsbyprojectid();
@@ -356,21 +393,15 @@ const EditProject = () => {
 
 
     const [selectedId, setSelectedId] = useState(null);
-    useEffect(() => {
-        if(selectedId){
-            setPopupDisplay("delete");
-            setIsOpen(true);
-        }
-
-    }, [selectedId]);
+  
 
     const handleDelete = async () => {
-        await UnitService.deleteunit(selectedId)
+        await UnitService.deleteunit(selectedId.pu_id)
           .then((resp) => {
             if (resp.is_success) {
                 setSelectedId(null);
                 setIsOpen(false);
-                getunitsbyprojectid();
+                onPageLoad();
               setNotify((prev) => ({
                 ...prev, options: {
                   type: "success",
@@ -430,7 +461,7 @@ const EditProject = () => {
                     <div className="page-content" style={{ marginTop: "20px" }}>
                         <div style={{ display: "inline" }}>
                             <span className="page-title">Units</span>
-                            <button type="submit" className="btn btn-primary mr-10 pull-right" onClick={() => toggleModal('single')} >Add Unit</button>
+                            <button type="submit" className="btn btn-primary mr-10 pull-right" onClick={() =>{setUnit(null);toggleModal('single');} } >Add Unit</button>
                             <button type="submit" className="btn btn-primary mr-10 pull-right" onClick={() => toggleModal('bulk')}
                                 style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }}>Upload Units</button>
                         </div>
@@ -449,8 +480,8 @@ const EditProject = () => {
                         overlayClassName="myoverlay"
                     >
                         {popupDisplay == "delete" && <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>}
-                        {popupDisplay == "edit" && <div><EditUnit project={project} unit={unit} loggedInUser={loggedInUser} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}
-                        {popupDisplay == "single" && <div><Addunits project={project} loggedInUser={loggedInUser} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}
+                        {popupDisplay == "edit" && <div><EditUnit project={project} unit={unit} loggedInUser={loggedInUser} lookupUnitConversion={lookupUnitConversion} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}
+                        {popupDisplay == "single" && <div><Addunits project={project} loggedInUser={loggedInUser} unit={unit} lookupUnitConversion={lookupUnitConversion} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}
                         {popupDisplay == "bulk" && <div>
                             <div className="modal-header">
                                 <button type="button" className="close" data-dismiss="modal" onClick={() => { toggleModal(); }} style={{ fontSize: "24px" }}>&times;</button>

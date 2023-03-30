@@ -38,7 +38,11 @@ export const endpoints = {
     editunit:  global.api_url + "unit/edit",
     deleteunit:  global.api_url + "unit/delete/",
 
-    //company unit
+  //lookups
+    getfans: global.api_url + "lookup/fans",
+    getunitconversions: global.api_url + "lookup/unitconversions",
+
+    //fans data
     getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
 
 }

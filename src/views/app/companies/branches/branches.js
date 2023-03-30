@@ -86,16 +86,12 @@ const Branches = () => {
                             pagination: pagination,
                         }));
                     }
-                    else {
-                        setNotify((prev) => ({
-                            ...prev, options: {
-                                type: "danger",
-                                message: resp?.message
-                            }, visible: true
-                        }));
+                    else{
+                        setListData((prev) => ({ ...prev, data: [], loading: false }));
                     }
                 },
                 (err) => {
+                    setListData((prev) => ({ ...prev, data: [], loading: false }));
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",
