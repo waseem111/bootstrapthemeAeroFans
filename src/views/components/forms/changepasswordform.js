@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const ChangePasswordForm = (props) => {
    
-    const { register, errors } = props;
+    const { register, errors, watch } = props;
 
     return (
         <>
@@ -10,11 +10,11 @@ const ChangePasswordForm = (props) => {
                   <label >New Password</label>
                   <input
                     className="form-control"
-                    type="text"
+                    type="password"
                     name="new_password"
                     {...register("new_password", {
                         pattern:{
-                          value: /^[0-9]+$/,
+                          value: /^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{8,}$/,
                         },
                       required: {
                         value: true,
@@ -39,12 +39,23 @@ const ChangePasswordForm = (props) => {
                   <label>Confirm Password</label>
                   <input
                     className="form-control"
-                    type="text"
+                    type="password"
                     name="confirm_password"
                     {...register("confirm_password", {
                       required: {
                         value: true,
                       },
+                      validate: (value) => {
+                        if (watch('new_password') != value) {
+                          debugger;
+                          return {
+                            value: false,
+                            message: "Your passwords do no match"
+                          }
+                        }
+                          
+                      }
+                      
                     })}
                   />
                   {errors.confirm_password &&

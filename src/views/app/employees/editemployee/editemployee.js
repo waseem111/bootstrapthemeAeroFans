@@ -165,7 +165,6 @@ const EditEmployee = () => {
           contentLabel="My dialog"
           className="mymodal"
           overlayClassName="myoverlay"
-          
       >
         <ChangePassword employee={employee} loggedInUser={loggedInUser} onClose={toggleModal} onSubmit={handleChangePasswordSubmit} />
       </Modal>

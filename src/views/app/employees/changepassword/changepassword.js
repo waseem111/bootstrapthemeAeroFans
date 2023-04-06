@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useForm, Controller } from "react-hook-form";
 import Notify from '../../../components/notify/notify';
-import UnitService from '../../../services/unitservices';
 import ChangePasswordForm from '../../../components/forms/changepasswordform';
+import EmployeeService from '../../../services/employeeservices';
+import { useParams } from 'react-router-dom';
 const ChangePassword = (props) => {
   const { employee=null, loggedInUser=null, onClose, onSubmit } = props;
-
+  const { id } = useParams();
   const [notify, setNotify] = useState({ options: [], visible: false });
   const {
     register,
@@ -17,9 +18,11 @@ const ChangePassword = (props) => {
   } = useForm({ mode: "all" });
 
   const submit = async (obj) => {
+    obj.emp_id = id;
     obj.updated_by = loggedInUser?.emp_id;
-    await UnitService.addunit(obj)
+    await EmployeeService.changeemployeepassword(obj)
       .then((data) => {
+        
         if (data.is_success) {
           setNotify((prev) => ({
             ...prev, options: {
@@ -27,8 +30,6 @@ const ChangePassword = (props) => {
               message: data?.message
             }, visible: true
           }));
-          reset();
-          onSubmit();
         }
         else {
           setNotify((prev) => ({
@@ -41,7 +42,7 @@ const ChangePassword = (props) => {
 
       })
       .catch((err) => {
-        console.log("addunit error ------------> ", err);
+        console.log("changepassword error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",
@@ -70,7 +71,7 @@ const ChangePassword = (props) => {
       <form>
         <div className="modal-body">
           {notify?.visible && <Notify options={notify?.options} />}
-          <ChangePasswordForm register={register} errors={errors}/>
+          <ChangePasswordForm register={register} errors={errors} watch={watch} />
         </div>
         <div className="modal-footer">
           <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>

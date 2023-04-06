@@ -75,6 +75,16 @@ EmployeeService.deleteemployee = (id) =>
             return err;
         });
 
+EmployeeService.changeemployeepassword = (obj) =>
+        fetch
+            .put(`${endpoints.changeemployeepassword}`, obj)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
+
 
 
 export default EmployeeService;

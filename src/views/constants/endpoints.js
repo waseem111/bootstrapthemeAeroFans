@@ -8,6 +8,7 @@ export const endpoints = {
     addemployee:  global.api_url + "employee/create",
     editemployee:  global.api_url + "employee/edit",
     deleteemployee:  global.api_url + "employee/delete/",
+    changeemployeepassword:  global.api_url + "employee/change_password/",
     //projects
     getprojects: global.api_url + "projects",
     getprojectbyid: global.api_url + "project/",
