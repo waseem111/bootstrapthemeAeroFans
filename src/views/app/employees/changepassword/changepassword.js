@@ -14,6 +14,7 @@ const ChangePassword = (props) => {
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { errors },
   } = useForm({ mode: "all" });
 
@@ -68,10 +69,10 @@ const ChangePassword = (props) => {
         <button type="button" className="close" data-dismiss="modal" onClick={() => { cancel(); }} style={{fontSize:"24px"}}>&times;</button>
         <h4 className="modal-title">Change Password</h4>
       </div>
-      <form>
+      <form autoComplete='off'>
         <div className="modal-body">
           {notify?.visible && <Notify options={notify?.options} />}
-          <ChangePasswordForm register={register} errors={errors} watch={watch} />
+          <ChangePasswordForm register={register} errors={errors} getValues={getValues} />
         </div>
         <div className="modal-footer">
           <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>

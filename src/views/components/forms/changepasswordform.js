@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 const ChangePasswordForm = (props) => {
    
-    const { register, errors, watch } = props;
+    const { register, errors, getValues } = props;
 
     return (
         <>
@@ -12,6 +12,7 @@ const ChangePasswordForm = (props) => {
                     className="form-control"
                     type="password"
                     name="new_password"
+                    autoComplete="new_password1"
                     {...register("new_password", {
                         pattern:{
                           value: /^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{8,}$/,
@@ -41,22 +42,14 @@ const ChangePasswordForm = (props) => {
                     className="form-control"
                     type="password"
                     name="confirm_password"
+                    autoComplete="confirm_password"
                     {...register("confirm_password", {
-                      required: {
-                        value: true,
-                      },
                       validate: (value) => {
-                        if (watch('new_password') != value) {
-                          debugger;
-                          return {
-                            value: false,
-                            message: "Your passwords do no match"
-                          }
-                        }
-                          
+                        const { new_password } = getValues();
+                        return new_password === value || "Passwords should match!";
                       }
-                      
                     })}
+
                   />
                   {errors.confirm_password &&
                     errors.confirm_password.type == "required" && (
@@ -64,7 +57,12 @@ const ChangePasswordForm = (props) => {
                         confirm password is a required field
                       </span>
                     )}
-                    
+                    {errors.confirm_password &&
+                    (
+                      <span className='error-text'>
+                        Passwords should match!
+                      </span>
+                    )}
                 </div>
               </div>
              
