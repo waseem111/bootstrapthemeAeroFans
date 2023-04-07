@@ -23,7 +23,7 @@ const ChangePassword = (props) => {
     obj.updated_by = loggedInUser?.emp_id;
     await EmployeeService.changeemployeepassword(obj)
       .then((data) => {
-        
+        reset();
         if (data.is_success) {
           setNotify((prev) => ({
             ...prev, options: {
@@ -73,6 +73,7 @@ const ChangePassword = (props) => {
         <div className="modal-body">
           {notify?.visible && <Notify options={notify?.options} />}
           <ChangePasswordForm register={register} errors={errors} getValues={getValues} />
+          <p>Password should contain both upper and lower case alphabets,<br/> atleast one special character and should be minimum of 8 characters.</p>
         </div>
         <div className="modal-footer">
           <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Submit</button>

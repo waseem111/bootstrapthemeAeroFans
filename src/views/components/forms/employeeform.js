@@ -107,31 +107,6 @@ const EmployeeForm = (props) => {
                     )}
 
                 </div>
-                {mode == "add" &&
-                <>
-                  <div className="form-group col-md-4">
-                    <label >Password</label>
-                    <input
-                      className="form-control"
-                      type="password"
-                      name="password"
-                      autoComplete="new-password"
-                      {...register("password", {
-                        required: {
-                          value: true,
-                        },
-                      })}
-                    />
-                    {errors.password &&
-                      errors.password.type == "required" && (
-                        <span className='error-text'>
-                          Password is a required field
-                        </span>
-                      )}
-                  </div>
-                </>
-                }
-
                 
                 <div className="form-group col-md-4 ">
                   <label>Role</label>
@@ -151,8 +126,46 @@ const EmployeeForm = (props) => {
                       </span>
                     )}
                 </div>
+              
+
               </div>
-             
+              {mode == "add" &&
+              <>
+                <div className="row">
+                <div className="form-group col-md-4">
+                    <label >Password</label>
+                    <input
+                      className="form-control"
+                      type="password"
+                      name="password"
+                      autoComplete="new-password"
+                      {...register("password", {
+                        required: {
+                          value: true,
+                        },
+                        pattern:{
+                          value: /^(?=.*?[A-Z])(?=.*?[#?!@$%^&*-]).{8,}$/,
+                        },
+                      })}
+                    />
+                    {errors.password &&
+                      errors.password.type == "required" && (
+                        <span className='error-text'>
+                          Password is a required field
+                        </span>
+                      )}
+                      {errors.password &&
+                    errors.password.type === "pattern" && (
+                      <span className='error-text'>
+                        Invalid Password pattern
+                      </span>
+                    )}
+                  </div>
+                 
+                </div>
+                <p>Password should contain both upper and lower case alphabets,<br/> atleast one special character and should be minimum of 8 characters.</p>
+                </>
+                }
 
         </>
     )
