@@ -140,6 +140,33 @@ const UnitForm = (props) => {
               </span>
             )}
         </div>
+        <div className="form-group col-md-6">
+          <label>Pressure Type</label>
+          <select
+            className="form-control"
+            defaultValue="Total"
+            id="pressure_type"
+            name="pressure_type"
+            {...register("pressure_type", {
+              required: {
+                value: true,
+              },
+            })}
+          >
+            <option value={"Total"}>
+                Total
+              </option>
+              <option value={"Static"}>
+                Static
+              </option>
+          </select>
+          {errors.pressure_type &&
+            errors.pressure_type.type == "required" && (
+              <span className='error-text'>
+                Pressure type is a required field
+              </span>
+            )}
+        </div>
 
       </div>
 

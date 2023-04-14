@@ -13,11 +13,43 @@ const Fans = () => {
             key: 'fan_id',
         },
         {
-            title: 'Fan Diameter',
+            title: 'Diameter',
             dataIndex: 'fan_diameter',
             key: 'fan_diameter',
             sorter: true
+        },
+        {
+            title: 'SD Diameter',
+            dataIndex: 'sd_diameter',
+            key: 'sd_diameter',
+            sorter: true
+        },
+        {
+            title: 'LD Diameter',
+            dataIndex: 'ld_diameter',
+            key: 'ld_diameter',
+            sorter: true
+        },
+        {
+            title: 'Area',
+            dataIndex: 'fan_area',
+            key: 'fan_area',
+            sorter: true
+        },
+        {
+            title: 'SD Area',
+            dataIndex: 'sd_area',
+            key: 'sd_area',
+            sorter: true
         }
+        ,
+        {
+            title: 'LD Area',
+            dataIndex: 'ld_area',
+            key: 'ld_area',
+            sorter: true
+        }
+
     ];
 
     const [listData, setListData] = useState({
