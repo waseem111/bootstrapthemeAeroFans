@@ -44,6 +44,7 @@ export const endpoints = {
     getunitconversions: global.api_url + "lookup/unitconversions",
 
     //fans data
-    getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
+    //getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
+    getrecordsbyairflowpressure: "http://localhost:3006/fansdata.json",
 
 }

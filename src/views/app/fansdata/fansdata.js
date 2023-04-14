@@ -108,7 +108,7 @@ const Fansdata = () => {
                 (resp) => {
                     setListData((prev) => ({
                         ...prev,
-                        data: resp?.data,
+                        data: resp,
                         loading: false,
                     }));
                 },
