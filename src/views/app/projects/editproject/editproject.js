@@ -12,7 +12,7 @@ import Units from '../units/units';
 import Modal from "react-modal";
 import Addunits from '../addunits/addunits';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClone, faEdit, faTrash } from '@fortawesome/fontawesome-free-solid'
+import { faClone, faEdit, faTrash, faLink } from '@fortawesome/fontawesome-free-solid'
 import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import EditUnit from '../editunit/editunit';
@@ -39,7 +39,6 @@ const EditProject = () => {
         reset,
         formState: { errors },
     } = useForm({ mode: "all" });
-
 
     const getcompanies = async () => {
         await CompanyService.getcompanies({
@@ -146,7 +145,7 @@ const EditProject = () => {
             title: 'Pressure',
             //dataIndex: 'pressure',
             key: 'pressure',
-            render: (record) => (`${record?.pressure} ${record?.pressure_unit ? record?.pressure_unit : ''}`),
+            render: (record) => (`${record?.pressure} ${record?.pressure_unit ? record?.pressure_unit : ''} (${record?.pressure_type})`),
         },
         {
             title: 'Action',
@@ -154,11 +153,14 @@ const EditProject = () => {
             render: (record) => <>
                 <button className='btn btn-primary mr-10' onClick={() => editToggleModal("edit", record)} ><FontAwesomeIcon icon={faEdit} /></button>
                 <button className='btn btn-danger mr-10' onClick={() =>{setSelectedId(record);toggleModal("delete")}} ><FontAwesomeIcon icon={faTrash} /></button>
-                <button className='btn btn-info' onClick={() =>{setUnit(JSON.parse(JSON.stringify(record)));toggleModal('single');}} ><FontAwesomeIcon icon={faClone} /></button>
+                <button className='btn btn-info mr-10' onClick={() =>{setUnit(JSON.parse(JSON.stringify(record)));toggleModal('single');}} ><FontAwesomeIcon icon={faClone} /></button>
+                
+                <button className='btn btn-success' onClick={() => navigate('/unitdata/'+record.pu_id)} ><FontAwesomeIcon icon={faLink} /></button>
+                
             </>,
         },
     ];
-
+    
     const [listData, setListData] = useState({
         data: [],
         pagination: null,

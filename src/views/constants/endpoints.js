@@ -38,6 +38,7 @@ export const endpoints = {
     bulkaddunit:  global.api_url + "unit/create/bulk",
     editunit:  global.api_url + "unit/edit",
     deleteunit:  global.api_url + "unit/delete/",
+    getunitdatabyid: global.api_url + "unitdata/",
 
   //lookups
     getfans: global.api_url + "lookup/fans",
@@ -45,6 +46,6 @@ export const endpoints = {
 
     //fans data
     //getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
-    getrecordsbyairflowpressure: "http://localhost:3006/fansdata.json",
+    getrecordsbyairflowpressure: global.api_url + "fansdata/getrecordsbyairflowpressure",
 
 }

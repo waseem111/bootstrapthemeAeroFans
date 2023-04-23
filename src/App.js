@@ -24,6 +24,7 @@ import AddBranch from "./views/app/companies/addbranch/addbranch";
 import Branches from "./views/app/companies/branches/branches";
 import EditBranch from "./views/app/companies/editbranch/editbranch";
 import EditProject from "./views/app/projects/editproject/editproject";
+import Unitdata from "./views/app/projects/unitdata/unitdata";
 
 
 function App() {
@@ -65,6 +66,8 @@ function App() {
             <Route path="/quotations" element={<Quotations />} />
 
             <Route path="/fansdata" element={<Fansdata />} />
+            <Route path="/unitdata" element={<Unitdata />} />
+            <Route path="/unitdata/:id" element={<Unitdata />} />
 
             <Route path="/fans" element={<Fans />} />
             <Route path="/unitconversions" element={<Unitconversions />} />

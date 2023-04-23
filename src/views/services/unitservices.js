@@ -30,6 +30,18 @@ UnitService.getunitbyid = (id) =>
             return err;
         });
 
+UnitService.getunitdatabyid = (id) =>
+        fetch({
+            url: `${endpoints.getunitdatabyid}${id}`,
+            method: "get",
+        })
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
+
 
 UnitService.addunit = (obj) =>
     fetch
