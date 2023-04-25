@@ -38,6 +38,8 @@ const UnitData = () => {
         formState: { errors },
     } = useForm({ mode: "all" });
 
+    // const initialState = { hiddenColumns: ['sd_diameter'] };
+
     const columns = [
         {
             title: 'Diameter',
@@ -59,58 +61,85 @@ const UnitData = () => {
             dataIndex: 'p',
             key: 'p',
         },
+        // {
+        //     title: 'SD Diameter',
+        //     render: (record) => (`${record?.sd_diameter ? record?.sd_diameter : ''}`),
+        //     diffuser:'sd'
+        // },
+        // {
+        //     title: 'LD Diameter',
+        //     render: (record) => (`${record?.ld_diameter ? record?.ld_diameter : ''}`),
+        //     diffuser:'ld'
+        // },
+        // {
+        //     title: 'Fan Area',
+        //     render: (record) => (`${record?.fan_area ? record?.fan_area : ''}`),
+        //     diffuser:'no'
+        // },
+        // {
+        //     title: 'SD Area',
+        //     render: (record) => (`${record?.sd_area ? record?.sd_area : ''}`),
+        //     diffuser:'sd'
+        // },
+        // {
+        //     title: 'LD Area',
+        //     render: (record) => (`${record?.ld_area ? record?.ld_area : ''}`),
+        //     diffuser:'ld'
+        // },
+        // {
+        //     title : 'Air flow m3/s',
+        //     render: (record) => (record?.g / 2118.88).toFixed(2),
+        // },
+        {
+            title : 'Fan Velocity',
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no': 
+                    return ((record?.g/2118.88) / record?.fan_area).toFixed(2)
+                    case 'sd': 
+                    return ((record?.g/2118.88) / record?.sd_area).toFixed(2)
+                    case 'ld': 
+                    return ((record?.g/2118.88) / record?.ld_area).toFixed(2)
+                    default:
+                    return ((record?.g/2118.88) / record?.fan_area).toFixed(2)
+                }
+            },
+        },
+        {
+            title : 'Velocity Pressure ',
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no': 
+                    return (0.6 * ((record?.g/2118.88) / record?.fan_area) * ((record?.g/2118.88) / record?.fan_area)).toFixed(2)
+                    case 'sd': 
+                    return (0.6 * ((record?.g/2118.88) / record?.sd_area) * ((record?.g/2118.88) / record?.sd_area)).toFixed(2)
+                    case 'ld': 
+                    return (0.6 * ((record?.g/2118.88) / record?.ld_area) * ((record?.g/2118.88) / record?.ld_area)).toFixed(2)
+                    default:
+                    return (0.6 * ((record?.g/2118.88) / record?.fan_area) * ((record?.g/2118.88) / record?.fan_area)).toFixed(2)
+                }
+            },
+        },
         {
             title: 'Fan Speed',
             dataIndex: 'n',
             key: 'n',
         },
         {
-            title: 'SD Diameter',
-            render: (record) => (`${record?.sd_diameter ? record?.sd_diameter : ''}`),
-        },
-        {
-            title: 'LD Diameter',
-            render: (record) => (`${record?.ld_diameter ? record?.ld_diameter : ''}`),
-        },
-        {
-            title: 'Fan Area',
-            render: (record) => (`${record?.fan_area ? record?.fan_area : ''}`),
-        },
-        {
-            title: 'SD Area',
-            render: (record) => (`${record?.sd_area ? record?.sd_area : ''}`),
-        },
-        {
-            title: 'LD Area',
-            render: (record) => (`${record?.ld_area ? record?.ld_area : ''}`),
-        },
-        {
-            title : 'Air flow m3/s',
-            render: (record) => ~~(`${record?.g / 2118.88}`),
-        },
-        {
-            title : 'Fan Velocity',
-            render: (record) => (`${record?.fan_area / (record?.g/2118.88)}`),
-        },
-        {
-            title : 'Velocity Pressure ',
-            key:''
-        },
-        {
-            title: 'Power',
+            title: 'Power(kW)',
             dataIndex: 'N_FAN',
             key: 'N_FAN',
         },
         {
-            title: 'Total Efficinecy',
+            title: 'Total Efficiency',
             dataIndex: 'EFF_TT',
             key: 'EFF_TT',
         },
-        {
-            title: 'Total Efficiency',
-            dataIndex: 'EFF_TS',
-            key: 'EFF_TS',
-        },
+        // {
+        //     title: 'Total Efficiency',
+        //     dataIndex: 'EFF_TS',
+        //     key: 'EFF_TS',
+        // },
         {
             title: 'Total Pressure',
             dataIndex: 'PRTT',
@@ -151,7 +180,11 @@ const UnitData = () => {
             dataIndex: 'Lwi',
             key: 'Lwi',
         },
-    ];
+        {
+            title: 'Max Torque Required ',
+            
+        }
+    ].filter(item => item.diffuser == undefined || item.diffuser == diffuser);
 
 
     const [listData, setListData] = useState({
