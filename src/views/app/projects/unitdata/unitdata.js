@@ -28,7 +28,7 @@ const UnitData = () => {
     const [lookupProjects, setLookupProjects] = useState([]);
     const [unitList, setUnitList] = useState([]);
     const [companyId, setCompanyId] = useState([]);
-    
+    const [diffuser, setDiffuser] = useState("no");
     const {
         register,
         watch,
@@ -294,6 +294,16 @@ const UnitData = () => {
             );
     };
 
+    function onChangeValue(event) {
+        setDiffuser(event.target.value);
+      }
+
+      useEffect(() => {
+        if (diffuser) {
+           
+        }
+    }, [diffuser]);
+
     useEffect(() => {
         if (unit) {
             reset(unit);
@@ -433,26 +443,34 @@ const UnitData = () => {
                             }
                         </form>
                         <div className=''>
-                            <label class="mr-10">
+                            <label className="mr-10">
                                 <input 
                                 type='radio' 
                                 className='mr-10' 
                                 name="diffuser"
-                                checked
+                                defaultValue={"no"}
+                                onChange={onChangeValue}
+                                checked={diffuser === "no"}
                                 /> No diffuser
                             </label>
-                            <label class="mr-10">
+                            <label className="mr-10">
                                 <input 
                                 type='radio' 
                                 className='mr-10'  
                                 name="diffuser"
+                                value={"sd"}
+                                onChange={onChangeValue}
+                                checked={diffuser === "sd"}
                                 /> Short diffuser
                             </label>
-                            <label class="mr-10">
+                            <label className="mr-10">
                                 <input 
                                 type='radio' 
                                 className=''  
                                 name="diffuser"
+                                value={"ld"}
+                                onChange={onChangeValue}
+                                checked={diffuser === "ld"}
                                 /> Long diffuser
                             </label>
                         </div>
