@@ -38,28 +38,31 @@ const UnitData = () => {
         formState: { errors },
     } = useForm({ mode: "all" });
 
-    // const initialState = { hiddenColumns: ['sd_diameter'] };
 
     const columns = [
         {
-            title: 'Diameter',
+            title: 'Diameter(mm)',
             dataIndex: 'mm',
             key: 'mm',
+            align: 'center',
         },
         {
-            title: 'Angle',
+            title: 'Angle(°)',
             dataIndex: 'ang',
             key: 'ang',
+            align: 'center',
         },
         {
-            title: 'Airflow',
+            title: 'Airflow(CFM)',
             dataIndex: 'g',
             key: 'g',
+            align: 'center',
         },
         {
-            title: 'Pressure',
+            title: 'Pressure(Pa)',
             dataIndex: 'p',
             key: 'p',
+            align: 'center',
         },
         // {
         //     title: 'SD Diameter',
@@ -91,98 +94,167 @@ const UnitData = () => {
         //     render: (record) => (record?.g / 2118.88).toFixed(2),
         // },
         {
-            title : 'Fan Velocity',
+            title: 'Fan Velocity(m/s)',
+            align: 'center',
             render: (record) => {
                 switch (diffuser) {
-                    case 'no': 
-                    return ((record?.g/2118.88) / record?.fan_area).toFixed(2)
-                    case 'sd': 
-                    return ((record?.g/2118.88) / record?.sd_area).toFixed(2)
-                    case 'ld': 
-                    return ((record?.g/2118.88) / record?.ld_area).toFixed(2)
+                    case 'no':
+                        return ((record?.g / 2118.88) / record?.fan_area).toFixed(2)
+                    case 'sd':
+                        return ((record?.g / 2118.88) / record?.sd_area).toFixed(2)
+                    case 'ld':
+                        return ((record?.g / 2118.88) / record?.ld_area).toFixed(2)
                     default:
-                    return ((record?.g/2118.88) / record?.fan_area).toFixed(2)
+                        return ((record?.g / 2118.88) / record?.fan_area).toFixed(2)
                 }
             },
         },
         {
-            title : 'Velocity Pressure ',
+            title: 'Velocity Pressure(Pa)',
+            align: 'center',
             render: (record) => {
                 switch (diffuser) {
-                    case 'no': 
-                    return (0.6 * ((record?.g/2118.88) / record?.fan_area) * ((record?.g/2118.88) / record?.fan_area)).toFixed(2)
-                    case 'sd': 
-                    return (0.6 * ((record?.g/2118.88) / record?.sd_area) * ((record?.g/2118.88) / record?.sd_area)).toFixed(2)
-                    case 'ld': 
-                    return (0.6 * ((record?.g/2118.88) / record?.ld_area) * ((record?.g/2118.88) / record?.ld_area)).toFixed(2)
+                    case 'no':
+                        return (0.6 * ((record?.g / 2118.88) / record?.fan_area) * ((record?.g / 2118.88) / record?.fan_area)).toFixed(2)
+                    case 'sd':
+                        return (0.6 * ((record?.g / 2118.88) / record?.sd_area) * ((record?.g / 2118.88) / record?.sd_area)).toFixed(2)
+                    case 'ld':
+                        return (0.6 * ((record?.g / 2118.88) / record?.ld_area) * ((record?.g / 2118.88) / record?.ld_area)).toFixed(2)
                     default:
-                    return (0.6 * ((record?.g/2118.88) / record?.fan_area) * ((record?.g/2118.88) / record?.fan_area)).toFixed(2)
+                        return (0.6 * ((record?.g / 2118.88) / record?.fan_area) * ((record?.g / 2118.88) / record?.fan_area)).toFixed(2)
                 }
             },
         },
         {
-            title: 'Fan Speed',
+            title: 'Fan Speed(rpm)',
+            align: 'center',
             dataIndex: 'n',
             key: 'n',
+            render: (record) => (record).toFixed(2),
         },
         {
             title: 'Power(kW)',
+            align: 'center',
             dataIndex: 'N_FAN',
             key: 'N_FAN',
         },
         {
             title: 'Total Efficiency',
+            align: 'center',
             dataIndex: 'EFF_TT',
             key: 'EFF_TT',
+            className: 'hidden'
         },
-        // {
-        //     title: 'Total Efficiency',
-        //     dataIndex: 'EFF_TS',
-        //     key: 'EFF_TS',
-        // },
         {
-            title: 'Total Pressure',
+            title: 'Total Static Efficiency',
+            align: 'center',
+            dataIndex: 'EFF_TS',
+            key: 'EFF_TS',
+            className: 'hidden'
+        },
+        {
+            title: 'Total Pressure(Pa)',
+            align: 'center',
             dataIndex: 'PRTT',
             key: 'PRTT',
+            className: 'hidden'
         },
         {
-            title: 'Static Pressure',
+            title: 'Static Pressure(Pa)',
+            align: 'center',
             dataIndex: 'PRTS',
             key: 'PRTS',
+            className: 'hidden'
         },
         {
             title: 'LpA',
+            align: 'center',
             dataIndex: 'LpA',
             key: 'LpA',
+            className: 'hidden'
         },
         {
             title: 'Lp',
+            align: 'center',
             dataIndex: 'Lp',
             key: 'Lp',
+            className: 'hidden'
         },
         {
             title: 'LwAt',
+            align: 'center',
             dataIndex: 'LwAt',
             key: 'LwAt',
+            className: 'hidden'
         },
         {
             title: 'Lwt',
+            align: 'center',
             dataIndex: 'Lwt',
             key: 'Lwt',
+            className: 'hidden'
         },
         {
             title: 'LwAi',
+            align: 'center',
+            dataIndex: 'LwAi',
+            key: 'LwAi',
+            className: 'hidden'
+        },
+        {
+            title: 'Lwi',
+            align: 'center',
+            dataIndex: 'Lwi',
+            key: 'Lwi',
+            className: 'hidden'
+        },
+        {
+            title: 'Max Torque Required(Nm)',
+            align: 'center',
+            render: (record) => (((record?.N_FAN * 1000) * 60) / (2 * 3.14 * record?.n)).toFixed(2),
+        },
+        {
+            title: 'Total Efficiency(%)',
+            align: 'center',
+            render: (record) => (record?.EFF_TT * 100).toFixed(2),
+        },
+        {
+            title: 'Static Efficiency(%)',
+            align: 'center',
+            render: (record) => (((((record?.g / 2118.88) * record?.p)) / 1000) / record?.N_FAN).toFixed(2),
+        },
+        {
+            title: 'Inlet Sound Power Level(dbA)',
+            align: 'center',
             dataIndex: 'LwAi',
             key: 'LwAi',
         },
         {
-            title: 'Lwi',
-            dataIndex: 'Lwi',
-            key: 'Lwi',
+            title: 'Outlet Sound Power Level(dbA)',
+            align: 'center',
+            dataIndex: 'LwAi',
+            key: 'LwAi',
         },
         {
-            title: 'Max Torque Required ',
-            
+            title: 'Sound Pressure Level(dbA)',
+            align: 'center',
+            dataIndex: 'LpA',
+            key: 'LpA',
+        },
+        {
+            title: 'Breakout Sound Power Level',
+            align: 'center',
+            className: 'hidden'
+        },
+        {
+            title: 'Breakout Sound Pressure Level',
+            align: 'center',
+            className: 'hidden'
+        },
+        {
+            title: 'Specific Fan Power(kw/m³s)',
+            align: 'center',
+            render: (record) => (record?.N_FAN /(record?.g/2118.88)).toFixed(2),
         }
     ].filter(item => item.diffuser == undefined || item.diffuser == diffuser);
 
@@ -287,7 +359,7 @@ const UnitData = () => {
                     if (resp.is_success) {
                         setUnitList(resp?.data);
                     }
-                    else{
+                    else {
                         setUnitList(resp?.data);
                     }
                 },
@@ -312,7 +384,7 @@ const UnitData = () => {
                     if (resp.is_success) {
                         setUnit(resp?.data);
                     }
-                    else{
+                    else {
                         setUnit(resp?.data);
                     }
                 },
@@ -329,11 +401,11 @@ const UnitData = () => {
 
     function onChangeValue(event) {
         setDiffuser(event.target.value);
-      }
+    }
 
-      useEffect(() => {
+    useEffect(() => {
         if (diffuser) {
-           
+
         }
     }, [diffuser]);
 
@@ -348,15 +420,13 @@ const UnitData = () => {
     }, [unit]);
 
     const onPageLoad = () => {
-        if(id)
-        {
+        if (id) {
             getunitdatabyid();
         }
-        else
-        {
+        else {
             getprojects();
         }
-            
+
     };
 
     useEffect(() => onPageLoad(), []);
@@ -368,7 +438,7 @@ const UnitData = () => {
         }
     }, [notify]);
 
-    const submit = async (obj) => {};
+    const submit = async (obj) => { };
 
     return (
         <>
@@ -386,133 +456,135 @@ const UnitData = () => {
                     <h1 className="page-title">Unit Data</h1>
                     {notify?.visible && <Notify options={notify?.options} />}
                     <div className="page-content">
-                        
+
                         <form>
-                            { id && 
-                            <div className="row">
-                                <div className="form-group col-md-6">
-                                <label >Project Name</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    name="proj_name"
-                                    disabled={true}
-                                    {...register("proj_name", {
-                                    required: {
-                                        value: true,
-                                    },
-                                    })}
-                                />
-                                {errors.proj_name &&
-                                    errors.proj_name.type == "required" && (
-                                    <span className='error-text'>
-                                        Project name is a required field
-                                    </span>
-                                    )}
+                            {id &&
+                                <div className="row">
+                                    <div className="form-group col-md-6">
+                                        <label >Project Name</label>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            name="proj_name"
+                                            disabled={true}
+                                            {...register("proj_name", {
+                                                required: {
+                                                    value: true,
+                                                },
+                                            })}
+                                        />
+                                        {errors.proj_name &&
+                                            errors.proj_name.type == "required" && (
+                                                <span className='error-text'>
+                                                    Project name is a required field
+                                                </span>
+                                            )}
 
-                                </div>
+                                    </div>
 
-                                <div className="form-group col-md-6 ">
-                                <label>Unit Name</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    name="unit_name"
-                                    disabled={true}
-                                    {...register("unit_name", {
-                                    required: {
-                                        value: true,
-                                    },
-                                    })}
-                                />
-                                {errors.unit_name &&
-                                    errors.unit_name.type == "required" && (
-                                    <span className='error-text'>
-                                        Unit name is a required field
-                                    </span>
-                                    )}
-                                </div>
-                            </div> }
+                                    <div className="form-group col-md-6 ">
+                                        <label>Unit Name</label>
+                                        <input
+                                            className="form-control"
+                                            type="text"
+                                            name="unit_name"
+                                            disabled={true}
+                                            {...register("unit_name", {
+                                                required: {
+                                                    value: true,
+                                                },
+                                            })}
+                                        />
+                                        {errors.unit_name &&
+                                            errors.unit_name.type == "required" && (
+                                                <span className='error-text'>
+                                                    Unit name is a required field
+                                                </span>
+                                            )}
+                                    </div>
+                                </div>}
                             {
                                 !id && <div className="row">
-                                <div className="form-group col-md-6">
-                                <label >Project Name</label>
-                                <select
-                                    className="form-control"
-                                    defaultValue=""
-                                    name="proj_id"
-                                    onChange={ (e) => getunitsbyprojectid(e) }
-                                >
-                                    <option value="">Select Project</option>
-                                    {lookupProjects?.map((elm) => (
-                                        <option key={elm.proj_id} value={elm.proj_id}>
-                                            {elm.proj_name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    <div className="form-group col-md-6">
+                                        <label >Project Name</label>
+                                        <select
+                                            className="form-control"
+                                            defaultValue=""
+                                            name="proj_id"
+                                            onChange={(e) => getunitsbyprojectid(e)}
+                                        >
+                                            <option value="">Select Project</option>
+                                            {lookupProjects?.map((elm) => (
+                                                <option key={elm.proj_id} value={elm.proj_id}>
+                                                    {elm.proj_name}
+                                                </option>
+                                            ))}
+                                        </select>
 
-                                </div>
+                                    </div>
 
-                                <div className="form-group col-md-6 ">
-                                <label>Unit Name</label>
-                                <select
-                                    className="form-control"
-                                    defaultValue=""
-                                    name="proj_id"
-                                    onChange={ (e) => getunitbyunitid(e) }
-                                >
-                                    <option value="">Select Unit</option>
-                                    {unitList?.map((elm) => (
-                                        <option key={elm.pu_id} value={elm.pu_id}>
-                                            {elm.unit_name}
-                                        </option>
-                                    ))}
-                                </select>
+                                    <div className="form-group col-md-6 ">
+                                        <label>Unit Name</label>
+                                        <select
+                                            className="form-control"
+                                            defaultValue=""
+                                            name="proj_id"
+                                            onChange={(e) => getunitbyunitid(e)}
+                                        >
+                                            <option value="">Select Unit</option>
+                                            {unitList?.map((elm) => (
+                                                <option key={elm.pu_id} value={elm.pu_id}>
+                                                    {elm.unit_name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
                             }
-                            { unit && 
-                            <UnitDataForm register={register} errors={errors} unit={unit} />
+                            {unit &&
+                                <UnitDataForm register={register} errors={errors} unit={unit} />
                             }
                         </form>
-                        <div className=''>
+                        <div>
                             <label className="mr-10">
-                                <input 
-                                type='radio' 
-                                className='mr-10' 
-                                name="diffuser"
-                                defaultValue={"no"}
-                                onChange={onChangeValue}
-                                checked={diffuser === "no"}
+                                <input
+                                    type='radio'
+                                    className='mr-10'
+                                    name="diffuser"
+                                    defaultValue={"no"}
+                                    onChange={onChangeValue}
+                                    checked={diffuser === "no"}
                                 /> No diffuser
                             </label>
                             <label className="mr-10">
-                                <input 
-                                type='radio' 
-                                className='mr-10'  
-                                name="diffuser"
-                                value={"sd"}
-                                onChange={onChangeValue}
-                                checked={diffuser === "sd"}
+                                <input
+                                    type='radio'
+                                    className='mr-10'
+                                    name="diffuser"
+                                    value={"sd"}
+                                    onChange={onChangeValue}
+                                    checked={diffuser === "sd"}
                                 /> Short diffuser
                             </label>
                             <label className="mr-10">
-                                <input 
-                                type='radio' 
-                                className=''  
-                                name="diffuser"
-                                value={"ld"}
-                                onChange={onChangeValue}
-                                checked={diffuser === "ld"}
+                                <input
+                                    type='radio'
+                                    className=''
+                                    name="diffuser"
+                                    value={"ld"}
+                                    onChange={onChangeValue}
+                                    checked={diffuser === "ld"}
                                 /> Long diffuser
                             </label>
                         </div>
                         <Table
                             columns={columns}
+                            className='fans-data'
                             rowKey={new Date().getTime()}
                             dataSource={listData.data}
-                            pagination={null}
-                            // loading={listData.loading}
+                            pagination={false}
+                            loading={listData.loading}
+                            scroll={{ x: "max-content" }}
                         />
                     </div>
                 </div>
