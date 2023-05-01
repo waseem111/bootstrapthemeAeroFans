@@ -40,6 +40,13 @@ export const endpoints = {
     deleteunit:  global.api_url + "unit/delete/",
     getunitdatabyid: global.api_url + "unitdata/",
 
+    //motors
+    getmotors: global.api_url + "motors",
+    getmotorbyid: global.api_url + "motor/",
+    addmotor:  global.api_url + "motor/create",
+    editmotor:  global.api_url + "motor/edit",
+    deletemotor:  global.api_url + "motor/delete/",
+
   //lookups
     getfans: global.api_url + "lookup/fans",
     getunitconversions: global.api_url + "lookup/unitconversions",

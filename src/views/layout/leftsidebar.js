@@ -141,8 +141,6 @@ const LeftSideBar = () => {
                             </li>
 
 
-
-
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
                                 <NavLink to="/fansdata">
                                     <div className="c-menu__item__inner">
@@ -151,6 +149,36 @@ const LeftSideBar = () => {
                                     </div>
                                 </NavLink>
                             </li>
+
+                            {/* <li className={location?.pathname == "/motors" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Motor">
+                                <NavLink to="/motors">
+                                    <div className="c-menu__item__inner">
+                                        <FontAwesomeIcon icon={faDatabase} />
+                                        <div className="c-menu-item__title" style={{ marginRight: "50px" }}><span>Motor Data </span></div>
+                                    </div>
+                                </NavLink>
+                            </li> */}
+
+                            <li className={location?.pathname == "/addmotor" || location?.pathname == "/motors" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
+                                data-toggle="tooltip" title="Motors" onClick={() => openSubmenu("Motors-show")}>
+                                <div className="c-menu__item__inner">
+                                    <FontAwesomeIcon icon={faFileAlt} />
+                                    <div className="c-menu-item__title"><span>Motors </span>  <FontAwesomeIcon icon={faCaretDown} /></div>
+                                </div>
+                                <ul className={location?.pathname == "/addmotor" || location?.pathname == "/motors" ? "Motors-show submenu show" : "Motors-show submenu"}>
+                                    <li>
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/addmotor">
+                                            Create Motor
+                                        </NavLink>
+                                    </li>
+                                    <li>
+                                        <NavLink className={(navData) => navData.isActive ? "link-active" : ""} to="/motors">
+                                            List of Motors
+                                        </NavLink>
+                                    </li>
+                                </ul>
+                            </li>
+
                             <li className={location?.pathname == "/fans" || location?.pathname == "/unitconversions" || location?.pathname == "/roleprivileges" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Lookups" onClick={() => openSubmenu("Lookups-show")}>
                                 <div className="c-menu__item__inner">

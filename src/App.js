@@ -25,6 +25,9 @@ import Branches from "./views/app/companies/branches/branches";
 import EditBranch from "./views/app/companies/editbranch/editbranch";
 import EditProject from "./views/app/projects/editproject/editproject";
 import Unitdata from "./views/app/projects/unitdata/unitdata";
+import Motors from "./views/app/motors/motors/motors";
+import AddMotor from "./views/app/motors/addmotor/addmotor";
+import EditMotor from "./views/app/motors/editmotor/editmotor";
 
 
 function App() {
@@ -72,6 +75,10 @@ function App() {
             <Route path="/fans" element={<Fans />} />
             <Route path="/unitconversions" element={<Unitconversions />} />
             <Route path="/roleprivileges" element={<Roleprivileges />} />
+
+            <Route path="/motors" element={<Motors />} />
+            <Route path="/addmotor" element={<AddMotor />} />
+            <Route path="/editmotor/:id" element={<EditMotor />} />
           </>
         )}
         <Route
