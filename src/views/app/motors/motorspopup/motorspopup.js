@@ -3,6 +3,7 @@ import { Table } from "antd";
 import MotorService from '../../../services/motorservices';
 import Notify from '../../../components/notify/notify';
 import { Navigate, useNavigate } from "react-router-dom";
+import UnitService from '../../../services/unitservices';
 
 
 const MotorsPopup = (props) => {
@@ -231,8 +232,28 @@ const MotorsPopup = (props) => {
         onClose();
       };
     const SaveFanMotor = async () => {
-        console.log(selectedMotorId);
-        console.log(selectedFan);
+        selectedFan.motor_id = selectedMotorId;
+        await UnitService.saveselectedfandata(selectedFan)
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "success",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
+                },
+                (err) => {
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
       };
 
       const rowSelection = {
@@ -268,7 +289,7 @@ const MotorsPopup = (props) => {
                         />
         </div>
         <div className="modal-footer">
-          <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }}>Save Selected Fan & Motor</button>
+          <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }} disabled={selectedMotorId==null}>Save Selected Fan & Motor</button>
           <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>
         </div>
       </form>

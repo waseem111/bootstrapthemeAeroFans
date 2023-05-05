@@ -84,6 +84,16 @@ UnitService.bulkaddunit = (obj) =>
             .catch((err) => {
                 return err;
             });
+            
+    UnitService.saveselectedfandata = (obj) =>
+        fetch
+            .post(`${endpoints.saveselectedfandata}`, obj)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
 
 
 export default UnitService;

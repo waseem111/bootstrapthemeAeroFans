@@ -36,7 +36,7 @@ const UnitData = () => {
     const [diffuser, setDiffuser] = useState("no");
     const [endDiameter, setEndDiameter] = useState(null);
     const [endAngle, setEndAngle] = useState(null);
-    const [selectedFan, setSelectedFan] = useState({});
+    const [selectedFan, setSelectedFan] = useState(null);
     const {
         register,
         watch,
@@ -646,10 +646,10 @@ const UnitData = () => {
                     breakout_sound_power_level : null,  
                     breakout_sound_pressure_level : null,  
                     specific_fan_power : (selectedRows[0]?.N_FAN / (selectedRows[0]?.g / global.fan_velocity_constant)),
-                    pu_id:  id
+                    pu_id:  id,
+                    created_by:loggedInUser?.emp_id
                 }
             )
-            console.log(selectedFan);
         }
     };
 
@@ -677,8 +677,28 @@ const UnitData = () => {
         }
     }, [notify]);
 
-    const submit = async (obj) => {
-        console.log(obj);
+    const submit = async () => {
+        await UnitService.saveselectedfandata(selectedFan)
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "success",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
+                },
+                (err) => {
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
     };
 
     return (
@@ -696,7 +716,7 @@ const UnitData = () => {
                 </nav>
                 <div className="content-wrapper content-wrapper--with-bg">
                     <h1 className="page-title">Unit Data</h1>
-                    {notify?.visible && <Notify options={notify?.options} />}
+                    
                     <div className="page-content">
                         <form>
                             {id &&
@@ -1081,12 +1101,11 @@ const UnitData = () => {
                                     scroll={{ x: true }}
                                 />
                                 <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center", paddingTop: "20px", paddingBottom: "20px" }}>
-                                    <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(submit)}>Save Selected Fan</button>
-                                    <button type="button" className="btn btn-primary mr-10" onClick={() =>{setIsOpen(true);}} style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }}>Check Motor</button>
-                                    <button type="button" className="btn btn-primary" style={{ backgroundColor: "#007bff", borderColor: "#9ec023" }}>Show Graph</button>
+                                    <button type="button" className="btn btn-primary mr-10" onClick={handleSubmit(submit)} disabled={selectedFan==null}>Save Selected Fan</button>
+                                    <button type="button" className="btn btn-primary mr-10" onClick={() =>{setIsOpen(true);}} style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }} disabled={selectedFan==null}>Check Motor</button>
+                                    <button type="button" className="btn btn-primary" style={{ backgroundColor: "#007bff", borderColor: "#9ec023" }} disabled={selectedFan==null}>Show Graph</button>
                                 </div>
-
-                                <div><pre>{JSON.stringify(selectedFan, null, 2) }</pre></div>
+                                {notify?.visible && <Notify options={notify?.options} />}
                             </div>
                         }
                     </div>

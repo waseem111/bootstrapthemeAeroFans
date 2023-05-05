@@ -24,12 +24,12 @@ export const endpoints = {
     editcompany:  global.api_url + "company/edit",
     deletecompany:  global.api_url + "company/delete/",
 
-      //company
-      getbranches: global.api_url + "branches",
-      getbranchbyid: global.api_url + "branch/",
-      addbranch:  global.api_url + "branch/create",
-      editbranch:  global.api_url + "branch/edit",
-      deletebranch:  global.api_url + "branch/delete/",
+    //company
+    getbranches: global.api_url + "branches",
+    getbranchbyid: global.api_url + "branch/",
+    addbranch:  global.api_url + "branch/create",
+    editbranch:  global.api_url + "branch/edit",
+    deletebranch:  global.api_url + "branch/delete/",
 
     //company unit
     getunits: global.api_url + "units",
@@ -39,6 +39,7 @@ export const endpoints = {
     editunit:  global.api_url + "unit/edit",
     deleteunit:  global.api_url + "unit/delete/",
     getunitdatabyid: global.api_url + "unitdata/",
+    saveselectedfandata: global.api_url + "selected_fan_data/create",
 
     //motors
     getmotors: global.api_url + "motors",
