@@ -1,6 +1,11 @@
 .mr-10{
-  margin-right: 10px;
+  margin-right: 10px !important;
 }
+
+.mr-40{
+  margin-right: 40px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

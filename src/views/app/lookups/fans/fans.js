@@ -13,7 +13,7 @@ const Fans = () => {
             key: 'fan_id',
         },
         {
-            title: 'Diameter',
+            title: 'Fan Diameter',
             dataIndex: 'fan_diameter',
             key: 'fan_diameter',
             sorter: true
@@ -96,7 +96,7 @@ const Fans = () => {
             <LeftSideBar />
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
-                    <h1 className="page-title">Fans(Diameter)</h1>
+                    <h1 className="page-title">Fans</h1>
                     <div className="page-content">
                         <Table
                             columns={columns}

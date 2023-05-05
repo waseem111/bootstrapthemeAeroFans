@@ -3,12 +3,10 @@ import fetch from "../../fetchinterceptor";
 
 
 const FansDataService = {};
-        FansDataService.getrecordsbyairflowpressure = (query) =>
-    fetch({
-        url: `${endpoints.getrecordsbyairflowpressure}`,
-        method: "get",
-        params: query,
-    })
+
+FansDataService.searchfansdata = (obj) =>
+    fetch
+        .post(`${endpoints.searchfansdata}`, obj)
         .then((data) => {
             return data;
         })

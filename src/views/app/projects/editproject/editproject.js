@@ -463,8 +463,8 @@ const EditProject = () => {
                     <div className="page-content" style={{ marginTop: "20px" }}>
                         <div style={{ display: "inline" }}>
                             <span className="page-title">Units</span>
-                            <button type="submit" className="btn btn-primary mr-10 pull-right" onClick={() =>{setUnit(null);toggleModal('single');} } >Add Unit</button>
-                            <button type="submit" className="btn btn-primary mr-10 pull-right" onClick={() => toggleModal('bulk')}
+                            <button type="button" className="btn btn-primary mr-10 pull-right" onClick={() =>{setUnit(null);toggleModal('single');} } >Add Unit</button>
+                            <button type="button" className="btn btn-primary mr-10 pull-right" onClick={() => toggleModal('bulk')}
                                 style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }}>Upload Units</button>
                         </div>
                         <div style={{ marginTop: "20px" }}>

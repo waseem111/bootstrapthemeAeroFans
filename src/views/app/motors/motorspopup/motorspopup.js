@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../../../layout/header';
-import LeftSideBar from '../../../layout/leftsidebar';
 import { Table } from "antd";
 import MotorService from '../../../services/motorservices';
 import Notify from '../../../components/notify/notify';
 import { Navigate, useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faTrash } from '@fortawesome/fontawesome-free-solid';
-import Modal from "react-modal";
-import Confirmation from '../../../components/confirmation/confirmation';
 
-const Motors = () => {
+
+const MotorsPopup = (props) => {
+    const { selectedFan, notification=null, onClose } = props;
     const navigate = useNavigate();
-    const [selectedId, setSelectedId] = useState(null);
+    const [selectedMotorId, setSelectedMotorId] = useState(null);
     const columns = [
         {
             title: 'Motor',
@@ -79,75 +75,67 @@ const Motors = () => {
             dataIndex: 'motor_model',
             key: 'motor_model',
         },
-        {
-            title: 'Rated Speed',
-            dataIndex: 'rated_speed',
-            key: 'rated_speed',
-        },
-        {
-            title: 'Efficiency 100',
-            dataIndex: 'efficiency_100',
-            key: 'efficiency_100',
-        },
-        {
-            title: 'Efficiency 75',
-            dataIndex: 'efficiency_75',
-            key: 'efficiency_75',
-        },
-        {
-            title: 'Efficiency 50',
-            dataIndex: 'efficiency_50',
-            key: 'efficiency_50',
-        },
-        {
-            title: 'Power Factor',
-            dataIndex: 'power_factor',
-            key: 'power_factor',
-        },
-        {
-            title: 'Rated Current InA',
-            dataIndex: 'rated_current_ina',
-            key: 'rated_current_ina',
-        },
-        {
-            title: 'Rate current ISIn',
-            dataIndex: 'rated_current_isin',
-            key: 'rated_current_isin',
-        },
-        {
-            title: 'Torque Nm',
-            dataIndex: 'torque_nm',
-            key: 'torque_nm',
-        },
-        {
-            title: 'Torque tstn',
-            dataIndex: 'torque_tstn',
-            key: 'torque_tstn',
-        },
-        {
-            title: 'Torque tbtn',
-            dataIndex: 'torque_tbtn',
-            key: 'torque_tbtn',
-        },
-        {
-            title: 'Moment of Inertia',
-            dataIndex: 'moment_of_inertia',
-            key: 'moment_of_inertia',
-        },
-        {
-            title: 'Weight',
-            dataIndex: 'weight',
-            key: 'weight',
-        },
-        {
-            title: 'Action',
-            render: (record) => <>
-                <button className='btn btn-primary mr-10' onClick={() => navigate('/editmotor/' + record?.motor_id)}><FontAwesomeIcon icon={faEdit} /></button>
-                <button className='btn btn-danger' onClick={() =>{setSelectedId(record?.motor_id);}} ><FontAwesomeIcon icon={faTrash} /></button>
-            </>,
-        }
+        // {
+        //     title: 'Rated Speed',
+        //     dataIndex: 'rated_speed',
+        //     key: 'rated_speed',
+        // },
+        // {
+        //     title: 'Efficiency 100',
+        //     dataIndex: 'efficiency_100',
+        //     key: 'efficiency_100',
+        // },
+        // {
+        //     title: 'Efficiency 75',
+        //     dataIndex: 'efficiency_75',
+        //     key: 'efficiency_75',
+        // },
+        // {
+        //     title: 'Efficiency 50',
+        //     dataIndex: 'efficiency_50',
+        //     key: 'efficiency_50',
+        // },
+        // {
+        //     title: 'Power Factor',
+        //     dataIndex: 'power_factor',
+        //     key: 'power_factor',
+        // },
+        // {
+        //     title: 'Rated Current InA',
+        //     dataIndex: 'rated_current_ina',
+        //     key: 'rated_current_ina',
+        // },
+        // {
+        //     title: 'Rate current ISIn',
+        //     dataIndex: 'rated_current_isin',
+        //     key: 'rated_current_isin',
+        // },
+        // {
+        //     title: 'Torque Nm',
+        //     dataIndex: 'torque_nm',
+        //     key: 'torque_nm',
+        // },
+        // {
+        //     title: 'Torque tstn',
+        //     dataIndex: 'torque_tstn',
+        //     key: 'torque_tstn',
+        // },
+        // {
+        //     title: 'Torque tbtn',
+        //     dataIndex: 'torque_tbtn',
+        //     key: 'torque_tbtn',
+        // },
+        // {
+        //     title: 'Moment of Inertia',
+        //     dataIndex: 'moment_of_inertia',
+        //     key: 'moment_of_inertia',
+        // },
+        // {
+        //     title: 'Weight',
+        //     dataIndex: 'weight',
+        //     key: 'weight',
+        // },
     ];
-    console.log(selectedId)
     const [listData, setListData] = useState({
         data: [],
         pagination: null,
@@ -239,92 +227,53 @@ const Motors = () => {
         }
     }, [notify]);
 
-    useEffect(() => {
-        if(selectedId)
-            setIsOpen(true);
-    }, [selectedId]);
-    
-    const [isOpen, setIsOpen] = useState(false);
-    function toggleModal() {
-        setIsOpen(!isOpen);
-    }
-
-    const handleDelete = async () => {
-        await MotorService.deletemotor(selectedId)
-          .then((resp) => {
-            debugger;
-            if (resp.is_success) {
-                setSelectedId(null);
-                setIsOpen(false);
-                fetch({
-                    size: 10,
-                    page: 1,
-                    search: listData.search,
-                    sortField: listData.sortField,
-                    sortOrder: listData.sortOrder,
-                    ...listData.filter,
-                });
-              setNotify((prev) => ({
-                ...prev, options: {
-                  type: "success",
-                  message: resp?.message
-                }, visible: true
-              }));
-            }
-            else {
-                setSelectedId(null);
-              setNotify((prev) => ({
-                ...prev, options: {
-                  type: "danger",
-                  message: resp?.message
-                }, visible: true
-              }));
-            }
-    
-          })
-          .catch((err) => {
-            setSelectedId(null);
-            setNotify((prev) => ({
-              ...prev, options: {
-                type: "danger",
-                message: err?.message
-              }, visible: true
-            }));
-          });
+    const cancel = () => {
+        onClose();
       };
+    const SaveFanMotor = async () => {
+        console.log(selectedMotorId);
+        console.log(selectedFan);
+      };
+
+      const rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            selectedFan.motor_id = selectedRows[0]?.motor_id;
+            setSelectedMotorId(selectedRows[0]?.motor_id);
+           
+        }
+    };
+
 
     return (
         <>
-            <Header />
-            <LeftSideBar />
-            <main className="l-main">
-                <div className="content-wrapper content-wrapper--with-bg">
-                    <h1 className="page-title">Motors</h1>
-                    <div className="page-content">
-                        <Table
+
+<div className="modal-header">
+        <button type="button" className="close" data-dismiss="modal" onClick={() => { cancel(); }} style={{fontSize:"24px"}}>&times;</button>
+        <h4 className="modal-title">Select Motor</h4>
+      </div>
+      <form>
+        <div className="modal-body">
+          {notify?.visible && <Notify options={notify?.options} />}
+          <Table
                             columns={columns}
                             rowKey="motor_id"
+                            rowSelection={{
+                                type: 'radio',
+                                ...rowSelection
+                            }}
                             dataSource={listData.data}
-                            onChange={handleTableChange}
-                            pagination={null}
+                            pagination={false}
                             loading={listData.loading}
-                            scroll={{ x: "max-content" }}
+                            scroll={{ x: true }}
                         />
-                    </div>
-
-                </div>
-            </main>
-            <Modal
-                isOpen={isOpen}
-                onRequestClose={toggleModal}
-                contentLabel="My dialog"
-                className="mymodal"
-                overlayClassName="myoverlay"
-            >
-                <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
-            </Modal>
+        </div>
+        <div className="modal-footer">
+          <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }}>Save Selected Fan & Motor</button>
+          <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>
+        </div>
+      </form>
         </>
     )
 };
 
-export default Motors;
+export default MotorsPopup;

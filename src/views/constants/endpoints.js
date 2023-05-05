@@ -53,6 +53,6 @@ export const endpoints = {
 
     //fans data
     //getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
-    getrecordsbyairflowpressure: global.api_url + "fansdata/getrecordsbyairflowpressure",
+    searchfansdata: global.api_url + "fansdata/searchfansdata",
 
 }

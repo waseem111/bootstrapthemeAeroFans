@@ -19,7 +19,6 @@ const Login = () => {
     const navigate = useNavigate();
     const { token, userLogin, logout, isLoggedIn } = useContext(authContext);
     const submit = async (obj) => {
-    
         await EmployeeService.login(obj)
         .then((res) => {
           if(res.is_success){
