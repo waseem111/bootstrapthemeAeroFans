@@ -8,7 +8,7 @@ import CompanyService from '../../../services/companyservices';
 import authContext from '../../../../auth-context';
 import ProjectForm from '../../../components/forms/projectform';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClone, faEdit, faTrash, faLink } from '@fortawesome/fontawesome-free-solid'
+import { faCogs, faSave, faChartArea } from '@fortawesome/fontawesome-free-solid'
 import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import LookupService from '../../../services/lookupservices';
@@ -19,6 +19,7 @@ import ProjectService from '../../../services/projectservices';
 import { global } from '../../../constants/global';
 import Modal from "react-modal";
 import MotorsPopup from '../../motors/motorspopup/motorspopup';
+import GraphPopup from '../../../components/graph/graphpopup';
 
 // Modal.setAppElement("#root")
 
@@ -37,6 +38,7 @@ const UnitData = () => {
     const [endDiameter, setEndDiameter] = useState(null);
     const [endAngle, setEndAngle] = useState(null);
     const [selectedFan, setSelectedFan] = useState(null);
+    const [popupMode, setPopupMode] = useState(null);
     const {
         register,
         watch,
@@ -48,6 +50,15 @@ const UnitData = () => {
 
 
     const columns = [
+        {
+            title: 'Action',
+            key: 'pu_id',
+            render: (record) => <>
+                <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave}  /></button>
+                <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} ><FontAwesomeIcon icon={faCogs} /></button>
+                <button className='btn btn-success' onClick={() =>setPopupMode("graph")} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
+            </>,
+        },
         {
             title: 'Diameter(mm)',
             dataIndex: 'mm',
@@ -578,6 +589,77 @@ const UnitData = () => {
         }
     }, [unit]);
 
+    const saveselectedfandata = async (obj, event) => {
+        setSelectedFan(
+            {
+                    diameter : obj?.mm, 
+                    angle : obj?.ang,  
+                    air_flow : obj?.g,  
+                    pressure : obj?.p,  
+                    fan_velocity : parseFloat((() => {
+                        switch (diffuser) {
+                            case 'no':
+                                return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
+                            case 'sd':
+                                return ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)
+                            case 'ld':
+                                return ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)
+                            default:
+                                return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
+                        }
+                    })()),  
+                    velocity_pressure : parseFloat((() => {
+                        switch (diffuser) {
+                            case 'no':
+                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
+                            case 'sd':
+                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area))
+                            case 'ld':
+                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area))
+                            default:
+                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
+                        }
+                    })()), 
+                    static_pressure : parseFloat((() => {
+                        switch (diffuser) {
+                            case 'no':
+                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
+                            case 'sd':
+                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)))
+                            case 'ld':
+                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)))
+                            default:
+                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
+                        }
+                    })()),   
+                    fan_speed : obj?.n,  
+                    power : obj?.N_FAN,   
+                    power_vfd : (obj?.N_FAN * global.vfd_constant),  
+                    total_efficiency : obj?.EFF_TT, 
+                    total_static_efficiency : obj?.EFF_TS,   
+                    total_pressure : obj?.PRTT, 
+                    static_pressure_prts : obj?.PRTS,  
+                    lpa : obj?.LpA,   
+                    lp : obj?.Lp,  
+                    lwat : obj?.LwAt,  
+                    lwt : obj?.Lwt,  
+                    lwai : obj?.LwAi, 
+                    lwi : obj?.Lwi,  
+                    max_torque_required : (((obj?.N_FAN * 1000) * 60) / (2 * 3.14 * obj?.n)),
+                    total_efficiency_percentage : (obj?.EFF_TT * 100),
+                    static_pressure_percentage : ((((obj?.g / global.fan_velocity_constant) * obj?.p) / 1000) / obj?.N_FAN),  
+                    inlet_sound_power_level : obj?.LwAi,  
+                    outlet_sound_power_level : obj?.LwAi, 
+                    sound_pressure_level : obj?.LpA,  
+                    breakout_sound_power_level : null,  
+                    breakout_sound_pressure_level : null,  
+                    specific_fan_power : (obj?.N_FAN / (obj?.g / global.fan_velocity_constant)),
+                    pu_id:  id,
+                    created_by:loggedInUser?.emp_id,
+                    event: event
+            }
+        )
+    };
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
@@ -657,6 +739,27 @@ const UnitData = () => {
     function toggleModal() {
         setIsOpen(!isOpen);
     }
+
+    useEffect(() => {
+        if(popupMode){
+            toggleModal();
+        }
+    }, [popupMode]);
+
+    useEffect(() => {
+        debugger;
+        if(selectedFan){
+            if (selectedFan?.event == "save") {
+                submit();
+            }
+            else if(selectedFan?.event == "motor"){
+                setPopupMode("motor");
+                //toggleModal();
+            }
+        }
+      
+    }, [selectedFan]);
+
 
     const onPageLoad = () => {
         if (id) {
@@ -1087,24 +1190,25 @@ const UnitData = () => {
                                         /> Long diffuser
                                     </label>
                                 </div>
+                                {notify?.visible && <Notify options={notify?.options} />}
                                 <Table
                                     columns={columns}
-                                    rowSelection={{
-                                        type: 'radio',
-                                        ...rowSelection
-                                    }}
+                                    // rowSelection={{
+                                    //     type: 'radio',
+                                    //     ...rowSelection
+                                    // }}
                                     className='fans-data'
                                     rowKey="uuid"
                                     dataSource={listData.data}
                                     pagination={false}
                                     loading={listData.loading}
-                                    scroll={{ x: true }}
+                                    scroll={{ x: "max-content" }}
                                 />
-                                <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center", paddingTop: "20px", paddingBottom: "20px" }}>
+                                {/* <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center", paddingTop: "20px", paddingBottom: "20px" }}>
                                     <button type="button" className="btn btn-primary mr-10" onClick={handleSubmit(submit)} disabled={selectedFan==null}>Save Selected Fan</button>
                                     <button type="button" className="btn btn-primary mr-10" onClick={() =>{setIsOpen(true);}} style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }} disabled={selectedFan==null}>Check Motor</button>
                                     <button type="button" className="btn btn-primary" style={{ backgroundColor: "#007bff", borderColor: "#9ec023" }} disabled={selectedFan==null}>Show Graph</button>
-                                </div>
+                                </div> */}
                                 {notify?.visible && <Notify options={notify?.options} />}
                             </div>
                         }
@@ -1118,7 +1222,8 @@ const UnitData = () => {
                 className="mymodal"
                 overlayClassName="myoverlay"
             >
-              <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>
+              {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
+              {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan}></GraphPopup>}
             </Modal>
         </>
     )
