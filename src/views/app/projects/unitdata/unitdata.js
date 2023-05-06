@@ -582,10 +582,6 @@ const UnitData = () => {
     useEffect(() => {
         if (unit) {
             reset(unit);
-            // getrecordsbyairflowpressure({
-            //     airflow: 50000,
-            //     pressure: 490
-            // })
         }
     }, [unit]);
 
@@ -659,80 +655,6 @@ const UnitData = () => {
                     event: event
             }
         )
-    };
-
-    const rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            setSelectedFan(
-                {
-                    diameter : selectedRows[0]?.mm, 
-                    angle : selectedRows[0]?.ang,  
-                    air_flow : selectedRows[0]?.g,  
-                    pressure : selectedRows[0]?.p,  
-                    fan_velocity : parseFloat((() => {
-                        switch (diffuser) {
-                            case 'no':
-                                return ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area)
-                            case 'sd':
-                                return ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.sd_area)
-                            case 'ld':
-                                return ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.ld_area)
-                            default:
-                                return ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area)
-                        }
-                    })()),  
-                    velocity_pressure : parseFloat((() => {
-                        switch (diffuser) {
-                            case 'no':
-                                return (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area))
-                            case 'sd':
-                                return (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.sd_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.sd_area))
-                            case 'ld':
-                                return (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.ld_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.ld_area))
-                            default:
-                                return (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area))
-                        }
-                    })()), 
-                    static_pressure : parseFloat((() => {
-                        switch (diffuser) {
-                            case 'no':
-                                return (selectedRows[0]?.p - (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area)))
-                            case 'sd':
-                                return (selectedRows[0]?.p - (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.sd_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.sd_area)))
-                            case 'ld':
-                                return (selectedRows[0]?.p - (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.ld_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.ld_area)))
-                            default:
-                                return (selectedRows[0]?.p - (global.fan_velocity_pressure * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area) * ((selectedRows[0]?.g / global.fan_velocity_constant) / selectedRows[0]?.fan_area)))
-                        }
-                    })()),   
-                    fan_speed : selectedRows[0]?.n,  
-                    power : selectedRows[0]?.N_FAN,   
-                    power_vfd : (selectedRows[0]?.N_FAN * global.vfd_constant),  
-                    total_efficiency : selectedRows[0]?.EFF_TT, 
-                    total_static_efficiency : selectedRows[0]?.EFF_TS,   
-                    total_pressure : selectedRows[0]?.PRTT, 
-                    static_pressure_prts : selectedRows[0]?.PRTS,  
-                    lpa : selectedRows[0]?.LpA,   
-                    lp : selectedRows[0]?.Lp,  
-                    lwat : selectedRows[0]?.LwAt,  
-                    lwt : selectedRows[0]?.Lwt,  
-                    lwai : selectedRows[0]?.LwAi, 
-                    lwi : selectedRows[0]?.Lwi,  
-                    max_torque_required : (((selectedRows[0]?.N_FAN * 1000) * 60) / (2 * 3.14 * selectedRows[0]?.n)),
-                    total_efficiency_percentage : (selectedRows[0]?.EFF_TT * 100),
-                    static_pressure_percentage : ((((selectedRows[0]?.g / global.fan_velocity_constant) * selectedRows[0]?.p) / 1000) / selectedRows[0]?.N_FAN),  
-                    inlet_sound_power_level : selectedRows[0]?.LwAi,  
-                    outlet_sound_power_level : selectedRows[0]?.LwAi, 
-                    sound_pressure_level : selectedRows[0]?.LpA,  
-                    breakout_sound_power_level : null,  
-                    breakout_sound_pressure_level : null,  
-                    specific_fan_power : (selectedRows[0]?.N_FAN / (selectedRows[0]?.g / global.fan_velocity_constant)),
-                    pu_id:  id,
-                    created_by:loggedInUser?.emp_id
-                }
-            )
-        }
     };
 
     const [isOpen, setIsOpen] = useState(false);
@@ -1193,10 +1115,6 @@ const UnitData = () => {
                                 {notify?.visible && <Notify options={notify?.options} />}
                                 <Table
                                     columns={columns}
-                                    // rowSelection={{
-                                    //     type: 'radio',
-                                    //     ...rowSelection
-                                    // }}
                                     className='fans-data'
                                     rowKey="uuid"
                                     dataSource={listData.data}
@@ -1204,11 +1122,6 @@ const UnitData = () => {
                                     loading={listData.loading}
                                     scroll={{ x: "max-content" }}
                                 />
-                                {/* <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center", paddingTop: "20px", paddingBottom: "20px" }}>
-                                    <button type="button" className="btn btn-primary mr-10" onClick={handleSubmit(submit)} disabled={selectedFan==null}>Save Selected Fan</button>
-                                    <button type="button" className="btn btn-primary mr-10" onClick={() =>{setIsOpen(true);}} style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }} disabled={selectedFan==null}>Check Motor</button>
-                                    <button type="button" className="btn btn-primary" style={{ backgroundColor: "#007bff", borderColor: "#9ec023" }} disabled={selectedFan==null}>Show Graph</button>
-                                </div> */}
                                 {notify?.visible && <Notify options={notify?.options} />}
                             </div>
                         }
