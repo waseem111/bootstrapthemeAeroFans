@@ -93,7 +93,6 @@ const EditMotor = () => {
 
       })
       .catch((err) => {
-        console.log("editmotor error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

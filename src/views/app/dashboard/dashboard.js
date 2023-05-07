@@ -1,18 +1,21 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import Header from '../../layout/header';
 import LeftSideBar from '../../layout/leftsidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faProjectDiagram, faUsers, faFileAlt } from '@fortawesome/fontawesome-free-solid'
 import './dashboard.css';
 import { Vortex } from 'react-loader-spinner';
+import { Spin } from 'antd';
+import Loader from '../../components/loader/loader';
 const Dashboard = () => {
+    const [loading, setLoading] = useState(false);
     return (
         <>
             <Header />
             <LeftSideBar />
-            {/* <div className='loader-outer-main'>
+            {/*<div className='loader-outer-main'>
                 <div className='loader-inner-main'>
-                    <Vortex
+                     <Vortex
                         visible={true}
                         height="90"
                         width="90"
@@ -20,10 +23,16 @@ const Dashboard = () => {
                         wrapperStyle={{}}
                         wrapperClass="vortex-wrapper"
                         colors={['#1c3e52', '#1c3e52', '#1c3e52', '#1c3e52', '#1c3e52', '#1c3e52']}
-                    />
+                    /> 
+                    
                 </div>
             </div> */}
-
+            {/* <div className='loader-outer-main'>
+                <div className='loader-inner-main'>
+                    <Spin spinning={loading} />
+                </div>
+            </div> */}
+            <Loader loader={loading} />
             <main className="l-main">
                 <div className="content-wrapper content-wrapper--with-bg">
                     <h1 className="page-title">Dashboard</h1>

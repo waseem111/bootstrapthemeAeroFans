@@ -20,12 +20,15 @@ import { global } from '../../../constants/global';
 import Modal from "react-modal";
 import MotorsPopup from '../../motors/motorspopup/motorspopup';
 import GraphPopup from '../../../components/graph/graphpopup';
+import Loader from '../../../components/loader/loader';
+import MotorsPopupDetail from '../../motors/motorspopup/motorspopupdetail';
 
 
 const UnitData = () => {
     const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
     const navigate = useNavigate();
     const { id } = useParams();
+    const [loading, setLoading] = useState(false);
     const [unit, setUnit] = useState(null);
     const [notify, setNotify] = useState({ options: [], visible: false });
     const [lookupProjects, setLookupProjects] = useState([]);
@@ -384,11 +387,12 @@ const UnitData = () => {
     const _column = [
         {
             title: 'Action',
-            dataIndex: 'unit_fan_id',
-            key: 'unit_fan_id',
-            render: (record) => <>
-                <Radio value={record} name='unit_fan_id' checked={record == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record)}></Radio>
-            </>,
+            // dataIndex: 'unit_fan_id',
+            // key: 'unit_fan_id',
+            render: (record) => <div key={record?.unit_fan_id}>
+                <Radio value={record?.unit_fan_id} name='unit_fan_id' checked={record?.unit_fan_id == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record?.unit_fan_id)}></Radio>
+                <button className='btn btn-info mr-10' title='Check Motor' type='button' onClick={() => checkMotor(record)} ><FontAwesomeIcon icon={faCogs} /></button>
+            </div>,
         },
         {
             title: 'Diameter(mm)',
@@ -815,7 +819,6 @@ const UnitData = () => {
         setSearchFanCriteria(event.target.value);
     }
 
-
     useEffect(() => {
         if (unit) {
             reset(unit);
@@ -897,7 +900,7 @@ const UnitData = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     function toggleModal() {
-        if(isOpen){
+        if (isOpen) {
             setPopupMode(null);
             onPageLoad();
         }
@@ -917,10 +920,14 @@ const UnitData = () => {
             }
             else if (selectedFan?.event == "motor") {
                 setPopupMode("motor");
-                //toggleModal();
+            }
+            else if (selectedFan?.event == "selectmotor") {
+                setPopupMode("selectmotor");
+            }
+            else if (selectedFan?.event == "motordetail") {
+                setPopupMode("motordetail");
             }
         }
-
     }, [selectedFan]);
 
 
@@ -975,11 +982,13 @@ const UnitData = () => {
             fan_selected_by: loggedInUser?.emp_id,
             unit_fan_id: unit_fan_id
         }
+        setLoading(true);
         await FansDataService.setfanfromselectedfans(obj)
             .then(
                 (resp) => {
                     if (resp.is_success) {
                         onPageLoad();
+                        setLoading(false);
                         setNotify((prev) => ({
                             ...prev, options: {
                                 type: "success",
@@ -989,6 +998,7 @@ const UnitData = () => {
                     }
                 },
                 (err) => {
+                    setLoading(false);
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",
@@ -999,10 +1009,23 @@ const UnitData = () => {
             );
     };
 
+    const checkMotor = (obj) => {
+        debugger;
+        if(obj?.motor_id){
+            obj.event = "motordetail"
+            setSelectedFan(obj);
+        }
+        else{
+            obj.event = "selectmotor"
+            setSelectedFan(obj);
+        }
+    }
+
     return (
         <>
             <Header />
             <LeftSideBar />
+            <Loader loader={loading} />
             <main className="l-main">
                 <nav aria-label="breadcrumb" className="container-fluid" style={{ marginTop: "20px" }}>
                     <ol className="breadcrumb">
@@ -1421,7 +1444,9 @@ const UnitData = () => {
                 className="mymodal"
                 overlayClassName="myoverlay"
             >
+                {popupMode == "selectmotor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
+                {popupMode == "motordetail" && <MotorsPopupDetail motor_id={selectedFan?.motor_id} onClose={toggleModal}/>}
                 {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan}></GraphPopup>}
             </Modal>
         </>

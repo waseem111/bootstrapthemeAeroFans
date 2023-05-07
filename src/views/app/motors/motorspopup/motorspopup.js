@@ -4,10 +4,13 @@ import MotorService from '../../../services/motorservices';
 import Notify from '../../../components/notify/notify';
 import { Navigate, useNavigate } from "react-router-dom";
 import UnitService from '../../../services/unitservices';
+import Loader from '../../../components/loader/loader';
+import FansDataService from '../../../services/fansdataservice';
 
 
 const MotorsPopup = (props) => {
     const { selectedFan, notification = null, onClose } = props;
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [selectedMotorId, setSelectedMotorId] = useState(null);
     const columns = [
@@ -201,11 +204,12 @@ const MotorsPopup = (props) => {
     };
 
     const SaveFanMotor = async () => {
+        setLoading(true);
         selectedFan.motor_id = selectedMotorId;
         await UnitService.saveselectedfandata(selectedFan)
             .then(
                 (resp) => {
-                    debugger;
+                    setLoading(false);
                     if (resp.is_success) {
                         onClose();
                         setNotify((prev) => ({
@@ -217,6 +221,40 @@ const MotorsPopup = (props) => {
                     }
                 },
                 (err) => {
+                    setLoading(false);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
+    };
+
+    const SaveMotor = async () => {
+        setLoading(true);
+        var obj = {
+            unit_fan_id: selectedFan?.unit_fan_id,
+            motor_id: selectedMotorId,
+            updated_by: selectedFan?.created_by,
+        }
+        await FansDataService.updatemotorforfan(obj)
+            .then(
+                (resp) => {
+                    setLoading(false);
+                    if (resp.is_success) {
+                        onClose();
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "success",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
+                },
+                (err) => {
+                    setLoading(false);
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",
@@ -231,14 +269,13 @@ const MotorsPopup = (props) => {
         onChange: (selectedRowKeys, selectedRows) => {
             selectedFan.motor_id = selectedRows[0]?.motor_id;
             setSelectedMotorId(selectedRows[0]?.motor_id);
-
         }
     };
 
 
     return (
         <>
-
+            <Loader loader={loading} />
             <div className="modal-header">
                 <button type="button" className="close" data-dismiss="modal" onClick={() => { cancel(); }} style={{ fontSize: "24px" }}>&times;</button>
                 <h4 className="modal-title">Select Motor</h4>
@@ -260,7 +297,8 @@ const MotorsPopup = (props) => {
                     />
                 </div>
                 <div className="modal-footer">
-                    <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }}>Save Selected Fan & Motor</button>
+                    {selectedFan?.event == "motor" && <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }}>Save Selected Fan & Motor</button>}
+                    {selectedFan?.event == "selectmotor" && <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveMotor(); }}>Save Motor</button>}
                     <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>
                 </div>
             </form>

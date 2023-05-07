@@ -35,5 +35,15 @@ FansDataService.setfanfromselectedfans = (obj) =>
             return err;
         });
 
+FansDataService.updatemotorforfan = (obj) =>
+    fetch
+        .put(`${endpoints.updatemotorforfan}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
 
 export default FansDataService;
