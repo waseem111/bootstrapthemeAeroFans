@@ -955,6 +955,7 @@ const UnitData = () => {
                                 message: resp?.message
                             }, visible: true
                         }));
+                        onPageLoad();
                     }
                 },
                 (err) => {
