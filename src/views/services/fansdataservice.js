@@ -14,5 +14,26 @@ FansDataService.searchfansdata = (obj) =>
             return err;
         });
 
+FansDataService.getselectedfans = (id) =>
+    fetch
+        .get(`${endpoints.getselectedfans}${id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+
+FansDataService.setfanfromselectedfans = (obj) =>
+    fetch
+        .put(`${endpoints.setfanfromselectedfans}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
 
 export default FansDataService;

@@ -7,7 +7,7 @@ import UnitService from '../../../services/unitservices';
 
 
 const MotorsPopup = (props) => {
-    const { selectedFan, notification=null, onClose } = props;
+    const { selectedFan, notification = null, onClose } = props;
     const navigate = useNavigate();
     const [selectedMotorId, setSelectedMotorId] = useState(null);
     const columns = [
@@ -148,6 +148,7 @@ const MotorsPopup = (props) => {
     });
 
     const [notify, setNotify] = useState({ options: [], visible: false });
+
     const fetch = async (params = {}) => {
         setListData((prev) => ({ ...prev, loading: true }));
         await MotorService.getmotors({
@@ -182,61 +183,31 @@ const MotorsPopup = (props) => {
             );
     };
 
-    const handleTableChange = (pagination, filters, sorter) => {
-        const pager = { ...listData.pagination };
-        pager.current = pagination.current;
-        pager.pageSize = pagination.pageSize;
-        setListData((prev) => ({
-            ...prev,
-            tableChange: true,
-            pagination: pager,
-            sortField: sorter.field,
-            sortOrder: sorter.order,
-        }));
-    };
 
     useEffect(() => {
-        if (listData.tableChange) {
-            fetch({
-                size: listData.pagination.pageSize,
-                page: listData.pagination.current,
-                search: listData.search,
-                sortField: listData.sortField,
-                sortOrder: listData.sortOrder,
-                ...listData.filter,
-            });
-            setListData((prev) => ({ ...prev, tableChange: false }));
-        }
-    }, [listData]);
-
-    useEffect(() => {
-        fetch({
-            size: 10,
-            page: 1,
-            search: listData.search,
-            sortField: listData.sortField,
-            sortOrder: listData.sortOrder,
-            ...listData.filter,
-        });
+        fetch({});
     }, []);
 
     useEffect(() => {
         if (notify.visible) {
-            setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false }));  
-        }, 3000);
-           
+            setTimeout(() => {
+                setNotify((prev) => ({ ...prev, visible: false }));
+            }, 3000);
         }
     }, [notify]);
 
     const cancel = () => {
         onClose();
-      };
+    };
+
     const SaveFanMotor = async () => {
         selectedFan.motor_id = selectedMotorId;
         await UnitService.saveselectedfandata(selectedFan)
             .then(
                 (resp) => {
+                    debugger;
                     if (resp.is_success) {
+                        onClose();
                         setNotify((prev) => ({
                             ...prev, options: {
                                 type: "success",
@@ -254,13 +225,13 @@ const MotorsPopup = (props) => {
                     }));
                 }
             );
-      };
+    };
 
-      const rowSelection = {
+    const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             selectedFan.motor_id = selectedRows[0]?.motor_id;
             setSelectedMotorId(selectedRows[0]?.motor_id);
-           
+
         }
     };
 
@@ -268,31 +239,31 @@ const MotorsPopup = (props) => {
     return (
         <>
 
-<div className="modal-header">
-        <button type="button" className="close" data-dismiss="modal" onClick={() => { cancel(); }} style={{fontSize:"24px"}}>&times;</button>
-        <h4 className="modal-title">Select Motor</h4>
-      </div>
-      <form>
-        <div className="modal-body">
-          {notify?.visible && <Notify options={notify?.options} />}
-          <Table
-                            columns={columns}
-                            rowKey="motor_id"
-                            rowSelection={{
-                                type: 'radio',
-                                ...rowSelection
-                            }}
-                            dataSource={listData.data}
-                            pagination={false}
-                            loading={listData.loading}
-                            scroll={{ x: true }}
-                        />
-        </div>
-        <div className="modal-footer">
-          <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }} disabled={selectedMotorId==null}>Save Selected Fan & Motor</button>
-          <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>
-        </div>
-      </form>
+            <div className="modal-header">
+                <button type="button" className="close" data-dismiss="modal" onClick={() => { cancel(); }} style={{ fontSize: "24px" }}>&times;</button>
+                <h4 className="modal-title">Select Motor</h4>
+            </div>
+            <form>
+                <div className="modal-body">
+                    {notify?.visible && <Notify options={notify?.options} />}
+                    <Table
+                        columns={columns}
+                        rowKey="motor_id"
+                        rowSelection={{
+                            type: 'radio',
+                            ...rowSelection
+                        }}
+                        dataSource={listData.data}
+                        pagination={false}
+                        loading={listData.loading}
+                        scroll={{ x: true }}
+                    />
+                </div>
+                <div className="modal-footer">
+                    <button type="button" className="btn btn-primary mr-10" onClick={() => { SaveFanMotor(); }}>Save Selected Fan & Motor</button>
+                    <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>
+                </div>
+            </form>
         </>
     )
 };

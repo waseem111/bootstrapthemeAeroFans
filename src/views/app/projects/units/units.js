@@ -8,7 +8,7 @@ const Units = (props) => {
         <>
                 <Table
                     columns={columns}
-                    rowKey={new Date().getTime()}
+                    rowKey={"pu_id"}
                     dataSource={listData?.data}
                     loading={listData.loading}
                     pagination={false} 

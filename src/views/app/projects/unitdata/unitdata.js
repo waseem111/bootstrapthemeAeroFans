@@ -13,7 +13,7 @@ import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import LookupService from '../../../services/lookupservices';
 import UnitDataForm from '../../../components/forms/unitdataform';
-import { Table } from "antd";
+import { Table, Radio } from "antd";
 import FansDataService from '../../../services/fansdataservice';
 import ProjectService from '../../../services/projectservices';
 import { global } from '../../../constants/global';
@@ -21,11 +21,9 @@ import Modal from "react-modal";
 import MotorsPopup from '../../motors/motorspopup/motorspopup';
 import GraphPopup from '../../../components/graph/graphpopup';
 
-// Modal.setAppElement("#root")
 
 const UnitData = () => {
     const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
-    //console.log(loggedInUser);
     const navigate = useNavigate();
     const { id } = useParams();
     const [unit, setUnit] = useState(null);
@@ -54,9 +52,9 @@ const UnitData = () => {
             title: 'Action',
             key: 'pu_id',
             render: (record) => <>
-                <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave}  /></button>
+                <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave} /></button>
                 <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} ><FontAwesomeIcon icon={faCogs} /></button>
-                <button className='btn btn-success' onClick={() =>setPopupMode("graph")} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
+                <button className='btn btn-success' onClick={() => setPopupMode("graph")} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
             </>,
         },
         {
@@ -383,10 +381,226 @@ const UnitData = () => {
         }
     ].filter(item => (item.diffuser == undefined || item.diffuser == diffuser));
 
+    const _column = [
+        {
+            title: 'Action',
+            dataIndex: 'unit_fan_id',
+            key: 'unit_fan_id',
+            render: (record) => <>
+                <Radio value={record} name='unit_fan_id' checked={record == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record)}></Radio>
+            </>,
+        },
+        {
+            title: 'Diameter(mm)',
+            dataIndex: 'diameter',
+            key: 'diameter',
+            align: 'center',
+        },
+        {
+            title: 'Angle(°)',
+            dataIndex: 'angle',
+            key: 'angle',
+            align: 'center',
+        },
+        {
+            title: 'Airflow(CFM)',
+            dataIndex: 'air_flow',
+            key: 'air_flow',
+            align: 'center',
+        },
+        {
+            title: 'Pressure(Pa)',
+            dataIndex: 'pressure',
+            key: 'pressure',
+            align: 'center',
+        },
+        {
+            title: 'Fan Velocity(m/s)',
+            dataIndex: 'fan_velocity',
+            key: 'fan_velocity',
+            align: 'center',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Velocity Pressure(Pa)',
+            dataIndex: 'velocity_pressure',
+            key: 'velocity_pressure',
+            align: 'center',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Static Pressure(Pa)',
+            dataIndex: 'static_pressure',
+            key: 'static_pressure',
+            align: 'center',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Fan Speed(rpm)',
+            align: 'center',
+            dataIndex: 'fan_speed',
+            key: 'fan_speed',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Power(kW)',
+            align: 'center',
+            dataIndex: 'power',
+            key: 'power',
+        },
+        {
+            title: 'Power VFD(kW)',
+            align: 'center',
+            dataIndex: 'power_vfd',
+            key: 'power_vfd',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Total Efficiency',
+            align: 'center',
+            dataIndex: 'total_efficiency',
+            key: 'total_efficiency',
+            className: 'hidden',
+        },
+        {
+            title: 'Total Static Efficiency',
+            align: 'center',
+            dataIndex: 'total_static_efficiency',
+            key: 'total_static_efficiency',
+            className: 'hidden',
+        },
+        {
+            title: 'Total Pressure(Pa)',
+            align: 'center',
+            dataIndex: 'total_pressure',
+            key: 'total_pressure',
+            className: 'hidden',
+        },
+        {
+            title: 'Static Pressure(Pa)',
+            align: 'center',
+            dataIndex: 'static_pressure_prts',
+            key: 'static_pressure_prts',
+            className: 'hidden',
+        },
+        {
+            title: 'LpA',
+            align: 'center',
+            dataIndex: 'lpa',
+            key: 'lpa',
+            className: 'hidden',
+        },
+        {
+            title: 'Lp',
+            align: 'center',
+            dataIndex: 'lp',
+            key: 'lp',
+            className: 'hidden',
+        },
+        {
+            title: 'LwAt',
+            align: 'center',
+            dataIndex: 'lwat',
+            key: 'lwat',
+            className: 'hidden',
+        },
+        {
+            title: 'Lwt',
+            align: 'center',
+            dataIndex: 'lwt',
+            key: 'lwt',
+            className: 'hidden',
+        },
+        {
+            title: 'LwAi',
+            align: 'center',
+            dataIndex: 'lwai',
+            key: 'lwai',
+            className: 'hidden',
+        },
+        {
+            title: 'Lwi',
+            align: 'center',
+            dataIndex: 'lwi',
+            key: 'lwi',
+            className: 'hidden',
+        },
+        {
+            title: 'Max Torque Required(Nm)',
+            align: 'center',
+            dataIndex: 'max_torque_required',
+            key: 'max_torque_required',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Total Efficiency(%)',
+            align: 'center',
+            dataIndex: 'total_efficiency_percentage',
+            key: 'total_efficiency_percentage',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Static Efficiency(%)',
+            align: 'center',
+            dataIndex: 'static_pressure_percentage',
+            key: 'static_pressure_percentage',
+            render: (record) => (record).toFixed(2),
+        },
+        {
+            title: 'Inlet Sound Power Level(dbA)',
+            align: 'center',
+            dataIndex: 'lwai',
+            key: 'lwai',
+        },
+        {
+            title: 'Outlet Sound Power Level(dbA)',
+            align: 'center',
+            dataIndex: 'lwai',
+            key: 'lwai',
+        },
+        {
+            title: 'Sound Pressure Level(dbA)',
+            align: 'center',
+            dataIndex: 'sound_pressure_level',
+            key: 'sound_pressure_level',
+        },
+        {
+            title: 'Breakout Sound Power Level',
+            align: 'center',
+            dataIndex: 'breakout_sound_power_level',
+            key: 'breakout_sound_power_level',
+            className: 'hidden',
+        },
+        {
+            title: 'Breakout Sound Pressure Level',
+            align: 'center',
+            dataIndex: 'breakout_sound_pressure_level',
+            key: 'breakout_sound_pressure_level',
+            className: 'hidden',
+        },
+        {
+            title: 'Specific Fan Power(kw/m³s)',
+            align: 'center',
+            dataIndex: 'specific_fan_power',
+            key: 'specific_fan_power',
+            render: (record) => (record).toFixed(2),
+        },
+    ]
 
     const [listData, setListData] = useState({
         data: [],
         pagination: null,
+        sortField: null,
+        sortOrder: null,
+        filter: null,
+        loading: true,
+        tableChange: false,
+        display: false
+    });
+
+    const [listDataSelectedFans, setListDataSelectedFans] = useState({
+        data: [],
+        pagination: false,
         sortField: null,
         sortOrder: null,
         filter: null,
@@ -512,6 +726,38 @@ const UnitData = () => {
             );
     };
 
+    const getselectedfans = async () => {
+        await FansDataService.getselectedfans(id)
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        setListDataSelectedFans((prev) => ({
+                            ...prev,
+                            data: resp?.data,
+                            loading: false,
+                            pagination: false,
+                        }));
+                    }
+                    else {
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "danger",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
+                },
+                (err) => {
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
+    };
+
     const getunitsbyprojectid = async (e) => {
         let proj_id = e.target.value;
         console.log(proj_id)
@@ -569,15 +815,6 @@ const UnitData = () => {
         setSearchFanCriteria(event.target.value);
     }
 
-    const cancel = () => {
-        reset();
-    };
-
-    useEffect(() => {
-        if (diffuser) {
-
-        }
-    }, [diffuser]);
 
     useEffect(() => {
         if (unit) {
@@ -588,104 +825,109 @@ const UnitData = () => {
     const saveselectedfandata = async (obj, event) => {
         setSelectedFan(
             {
-                    diameter : obj?.mm, 
-                    angle : obj?.ang,  
-                    air_flow : obj?.g,  
-                    pressure : obj?.p,  
-                    fan_velocity : parseFloat((() => {
-                        switch (diffuser) {
-                            case 'no':
-                                return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
-                            case 'sd':
-                                return ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)
-                            case 'ld':
-                                return ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)
-                            default:
-                                return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
-                        }
-                    })()),  
-                    velocity_pressure : parseFloat((() => {
-                        switch (diffuser) {
-                            case 'no':
-                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
-                            case 'sd':
-                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area))
-                            case 'ld':
-                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area))
-                            default:
-                                return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
-                        }
-                    })()), 
-                    static_pressure : parseFloat((() => {
-                        switch (diffuser) {
-                            case 'no':
-                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
-                            case 'sd':
-                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)))
-                            case 'ld':
-                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)))
-                            default:
-                                return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
-                        }
-                    })()),   
-                    fan_speed : obj?.n,  
-                    power : obj?.N_FAN,   
-                    power_vfd : (obj?.N_FAN * global.vfd_constant),  
-                    total_efficiency : obj?.EFF_TT, 
-                    total_static_efficiency : obj?.EFF_TS,   
-                    total_pressure : obj?.PRTT, 
-                    static_pressure_prts : obj?.PRTS,  
-                    lpa : obj?.LpA,   
-                    lp : obj?.Lp,  
-                    lwat : obj?.LwAt,  
-                    lwt : obj?.Lwt,  
-                    lwai : obj?.LwAi, 
-                    lwi : obj?.Lwi,  
-                    max_torque_required : (((obj?.N_FAN * 1000) * 60) / (2 * 3.14 * obj?.n)),
-                    total_efficiency_percentage : (obj?.EFF_TT * 100),
-                    static_pressure_percentage : ((((obj?.g / global.fan_velocity_constant) * obj?.p) / 1000) / obj?.N_FAN),  
-                    inlet_sound_power_level : obj?.LwAi,  
-                    outlet_sound_power_level : obj?.LwAi, 
-                    sound_pressure_level : obj?.LpA,  
-                    breakout_sound_power_level : null,  
-                    breakout_sound_pressure_level : null,  
-                    specific_fan_power : (obj?.N_FAN / (obj?.g / global.fan_velocity_constant)),
-                    pu_id:  id,
-                    created_by:loggedInUser?.emp_id,
-                    event: event
+                diameter: obj?.mm,
+                angle: obj?.ang,
+                air_flow: obj?.g,
+                pressure: obj?.p,
+                fan_velocity: parseFloat((() => {
+                    switch (diffuser) {
+                        case 'no':
+                            return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
+                        case 'sd':
+                            return ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)
+                        case 'ld':
+                            return ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)
+                        default:
+                            return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
+                    }
+                })()),
+                velocity_pressure: parseFloat((() => {
+                    switch (diffuser) {
+                        case 'no':
+                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
+                        case 'sd':
+                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area))
+                        case 'ld':
+                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area))
+                        default:
+                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
+                    }
+                })()),
+                static_pressure: parseFloat((() => {
+                    switch (diffuser) {
+                        case 'no':
+                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
+                        case 'sd':
+                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)))
+                        case 'ld':
+                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)))
+                        default:
+                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
+                    }
+                })()),
+                fan_speed: obj?.n,
+                power: obj?.N_FAN,
+                power_vfd: (obj?.N_FAN * global.vfd_constant),
+                total_efficiency: obj?.EFF_TT,
+                total_static_efficiency: obj?.EFF_TS,
+                total_pressure: obj?.PRTT,
+                static_pressure_prts: obj?.PRTS,
+                lpa: obj?.LpA,
+                lp: obj?.Lp,
+                lwat: obj?.LwAt,
+                lwt: obj?.Lwt,
+                lwai: obj?.LwAi,
+                lwi: obj?.Lwi,
+                max_torque_required: (((obj?.N_FAN * 1000) * 60) / (2 * 3.14 * obj?.n)),
+                total_efficiency_percentage: (obj?.EFF_TT * 100),
+                static_pressure_percentage: ((((obj?.g / global.fan_velocity_constant) * obj?.p) / 1000) / obj?.N_FAN),
+                inlet_sound_power_level: obj?.LwAi,
+                outlet_sound_power_level: obj?.LwAi,
+                sound_pressure_level: obj?.LpA,
+                breakout_sound_power_level: null,
+                breakout_sound_pressure_level: null,
+                specific_fan_power: (obj?.N_FAN / (obj?.g / global.fan_velocity_constant)),
+                pu_id: id,
+                created_by: loggedInUser?.emp_id,
+                event: event
             }
         )
     };
 
     const [isOpen, setIsOpen] = useState(false);
+
     function toggleModal() {
+        if(isOpen){
+            setPopupMode(null);
+            onPageLoad();
+        }
         setIsOpen(!isOpen);
     }
 
     useEffect(() => {
-        if(popupMode){
+        if (popupMode) {
             toggleModal();
         }
     }, [popupMode]);
 
     useEffect(() => {
-        debugger;
-        if(selectedFan){
+        if (selectedFan) {
             if (selectedFan?.event == "save") {
                 submit();
             }
-            else if(selectedFan?.event == "motor"){
+            else if (selectedFan?.event == "motor") {
                 setPopupMode("motor");
                 //toggleModal();
             }
         }
-      
+
     }, [selectedFan]);
 
 
     const onPageLoad = () => {
         if (id) {
             getunitdatabyid();
+            getselectedfans();
             getlookupfans();
         }
         else {
@@ -726,6 +968,36 @@ const UnitData = () => {
             );
     };
 
+    const setfanfromselectedfans = async (unit_fan_id) => {
+        var obj = {
+            pu_id: id,
+            fan_selected_by: loggedInUser?.emp_id,
+            unit_fan_id: unit_fan_id
+        }
+        await FansDataService.setfanfromselectedfans(obj)
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        onPageLoad();
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "success",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
+                },
+                (err) => {
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
+    };
+
     return (
         <>
             <Header />
@@ -741,7 +1013,7 @@ const UnitData = () => {
                 </nav>
                 <div className="content-wrapper content-wrapper--with-bg">
                     <h1 className="page-title">Unit Data</h1>
-                    
+
                     <div className="page-content">
                         <form>
                             {id &&
@@ -829,6 +1101,19 @@ const UnitData = () => {
                             {unit &&
                                 <UnitDataForm register={register} errors={errors} unit={unit} />
                             }
+                            {listDataSelectedFans.data.length > 0 && <div style={{ paddingTop: "20px", paddingBottom: "20px" }}>
+                                <h5>Selected Fans</h5>
+                                <Table
+                                    columns={_column}
+                                    rowKey="unit_fan_id"
+                                    dataSource={listDataSelectedFans.data}
+                                    pagination={false}
+                                    loading={listDataSelectedFans.loading}
+                                    scroll={{ x: "max-content" }}
+                                />
+                            </div>}
+
+
                             <div className="row">
                                 <div className="form-group col-md-12">
                                     <h5>Search Fan</h5>
@@ -1135,8 +1420,8 @@ const UnitData = () => {
                 className="mymodal"
                 overlayClassName="myoverlay"
             >
-              {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
-              {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan}></GraphPopup>}
+                {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
+                {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan}></GraphPopup>}
             </Modal>
         </>
     )

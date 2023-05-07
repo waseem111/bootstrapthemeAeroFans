@@ -40,6 +40,7 @@ export const endpoints = {
     deleteunit:  global.api_url + "unit/delete/",
     getunitdatabyid: global.api_url + "unitdata/",
     saveselectedfandata: global.api_url + "selected_fan_data/create",
+    getselectedfans: global.api_url +"unit/selectedfans/",
 
     //motors
     getmotors: global.api_url + "motors",
@@ -55,5 +56,6 @@ export const endpoints = {
     //fans data
     //getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
     searchfansdata: global.api_url + "fansdata/searchfansdata",
+    setfanfromselectedfans:  global.api_url + "setfanfromselectedfans"
 
 }
