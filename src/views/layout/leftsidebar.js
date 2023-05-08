@@ -120,7 +120,7 @@ const LeftSideBar = () => {
                                     </li> */}
                                 </ul>
                             </li>
-                            <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
+                            {/* <li className={location?.pathname == "/createquotation" || location?.pathname == "/quotations" ? "c-menu__item has-submenu is-active" : "c-menu__item has-submenu"}
                                 data-toggle="tooltip" title="Quotations" onClick={() => openSubmenu("Quotations-show")}>
                                 <div className="c-menu__item__inner">
                                     <FontAwesomeIcon icon={faFileAlt} />
@@ -138,7 +138,7 @@ const LeftSideBar = () => {
                                         </NavLink>
                                     </li>
                                 </ul>
-                            </li>
+                            </li> */}
 
 
                             <li className={location?.pathname == "/fansdata" ? "c-menu__item is-active" : "c-menu__item"} data-toggle="tooltip" title="Dashboard">
