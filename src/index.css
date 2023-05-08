@@ -938,16 +938,17 @@ span.page-title {
 }
 
 .mymodal {
-  position: fixed;
+  position: relative;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-40%, -50%);
 
   border: 1px solid #ccc;
   background: #fff;
   overflow: auto;
   border-radius: 4px;
   outline: none;
+  width: 80%;
 }
 
 .myoverlay {
@@ -957,4 +958,5 @@ span.page-title {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
+  z-index: 11;
 }

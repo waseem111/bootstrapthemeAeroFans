@@ -79,66 +79,66 @@ const MotorsPopup = (props) => {
             dataIndex: 'motor_model',
             key: 'motor_model',
         },
-        // {
-        //     title: 'Rated Speed',
-        //     dataIndex: 'rated_speed',
-        //     key: 'rated_speed',
-        // },
-        // {
-        //     title: 'Efficiency 100',
-        //     dataIndex: 'efficiency_100',
-        //     key: 'efficiency_100',
-        // },
-        // {
-        //     title: 'Efficiency 75',
-        //     dataIndex: 'efficiency_75',
-        //     key: 'efficiency_75',
-        // },
-        // {
-        //     title: 'Efficiency 50',
-        //     dataIndex: 'efficiency_50',
-        //     key: 'efficiency_50',
-        // },
-        // {
-        //     title: 'Power Factor',
-        //     dataIndex: 'power_factor',
-        //     key: 'power_factor',
-        // },
-        // {
-        //     title: 'Rated Current InA',
-        //     dataIndex: 'rated_current_ina',
-        //     key: 'rated_current_ina',
-        // },
-        // {
-        //     title: 'Rate current ISIn',
-        //     dataIndex: 'rated_current_isin',
-        //     key: 'rated_current_isin',
-        // },
-        // {
-        //     title: 'Torque Nm',
-        //     dataIndex: 'torque_nm',
-        //     key: 'torque_nm',
-        // },
-        // {
-        //     title: 'Torque tstn',
-        //     dataIndex: 'torque_tstn',
-        //     key: 'torque_tstn',
-        // },
-        // {
-        //     title: 'Torque tbtn',
-        //     dataIndex: 'torque_tbtn',
-        //     key: 'torque_tbtn',
-        // },
-        // {
-        //     title: 'Moment of Inertia',
-        //     dataIndex: 'moment_of_inertia',
-        //     key: 'moment_of_inertia',
-        // },
-        // {
-        //     title: 'Weight',
-        //     dataIndex: 'weight',
-        //     key: 'weight',
-        // },
+        {
+            title: 'Rated Speed',
+            dataIndex: 'rated_speed',
+            key: 'rated_speed',
+        },
+        {
+            title: 'Efficiency 100',
+            dataIndex: 'efficiency_100',
+            key: 'efficiency_100',
+        },
+        {
+            title: 'Efficiency 75',
+            dataIndex: 'efficiency_75',
+            key: 'efficiency_75',
+        },
+        {
+            title: 'Efficiency 50',
+            dataIndex: 'efficiency_50',
+            key: 'efficiency_50',
+        },
+        {
+            title: 'Power Factor',
+            dataIndex: 'power_factor',
+            key: 'power_factor',
+        },
+        {
+            title: 'Rated Current InA',
+            dataIndex: 'rated_current_ina',
+            key: 'rated_current_ina',
+        },
+        {
+            title: 'Rate current ISIn',
+            dataIndex: 'rated_current_isin',
+            key: 'rated_current_isin',
+        },
+        {
+            title: 'Torque Nm',
+            dataIndex: 'torque_nm',
+            key: 'torque_nm',
+        },
+        {
+            title: 'Torque tstn',
+            dataIndex: 'torque_tstn',
+            key: 'torque_tstn',
+        },
+        {
+            title: 'Torque tbtn',
+            dataIndex: 'torque_tbtn',
+            key: 'torque_tbtn',
+        },
+        {
+            title: 'Moment of Inertia',
+            dataIndex: 'moment_of_inertia',
+            key: 'moment_of_inertia',
+        },
+        {
+            title: 'Weight',
+            dataIndex: 'weight',
+            key: 'weight',
+        },
     ];
     const [listData, setListData] = useState({
         data: [],
