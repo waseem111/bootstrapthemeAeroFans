@@ -155,7 +155,10 @@ const EditProject = () => {
                 <button className='btn btn-danger mr-10' onClick={() =>{setSelectedId(record);toggleModal("delete")}} ><FontAwesomeIcon icon={faTrash} /></button>
                 <button className='btn btn-info mr-10' onClick={() =>{setUnit(JSON.parse(JSON.stringify(record)));toggleModal('single');}} ><FontAwesomeIcon icon={faClone} /></button>
                 
-                <button className='btn btn-success' onClick={() => navigate('/unitdata/'+record.pu_id)} ><FontAwesomeIcon icon={faLink} /></button>
+                <button className='btn btn-success' onClick={() => navigate('/unitdata/'+record.pu_id)} >
+                    <img src={"../assets/images/fan.png"} width={20} />
+                </button>
+
                 
             </>,
         },

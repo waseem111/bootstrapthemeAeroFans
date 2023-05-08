@@ -15,6 +15,11 @@ const Motors = () => {
     const [selectedId, setSelectedId] = useState(null);
     const columns = [
         {
+            title: 'Motor Id',
+            dataIndex: 'motor_id',
+            key: 'motor_id',
+        },
+        {
             title: 'Motor',
             dataIndex: 'motor_make',
             key: 'motor_make',
@@ -308,7 +313,7 @@ const Motors = () => {
                             onChange={handleTableChange}
                             pagination={null}
                             loading={listData.loading}
-                            scroll={{ x: "max-content" }}
+                            scroll={{ x: "max-content", y: 400 }}
                         />
                     </div>
 

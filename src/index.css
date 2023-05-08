@@ -949,6 +949,8 @@ span.page-title {
   border-radius: 4px;
   outline: none;
   width: 80%;
+  /* 
+  height: 50%; */
 }
 
 .myoverlay {
@@ -959,4 +961,9 @@ span.page-title {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 11;
+}
+
+.motor-modal{
+  overflow-y: scroll;
+max-height: 450px;
 }

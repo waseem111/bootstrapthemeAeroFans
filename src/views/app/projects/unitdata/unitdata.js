@@ -56,7 +56,7 @@ const UnitData = () => {
             key: 'pu_id',
             render: (record) => <>
                 <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave} /></button>
-                <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} ><FontAwesomeIcon icon={faCogs} /></button>
+                <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} > <img src={"../assets/images/electric-motor.png"} width={20} /></button>
                 <button className='btn btn-success' onClick={() => setPopupMode("graph")} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
             </>,
         },
@@ -391,7 +391,7 @@ const UnitData = () => {
             // key: 'unit_fan_id',
             render: (record) => <div key={record?.unit_fan_id}>
                 <Radio value={record?.unit_fan_id} name='unit_fan_id' checked={record?.unit_fan_id == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record?.unit_fan_id)}></Radio>
-                <button className='btn btn-info mr-10' title='Check Motor' type='button' onClick={() => checkMotor(record)} ><FontAwesomeIcon icon={faCogs} /></button>
+                <button className='btn btn-info mr-10' title='Check Motor' type='button' onClick={() => checkMotor(record)} ><img src={"../assets/images/electric-motor.png"} width={20} /></button>
             </div>,
         },
         {
@@ -614,10 +614,12 @@ const UnitData = () => {
     });
 
     const searchfansdata = async (obj) => {
+        setLoading(true);
         setListData((prev) => ({ ...prev, loading: true }));
         await FansDataService.searchfansdata(obj)
             .then((res) => {
                 if (res.is_success) {
+                    setLoading(false);
                     setListData((prev) => ({
                         ...prev,
                         data: res?.data,
@@ -626,6 +628,7 @@ const UnitData = () => {
                     }));
                 }
                 else {
+                    setLoading(false);
                     setListData((prev) => ({ ...prev, data: [], loading: false }));
                     setNotify((prev) => ({
                         ...prev, options: {
@@ -637,6 +640,7 @@ const UnitData = () => {
 
             })
             .catch((err) => {
+                setLoading(false);
                 setListData((prev) => ({ ...prev, data: [], loading: false }));
                 setNotify((prev) => ({
                     ...prev, options: {

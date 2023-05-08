@@ -10,6 +10,7 @@ import FansDataService from '../../../services/fansdataservice';
 
 const MotorsPopup = (props) => {
     const { selectedFan, notification = null, onClose } = props;
+    debugger;
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [selectedMotorId, setSelectedMotorId] = useState(null);
@@ -163,9 +164,16 @@ const MotorsPopup = (props) => {
                         const pagination = { ...listData.pagination };
                         pagination.total = resp?.count;
                         pagination.current = resp?.current_page;
+                        let newArray = resp?.data.filter(function (el)
+                        {
+                          return el.rated_power > selectedFan?.power_vfd &&
+                                 el.torque_nm <= selectedFan?.max_torque_required 
+                        }
+                        );
+                        console.log(newArray);
                         setListData((prev) => ({
                             ...prev,
-                            data: resp?.data,
+                            data: newArray,
                             loading: false,
                             pagination: pagination,
                         }));
@@ -281,7 +289,7 @@ const MotorsPopup = (props) => {
                 <h4 className="modal-title">Select Motor</h4>
             </div>
             <form>
-                <div className="modal-body">
+                <div className="modal-body motor-modal">
                     {notify?.visible && <Notify options={notify?.options} />}
                     <Table
                         columns={columns}
