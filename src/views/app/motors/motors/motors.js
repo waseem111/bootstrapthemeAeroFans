@@ -313,7 +313,7 @@ const Motors = () => {
                             onChange={handleTableChange}
                             pagination={null}
                             loading={listData.loading}
-                            scroll={{ x: "max-content", y: 400 }}
+                            scroll={{ x: "max-content" }}
                         />
                     </div>
 
