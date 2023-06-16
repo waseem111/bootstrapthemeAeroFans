@@ -51,7 +51,12 @@ FetchInterceptor.interceptors.request.use(
 // API respone interceptor
 FetchInterceptor.interceptors.response.use(
   (response) => {
-    return Promise.resolve(response.data); 
+    if(response.headers["content-type"] == 'image/png'){
+      return Promise.resolve(response); 
+    }
+    else{
+      return Promise.resolve(response.data); 
+    }
   },
   (error) => {
     let responseObj = {

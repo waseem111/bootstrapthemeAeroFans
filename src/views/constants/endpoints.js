@@ -57,6 +57,7 @@ export const endpoints = {
     //getrecordsbyairflowpressure: global.fandata_api_url + "getrecordsbyairflowpressure",
     searchfansdata: global.api_url + "fansdata/searchfansdata",
     setfanfromselectedfans:  global.api_url + "setfanfromselectedfans",
-    updatemotorforfan:  global.api_url + "unitfan/updatemotorforfan"
+    updatemotorforfan:  global.api_url + "unitfan/updatemotorforfan",
+    plotgraph: global.fandata_api_url + "/plotgraph",
 
 }

@@ -10,7 +10,6 @@ import FansDataService from '../../../services/fansdataservice';
 
 const MotorsPopup = (props) => {
     const { selectedFan, notification = null, onClose } = props;
-    debugger;
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const [selectedMotorId, setSelectedMotorId] = useState(null);
@@ -167,7 +166,7 @@ const MotorsPopup = (props) => {
                         let newArray = resp?.data.filter(function (el)
                         {
                           return el.rated_power > selectedFan?.power_vfd &&
-                                 el.torque_nm <= selectedFan?.max_torque_required 
+                                 el.torque_nm > selectedFan?.max_torque_required 
                         }
                         );
                         console.log(newArray);

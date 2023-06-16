@@ -22,8 +22,9 @@ import MotorsPopup from '../../motors/motorspopup/motorspopup';
 import GraphPopup from '../../../components/graph/graphpopup';
 import Loader from '../../../components/loader/loader';
 import MotorsPopupDetail from '../../motors/motorspopup/motorspopupdetail';
-
-
+import { fromByteArray  } from 'base64-js';
+import { Buffer } from 'buffer';
+import { graph } from '../../../constants/graph';
 const UnitData = () => {
     const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
     const navigate = useNavigate();
@@ -392,6 +393,7 @@ const UnitData = () => {
             render: (record) => <div key={record?.unit_fan_id}>
                 <Radio value={record?.unit_fan_id} name='unit_fan_id' checked={record?.unit_fan_id == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record?.unit_fan_id)}></Radio>
                 <button className='btn btn-info mr-10' title='Check Motor' type='button' onClick={() => checkMotor(record)} ><img src={"../assets/images/electric-motor.png"} width={20} /></button>
+                <button className='btn btn-success' type='button' onClick={() => plotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
             </div>,
         },
         {
@@ -1014,7 +1016,6 @@ const UnitData = () => {
     };
 
     const checkMotor = (obj) => {
-        debugger;
         if(obj?.motor_id){
             obj.event = "motordetail"
             setSelectedFan(obj);
@@ -1024,6 +1025,92 @@ const UnitData = () => {
             setSelectedFan(obj);
         }
     }
+
+    const openGraph = (obj) => {
+        setSelectedFan(obj);
+        setPopupMode("graph");
+    }
+
+    const [imageData, setImageData] = useState(null);
+    
+    function convertBase64ToBlob(base64Image) {
+        const parts = base64Image.split(";base64,");
+        const imageType = parts[0].split(":")[1];
+        const decodedData = window.atob(parts[1]);
+        const uInt8Array = new Uint8Array(decodedData.length);
+        for (let i = 0; i < decodedData.length; ++i) {
+          uInt8Array[i] = decodedData.charCodeAt(i);
+        }
+        return new Blob([uInt8Array], { type: imageType });
+      }
+
+      function getBase64ImageURL(fileBase64) {
+        const blob = convertBase64ToBlob(fileBase64);
+        return new Promise((resolve, reject) => {
+          try {
+            const blobUrl = URL.createObjectURL(blob);
+            return resolve(blobUrl);
+          } catch (err) {
+            return reject(err);
+          }
+        });
+      }
+
+    const plotgraph = async (sf) => {
+        setLoading(true);
+        let obj = {
+          "diameter": sf?.diameter,
+          "airflow": sf?.air_flow,
+          "pressure": sf?.pressure,
+        }
+        // getBase64ImageURL(graph).then((result) => {
+        //     console.log(result);
+        //     setImageData(result);
+        //     setLoading(false);
+        //   });
+        setLoading(false);
+        setPopupMode("graph");
+        // await FansDataService.plotgraph(obj)
+        //     .then(
+        //         (resp) => {
+        //             console.log(resp);
+        //             //let b64Response = btoa(resp);
+        //             // const encoder = new TextEncoder();
+        //             // const data = encoder.encode(resp);
+        //             // const encodedString = fromByteArray(data);
+        //             //const base64Image = `data:image/png;base64,${encodedString}`;
+
+        //             // let base64ImageString = Buffer.from(resp, 'binary').toString('base64');
+        //             // const base64Image = `data:image/png;base64,${base64ImageString}`;
+        //             // console.log(base64Image);
+        //             // getBase64ImageURL(base64Image).then((result) => {
+        //             //     console.log(result);
+        //             //     setImageData(result);
+        //             //     setLoading(false);
+        //             //   });
+
+
+                    
+        //             setPopupMode("graph");
+        //         },
+        //         (err) => {
+        //             setLoading(false);
+        //             setNotify((prev) => ({
+        //                 ...prev, options: {
+        //                     type: "danger",
+        //                     message: err?.message
+        //                 }, visible: true
+        //             }));
+        //         }
+        //     );
+    };
+
+    useEffect(() => {
+        if (imageData) {
+            debugger;
+            setPopupMode("graph");
+        }
+    }, [imageData]);
 
     return (
         <>
@@ -1451,7 +1538,7 @@ const UnitData = () => {
                 {popupMode == "selectmotor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motordetail" && <MotorsPopupDetail motor_id={selectedFan?.motor_id} onClose={toggleModal}/>}
-                {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan}></GraphPopup>}
+                {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan} imageData={imageData}></GraphPopup>}
             </Modal>
         </>
     )
