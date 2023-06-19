@@ -437,7 +437,6 @@ const EditProject = () => {
       };
 
       const generatefandatasheet = async (id) => {
-        debugger;
         setLoading(true);
         await FansDataService.generatefandatasheet(id)
             .then(
