@@ -22,9 +22,6 @@ import MotorsPopup from '../../motors/motorspopup/motorspopup';
 import GraphPopup from '../../../components/graph/graphpopup';
 import Loader from '../../../components/loader/loader';
 import MotorsPopupDetail from '../../motors/motorspopup/motorspopupdetail';
-import { fromByteArray  } from 'base64-js';
-import { Buffer } from 'buffer';
-import { graph } from '../../../constants/graph';
 const UnitData = () => {
     const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
     const navigate = useNavigate();
@@ -425,28 +422,28 @@ const UnitData = () => {
             dataIndex: 'fan_velocity',
             key: 'fan_velocity',
             align: 'center',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Velocity Pressure(Pa)',
             dataIndex: 'velocity_pressure',
             key: 'velocity_pressure',
             align: 'center',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Static Pressure(Pa)',
             dataIndex: 'static_pressure',
             key: 'static_pressure',
             align: 'center',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Fan Speed(rpm)',
             align: 'center',
             dataIndex: 'fan_speed',
             key: 'fan_speed',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Power(kW)',
@@ -459,7 +456,7 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'power_vfd',
             key: 'power_vfd',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Total Efficiency',
@@ -536,21 +533,21 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'max_torque_required',
             key: 'max_torque_required',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Total Efficiency(%)',
             align: 'center',
             dataIndex: 'total_efficiency_percentage',
             key: 'total_efficiency_percentage',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Static Efficiency(%)',
             align: 'center',
             dataIndex: 'static_pressure_percentage',
             key: 'static_pressure_percentage',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
         {
             title: 'Inlet Sound Power Level(dbA)',
@@ -589,7 +586,7 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'specific_fan_power',
             key: 'specific_fan_power',
-            render: (record) => (record).toFixed(2),
+            render: (record) => (record)?.toFixed(2),
         },
     ]
 
@@ -770,7 +767,6 @@ const UnitData = () => {
 
     const getunitsbyprojectid = async (e) => {
         let proj_id = e.target.value;
-        console.log(proj_id)
         await ProjectService.getunitsbyprojectid(proj_id)
             .then(
                 (resp) => {
@@ -795,7 +791,6 @@ const UnitData = () => {
 
     const getunitbyunitid = async (e) => {
         let pu_id = e.target.value;
-        console.log(pu_id)
         await UnitService.getunitbyid(pu_id)
             .then(
                 (resp) => {
@@ -1026,35 +1021,21 @@ const UnitData = () => {
         }
     }
 
+
+    const changeMotor = () => {
+        setIsOpen(false);
+        setSelectedFan((prev) => ({
+            ...prev, event: "selectmotor"
+        }));
+    }
+
     const openGraph = (obj) => {
         setSelectedFan(obj);
         setPopupMode("graph");
     }
 
     const [imageData, setImageData] = useState(null);
-    
-    function convertBase64ToBlob(base64Image) {
-        const parts = base64Image.split(";base64,");
-        const imageType = parts[0].split(":")[1];
-        const decodedData = window.atob(parts[1]);
-        const uInt8Array = new Uint8Array(decodedData.length);
-        for (let i = 0; i < decodedData.length; ++i) {
-          uInt8Array[i] = decodedData.charCodeAt(i);
-        }
-        return new Blob([uInt8Array], { type: imageType });
-      }
 
-      function getBase64ImageURL(fileBase64) {
-        const blob = convertBase64ToBlob(fileBase64);
-        return new Promise((resolve, reject) => {
-          try {
-            const blobUrl = URL.createObjectURL(blob);
-            return resolve(blobUrl);
-          } catch (err) {
-            return reject(err);
-          }
-        });
-      }
 
     const plotgraph = async (sf) => {
         setLoading(true);
@@ -1063,51 +1044,27 @@ const UnitData = () => {
           "airflow": sf?.air_flow,
           "pressure": sf?.pressure,
         }
-        // getBase64ImageURL(graph).then((result) => {
-        //     console.log(result);
-        //     setImageData(result);
-        //     setLoading(false);
-        //   });
-        setLoading(false);
-        setPopupMode("graph");
-        // await FansDataService.plotgraph(obj)
-        //     .then(
-        //         (resp) => {
-        //             console.log(resp);
-        //             //let b64Response = btoa(resp);
-        //             // const encoder = new TextEncoder();
-        //             // const data = encoder.encode(resp);
-        //             // const encodedString = fromByteArray(data);
-        //             //const base64Image = `data:image/png;base64,${encodedString}`;
-
-        //             // let base64ImageString = Buffer.from(resp, 'binary').toString('base64');
-        //             // const base64Image = `data:image/png;base64,${base64ImageString}`;
-        //             // console.log(base64Image);
-        //             // getBase64ImageURL(base64Image).then((result) => {
-        //             //     console.log(result);
-        //             //     setImageData(result);
-        //             //     setLoading(false);
-        //             //   });
-
-
-                    
-        //             setPopupMode("graph");
-        //         },
-        //         (err) => {
-        //             setLoading(false);
-        //             setNotify((prev) => ({
-        //                 ...prev, options: {
-        //                     type: "danger",
-        //                     message: err?.message
-        //                 }, visible: true
-        //             }));
-        //         }
-        //     );
+        await FansDataService.plotgraph(obj)
+            .then(
+                (resp) => {
+                    const base64Image = `data:image/png;base64,${resp}`;
+                    setImageData(base64Image);
+                    setLoading(false);
+                },
+                (err) => {
+                    setLoading(false);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
     };
 
     useEffect(() => {
         if (imageData) {
-            debugger;
             setPopupMode("graph");
         }
     }, [imageData]);
@@ -1532,12 +1489,12 @@ const UnitData = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className="mymodal"
+                className={popupMode == "graph" ? "mygraphmodal" : "mymodal"}
                 overlayClassName="myoverlay"
             >
                 {popupMode == "selectmotor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
-                {popupMode == "motordetail" && <MotorsPopupDetail motor_id={selectedFan?.motor_id} onClose={toggleModal}/>}
+                {popupMode == "motordetail" && <MotorsPopupDetail motor_id={selectedFan?.motor_id} onClose={toggleModal} changeMotor={changeMotor}/>}
                 {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan} imageData={imageData}></GraphPopup>}
             </Modal>
         </>

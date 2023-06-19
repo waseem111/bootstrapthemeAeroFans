@@ -107,7 +107,6 @@ const EditEmployee = () => {
 
       })
       .catch((err) => {
-        console.log("editemployee error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

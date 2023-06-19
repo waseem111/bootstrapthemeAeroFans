@@ -1,5 +1,6 @@
 import { endpoints } from "../constants/endpoints";
 import fetch from "../../fetchinterceptor";
+import { global } from "../constants/global";
 
 
 const FansDataService = {};
@@ -46,36 +47,28 @@ FansDataService.updatemotorforfan = (obj) =>
         });
 
 
-        FansDataService.plotgraph = (query) =>
-            // fetch({
-            //     url: "http://3.109.124.68/plotgraph",
-            //     method: "get",
-            //     params: query,
-            // })
-            //     .then((data) => {
-            //         return data;
-            //     })
-            //     .catch((err) => {
-            //         return err;
-            //     });
-        
-                fetch({
-                    url: "http://3.109.124.68/plotgraph",
-                    method: "get",
-                    params: query,
-                })
-                .then((response) => response.blob())
-                .then((blob) => {
-                    debugger;
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    //setImageData(reader.result);
-                    debugger;
-                    return reader.result;
-                  };
-                  reader.readAsDataURL(blob);
-                });
+FansDataService.plotgraph = (query) =>
+    fetch({
+        url: `${global.fandata_api_url}plotgraph`,//"http://3.109.124.68/plotgraph",
+        method: "get",
+        params: query,
+    })
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
+FansDataService.generatefandatasheet = (id) =>
+    fetch
+        .get(`${endpoints.generatefandatasheet}${id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
 
 export default FansDataService;

@@ -102,7 +102,7 @@ const Unitconversions = () => {
                     <div className="page-content">
                         <Table
                             columns={columns}
-                            rowKey={new Date().getTime()}
+                            rowKey={'luc_id'}
                             dataSource={listData.data}
                             pagination={null}
                             loading={listData.loading}

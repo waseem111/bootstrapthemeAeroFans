@@ -155,6 +155,7 @@ const Employees = () => {
     const [isOpen, setIsOpen] = useState(false);
     function toggleModal() {
         setIsOpen(!isOpen);
+        setSelectedId(null);
     }
     const handleDelete = async () => {
         await EmployeeService.deleteemployee(selectedId)
@@ -209,7 +210,7 @@ const Employees = () => {
                     <div className="page-content">
                         <Table
                             columns={columns}
-                            rowKey={new Date().getTime()}
+                            rowKey={'emp_id'}
                             dataSource={listData.data}
                             pagination={listData.pagination}
                             onChange={handleTableChange}
@@ -222,8 +223,9 @@ const Employees = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className="mymodal"
+                className="mydeletemodal"
                 overlayClassName="myoverlay"
+                shouldCloseOnOverlayClick={false}
             >
                 <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
             </Modal>

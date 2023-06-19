@@ -152,7 +152,6 @@ const Motors = () => {
             </>,
         }
     ];
-    console.log(selectedId)
     const [listData, setListData] = useState({
         data: [],
         pagination: null,
@@ -252,12 +251,12 @@ const Motors = () => {
     const [isOpen, setIsOpen] = useState(false);
     function toggleModal() {
         setIsOpen(!isOpen);
+        setSelectedId(null);
     }
 
     const handleDelete = async () => {
         await MotorService.deletemotor(selectedId)
           .then((resp) => {
-            debugger;
             if (resp.is_success) {
                 setSelectedId(null);
                 setIsOpen(false);
@@ -323,8 +322,9 @@ const Motors = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className="mymodal"
+                className="mydeletemodal"
                 overlayClassName="myoverlay"
+                shouldCloseOnOverlayClick={false}
             >
                 <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
             </Modal>

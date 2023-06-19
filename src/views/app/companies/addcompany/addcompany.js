@@ -42,7 +42,6 @@ const AddCompany = () => {
         
     })
     .catch((err) => {
-      console.log("addcompany error ------------> ", err);
       setNotify((prev) => ({
         ...prev, options: {
           type: "danger",

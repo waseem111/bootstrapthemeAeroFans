@@ -42,7 +42,6 @@ const AddMotor = () => {
 
       })
       .catch((err) => {
-        console.log("addmotor error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

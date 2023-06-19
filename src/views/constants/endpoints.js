@@ -59,5 +59,5 @@ export const endpoints = {
     setfanfromselectedfans:  global.api_url + "setfanfromselectedfans",
     updatemotorforfan:  global.api_url + "unitfan/updatemotorforfan",
     plotgraph: global.fandata_api_url + "/plotgraph",
-
+    generatefandatasheet:  global.api_url + "generatefandatasheet/"
 }

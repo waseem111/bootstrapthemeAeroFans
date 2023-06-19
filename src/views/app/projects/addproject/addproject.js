@@ -47,7 +47,6 @@ const Addproject = () => {
 
       })
       .catch((err) => {
-        console.log("addproject error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

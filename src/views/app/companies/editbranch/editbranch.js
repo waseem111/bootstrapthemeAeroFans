@@ -116,7 +116,6 @@ const EditBranch = () => {
         
     })
     .catch((err) => {
-      console.log("editcompany error ------------> ", err);
       setNotify((prev) => ({
         ...prev, options: {
           type: "danger",

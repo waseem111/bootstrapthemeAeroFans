@@ -219,6 +219,7 @@ const Branches = () => {
     const [isOpen, setIsOpen] = useState(false);
     function toggleModal() {
         setIsOpen(!isOpen);
+        setSelectedId(null);
     }
     const handleDelete = async () => {
         await CompanyService.deletebranch(selectedId)
@@ -312,7 +313,7 @@ const Branches = () => {
 
                         <Table
                             columns={columns}
-                            rowKey={new Date().getTime()}
+                            rowKey={"cb_id"}
                             dataSource={listData.data}
                             pagination={listData.pagination}
                             loading={listData.loading}
@@ -332,8 +333,9 @@ const Branches = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className="mymodal"
+                className="mydeletemodal"
                 overlayClassName="myoverlay"
+                shouldCloseOnOverlayClick={false}
             >
                 <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
             </Modal>

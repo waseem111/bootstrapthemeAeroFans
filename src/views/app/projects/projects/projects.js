@@ -250,9 +250,12 @@ const Projects = () => {
             setIsOpen(true);
     }, [selectedId]);
     const [isOpen, setIsOpen] = useState(false);
+
     function toggleModal() {
         setIsOpen(!isOpen);
+        setSelectedId(null);
     }
+
     const handleDelete = async () => {
         await ProjectService.deleteproject(selectedId)
           .then((resp) => {
@@ -341,7 +344,7 @@ const Projects = () => {
 
                         <Table
                             columns={columns}
-                            rowKey={new Date().getTime()}
+                            rowKey={"proj_id"}
                             dataSource={listData.data}
                             pagination={listData.pagination}
                             onChange={handleTableChange}
@@ -355,8 +358,9 @@ const Projects = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className="mymodal"
+                className="mydeletemodal"
                 overlayClassName="myoverlay"
+                shouldCloseOnOverlayClick={false}
             >
                 <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>
             </Modal>

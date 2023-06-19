@@ -23,7 +23,6 @@ const AddBranch = () => {
 
   const submit = async (obj) => {
     obj.created_by = loggedInUser?.emp_id;
-    console.log(obj);
     await CompanyService.addbranch(obj)
       .then((data) => {
         if (data.is_success) {
@@ -46,7 +45,6 @@ const AddBranch = () => {
 
       })
       .catch((err) => {
-        console.log("addcompany error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

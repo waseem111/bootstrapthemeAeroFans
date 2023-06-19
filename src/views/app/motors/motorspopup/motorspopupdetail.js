@@ -7,7 +7,7 @@ import MotorForm from '../../../components/forms/motorform';
 
 
 const MotorsPopupDetail = (props) => {
-    const { motor_id, onClose } = props;
+    const { motor_id, onClose, changeMotor } = props;
     const [loading, setLoading] = useState(false);
     const [motor, setMotor] = useState(null);
     const [notify, setNotify] = useState({ options: [], visible: false });
@@ -50,6 +50,11 @@ const MotorsPopupDetail = (props) => {
             );
     };
 
+    
+    const closePopupChangeMotor = () => {
+        changeMotor();
+    };
+
     const cancel = () => {
         onClose();
     };
@@ -84,6 +89,7 @@ const MotorsPopupDetail = (props) => {
                     <MotorForm register={register} errors={errors} />
                 </div>
                 <div className="modal-footer">
+                <button type="button" className="btn btn-primary mr-10" onClick={() => { closePopupChangeMotor(); }}>Change Motor</button>
                     <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>
                 </div>
             </form>

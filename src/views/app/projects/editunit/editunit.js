@@ -41,7 +41,6 @@ const EditUnit = (props) => {
 
       })
       .catch((err) => {
-        console.log("addunit error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

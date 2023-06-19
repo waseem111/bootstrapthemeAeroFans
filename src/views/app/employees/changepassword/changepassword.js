@@ -43,7 +43,6 @@ const ChangePassword = (props) => {
 
       })
       .catch((err) => {
-        console.log("changepassword error ------------> ", err);
         setNotify((prev) => ({
           ...prev, options: {
             type: "danger",

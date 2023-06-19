@@ -42,7 +42,6 @@ const Login = () => {
             
         })
         .catch((err) => {
-          console.log("addemployee error ------------> ", err);
           setNotify((prev) => ({
             ...prev, options: {
               type: "danger",

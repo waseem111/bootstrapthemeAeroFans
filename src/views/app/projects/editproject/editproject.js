@@ -12,12 +12,14 @@ import Units from '../units/units';
 import Modal from "react-modal";
 import Addunits from '../addunits/addunits';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faClone, faEdit, faTrash, faLink } from '@fortawesome/fontawesome-free-solid'
+import { faClone, faEdit, faTrash, faFilePdf } from '@fortawesome/fontawesome-free-solid'
 import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import EditUnit from '../editunit/editunit';
 import Confirmation from '../../../components/confirmation/confirmation';
 import LookupService from '../../../services/lookupservices';
+import Loader from '../../../components/loader/loader';
+import FansDataService from '../../../services/fansdataservice';
 
 Modal.setAppElement("#root")
 
@@ -31,6 +33,7 @@ const EditProject = () => {
     const [lookupUnitConversion, setLookupUnitConversion] = useState([]);
     const [unit, setUnit] = useState([]);
     const [lookupBranches, setLookupBranches] = useState([]);
+    const [loading, setLoading] = useState(false);
     const {
         register,
         watch,
@@ -155,11 +158,10 @@ const EditProject = () => {
                 <button className='btn btn-danger mr-10' onClick={() =>{setSelectedId(record);toggleModal("delete")}} ><FontAwesomeIcon icon={faTrash} /></button>
                 <button className='btn btn-info mr-10' onClick={() =>{setUnit(JSON.parse(JSON.stringify(record)));toggleModal('single');}} ><FontAwesomeIcon icon={faClone} /></button>
                 
-                <button className='btn btn-success' onClick={() => navigate('/unitdata/'+record.pu_id)} >
+                <button className='btn btn-success mr-10' onClick={() => navigate('/unitdata/'+record.pu_id)} >
                     <img src={"../assets/images/fan.png"} width={20} />
                 </button>
-
-                
+                {(record?.unit_fan_id && record?.motor_id) && <button className='btn btn-info mr-10' type='button' style={{backgroundColor:"#5b65de", borderColor:"#5b65de"}} onClick={() =>{generatefandatasheet(record?.pu_id);}} ><FontAwesomeIcon icon={faFilePdf} /></button>}
             </>,
         },
     ];
@@ -260,7 +262,6 @@ const EditProject = () => {
 
             })
             .catch((err) => {
-                console.log("editcompany error ------------> ", err);
                 setNotify((prev) => ({
                     ...prev, options: {
                         type: "danger",
@@ -386,7 +387,6 @@ const EditProject = () => {
 
             })
             .catch((err) => {
-                console.log("addunit error ------------> ", err);
                 setNotify((prev) => ({
                     ...prev, options: {
                         type: "danger",
@@ -436,10 +436,34 @@ const EditProject = () => {
           });
       };
 
+      const generatefandatasheet = async (id) => {
+        debugger;
+        setLoading(true);
+        await FansDataService.generatefandatasheet(id)
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        setLoading(false);
+                        window.open(resp?.data, '_blank');
+                    }
+                },
+                (err) => {
+                    setLoading(false);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
+    };
+
     return (
         <>
             <Header />
             <LeftSideBar />
+            <Loader loader={loading} />
             <main className="l-main">
                 <nav aria-label="breadcrumb" className="container-fluid" style={{ marginTop: "20px" }}>
                     <ol className="breadcrumb">
@@ -481,8 +505,9 @@ const EditProject = () => {
                         isOpen={isOpen}
                         onRequestClose={toggleModal}
                         contentLabel="My dialog"
-                        className="mymodal"
                         overlayClassName="myoverlay"
+                        className={popupDisplay == "delete" ? "mydeletemodal" : "mymodal"}
+                        shouldCloseOnOverlayClick={false}
                     >
                         {popupDisplay == "delete" && <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>}
                         {popupDisplay == "edit" && <div><EditUnit project={project} unit={unit} loggedInUser={loggedInUser} lookupUnitConversion={lookupUnitConversion} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}

@@ -169,7 +169,6 @@ const MotorsPopup = (props) => {
                                  el.torque_nm > selectedFan?.max_torque_required 
                         }
                         );
-                        console.log(newArray);
                         setListData((prev) => ({
                             ...prev,
                             data: newArray,
