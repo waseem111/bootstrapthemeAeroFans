@@ -51,11 +51,11 @@ const UnitData = () => {
     const columns = [
         {
             title: 'Action',
-            key: 'pu_id',
+           // key: 'pu_id',
             render: (record) => <>
                 <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave} /></button>
                 <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} > <img src={"../assets/images/electric-motor.png"} width={20} /></button>
-                <button className='btn btn-success' onClick={() => setPopupMode("graph")} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
+                <button className='btn btn-success' type='button' onClick={() => checkPlotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
             </>,
         },
         {
@@ -903,6 +903,7 @@ const UnitData = () => {
     function toggleModal() {
         if (isOpen) {
             setPopupMode(null);
+            setImageData(null);
             onPageLoad();
         }
         setIsOpen(!isOpen);
@@ -1038,6 +1039,7 @@ const UnitData = () => {
 
 
     const plotgraph = async (sf) => {
+        debugger;
         setLoading(true);
         let obj = {
           "diameter": sf?.diameter,
@@ -1063,7 +1065,36 @@ const UnitData = () => {
             );
     };
 
+
+    const checkPlotgraph = async (sf) => {
+        debugger;
+        setLoading(true);
+        let obj = {
+          "diameter": sf?.mm,
+          "airflow": sf?.g,
+          "pressure": sf?.p,
+        }
+        await FansDataService.plotgraph(obj)
+            .then(
+                (resp) => {
+                    const base64Image = `data:image/png;base64,${resp}`;
+                    setImageData(base64Image);
+                    setLoading(false);
+                },
+                (err) => {
+                    setLoading(false);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
+    };
+
     useEffect(() => {
+        debugger;
         if (imageData) {
             setPopupMode("graph");
         }
@@ -1491,6 +1522,7 @@ const UnitData = () => {
                 contentLabel="My dialog"
                 className={popupMode == "graph" ? "mygraphmodal" : "mymodal"}
                 overlayClassName="myoverlay"
+                shouldCloseOnOverlayClick={false}
             >
                 {popupMode == "selectmotor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
