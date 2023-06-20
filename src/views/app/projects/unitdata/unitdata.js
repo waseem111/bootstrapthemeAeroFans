@@ -1039,18 +1039,19 @@ const UnitData = () => {
 
 
     const plotgraph = async (sf) => {
-        debugger;
+       
         setLoading(true);
         let obj = {
           "diameter": sf?.diameter,
           "airflow": sf?.air_flow,
           "pressure": sf?.pressure,
         }
-        await FansDataService.plotgraph(obj)
+        await FansDataService.generateorfetchfandatasheet(obj)
             .then(
                 (resp) => {
-                    const base64Image = `data:image/png;base64,${resp}`;
-                    setImageData(base64Image);
+                    console.log(resp);
+                    // const base64Image = `data:image/png;base64,${resp}`;
+                    setImageData(resp.data);
                     setLoading(false);
                 },
                 (err) => {
@@ -1063,11 +1064,28 @@ const UnitData = () => {
                     }));
                 }
             );
+        // await FansDataService.plotgraph(obj)
+        //     .then(
+        //         (resp) => {
+        //             const base64Image = `data:image/png;base64,${resp}`;
+        //             setImageData(base64Image);
+        //             setLoading(false);
+        //         },
+        //         (err) => {
+        //             setLoading(false);
+        //             setNotify((prev) => ({
+        //                 ...prev, options: {
+        //                     type: "danger",
+        //                     message: err?.message
+        //                 }, visible: true
+        //             }));
+        //         }
+        //     );
     };
 
 
     const checkPlotgraph = async (sf) => {
-        debugger;
+        
         setLoading(true);
         let obj = {
           "diameter": sf?.mm,
@@ -1094,7 +1112,7 @@ const UnitData = () => {
     };
 
     useEffect(() => {
-        debugger;
+        
         if (imageData) {
             setPopupMode("graph");
         }

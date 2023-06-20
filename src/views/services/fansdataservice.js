@@ -70,5 +70,15 @@ FansDataService.generatefandatasheet = (id) =>
             return err;
         });
 
+FansDataService.generateorfetchfandatasheet = (obj) =>
+        fetch
+            .put(`${endpoints.generateorfetchfandatasheet}`, obj)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
+
 
 export default FansDataService;
