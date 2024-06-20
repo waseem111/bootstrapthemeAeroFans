@@ -11,16 +11,16 @@ const UnitDataForm = (props) => {
           <input
             className="form-control"
             type="text"
-            name="airflow"
+            name="airflowwithunits"
             disabled={true}
-            {...register("airflow", {
+            {...register("airflowwithunits", {
               required: {
                 value: true,
               },
             })}
           />
-          {errors.airflow &&
-            errors.airflow.type == "required" && (
+          {errors.airflowwithunits &&
+            errors.airflowwithunits.type == "required" && (
               <span className='error-text'>
                 Airflow is a required field
               </span>
@@ -32,16 +32,16 @@ const UnitDataForm = (props) => {
           <input
             className="form-control"
             type="text"
-            name="pressure"
+            name="pressurewithunits"
             disabled={true}
-            {...register("pressure", {
+            {...register("pressurewithunits", {
               required: {
                 value: true,
               },
             })}
           />
-          {errors.pressure &&
-            errors.pressure.type == "required" && (
+          {errors.pressurewithunits &&
+            errors.pressurewithunits.type == "required" && (
               <span className='error-text'>
                 Pressure is a required field
               </span>

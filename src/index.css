@@ -940,7 +940,7 @@ span.page-title {
 .mymodal {
   position: relative;
   top: 50%;
-  left: 50%;
+  left: 44%;
   transform: translate(-40%, -50%);
   border: 1px solid #ccc;
   background: #fff;
@@ -970,10 +970,9 @@ span.page-title {
   transform: translate(-40%, -50%);
   border: 1px solid #ccc;
   background: #fff;
-  overflow: auto;
   border-radius: 4px;
   outline: none;
-  width: 500px;
+  width: 900px;
 }
 
 .myoverlay {
@@ -992,6 +991,7 @@ max-height: 450px;
 }
 
 .graph-modal{
-  width: 50%;
+  width: auto;
   max-height: 450px;
+  overflow-y: scroll;
 }

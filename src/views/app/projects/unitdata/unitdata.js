@@ -8,7 +8,7 @@ import CompanyService from '../../../services/companyservices';
 import authContext from '../../../../auth-context';
 import ProjectForm from '../../../components/forms/projectform';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCogs, faSave, faChartArea } from '@fortawesome/fontawesome-free-solid'
+import { faFilePdf, faSave, faChartArea } from '@fortawesome/fontawesome-free-solid'
 import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import LookupService from '../../../services/lookupservices';
@@ -22,6 +22,7 @@ import MotorsPopup from '../../motors/motorspopup/motorspopup';
 import GraphPopup from '../../../components/graph/graphpopup';
 import Loader from '../../../components/loader/loader';
 import MotorsPopupDetail from '../../motors/motorspopup/motorspopupdetail';
+import Alert from '../../../components/alert/alert';
 const UnitData = () => {
     const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
     const navigate = useNavigate();
@@ -29,6 +30,7 @@ const UnitData = () => {
     const [loading, setLoading] = useState(false);
     const [unit, setUnit] = useState(null);
     const [notify, setNotify] = useState({ options: [], visible: false });
+    const [alert, setAlert] = useState({ options: [], visible: false });
     const [lookupProjects, setLookupProjects] = useState([]);
     const [lookupDiameter, setLookupDiameter] = useState([]);
     const [unitList, setUnitList] = useState([]);
@@ -37,6 +39,7 @@ const UnitData = () => {
     const [endDiameter, setEndDiameter] = useState(null);
     const [endAngle, setEndAngle] = useState(null);
     const [selectedFan, setSelectedFan] = useState(null);
+    const [checkSelectedFanMotor, setCheckSelectedFanMotor] = useState(null);
     const [popupMode, setPopupMode] = useState(null);
     const {
         register,
@@ -48,348 +51,14 @@ const UnitData = () => {
     } = useForm({ mode: "all" });
 
 
-    const columns = [
-        {
-            title: 'Action',
-           // key: 'pu_id',
-            render: (record) => <>
-                <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave} /></button>
-                <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} > <img src={"../assets/images/electric-motor.png"} width={20} /></button>
-                <button className='btn btn-success' type='button' onClick={() => checkPlotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
-            </>,
-        },
-        {
-            title: 'Diameter(mm)',
-            dataIndex: 'mm',
-            key: 'mm',
-            align: 'center',
-            sorter: {
-                compare: (a, b) => a?.mm - b?.mm
-            },
-        },
-        {
-            title: 'Angle(°)',
-            dataIndex: 'ang',
-            key: 'ang',
-            align: 'center',
-            sorter: {
-                compare: (a, b) => a?.ang - b?.ang
-            },
-        },
-        {
-            title: 'Airflow(CFM)',
-            dataIndex: 'g',
-            key: 'g',
-            align: 'center',
-            sorter: {
-                compare: (a, b) => a?.g - b?.g,
-            },
-        },
-        {
-            title: 'Pressure(Pa)',
-            dataIndex: 'p',
-            key: 'p',
-            align: 'center',
-            sorter: {
-                compare: (a, b) => a?.p - b?.p,
-            },
-        },
-        {
-            title: 'Fan Velocity(m/s)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => {
-                switch (diffuser) {
-                    case 'no':
-                        return ((record?.g / global.fan_velocity_constant) / record?.fan_area).toFixed(2)
-                    case 'sd':
-                        return ((record?.g / global.fan_velocity_constant) / record?.sd_area).toFixed(2)
-                    case 'ld':
-                        return ((record?.g / global.fan_velocity_constant) / record?.ld_area).toFixed(2)
-                    default:
-                        return ((record?.g / global.fan_velocity_constant) / record?.fan_area).toFixed(2)
-                }
-            },
-            sorter: {
-                compare: (a, b) => {
-                    switch (diffuser) {
-                        case 'no':
-                            return (a?.g / global.fan_velocity_constant) / a?.fan_area - (b?.g / global.fan_velocity_constant) / b?.fan_area;
-                        case 'sd':
-                            return (a?.g / global.fan_velocity_constant) / a?.sd_area - (b?.g / global.fan_velocity_constant) / b?.sd_area;
-                        case 'ld':
-                            return (a?.g / global.fan_velocity_constant) / a?.ld_area - (b?.g / global.fan_velocity_constant) / b?.ld_area;
-                        default:
-                            return (a?.g / global.fan_velocity_constant) / a?.fan_area - (b?.g / global.fan_velocity_constant) / b?.fan_area;
-                    }
-                }
-            },
-        },
-        {
-            title: 'Velocity Pressure(Pa)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => {
-                switch (diffuser) {
-                    case 'no':
-                        return (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.fan_area) * ((record?.g / global.fan_velocity_constant) / record?.fan_area)).toFixed(2)
-                    case 'sd':
-                        return (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.sd_area) * ((record?.g / global.fan_velocity_constant) / record?.sd_area)).toFixed(2)
-                    case 'ld':
-                        return (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.ld_area) * ((record?.g / global.fan_velocity_constant) / record?.ld_area)).toFixed(2)
-                    default:
-                        return (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.fan_area) * ((record?.g / global.fan_velocity_constant) / record?.fan_area)).toFixed(2)
-                }
-            },
-            sorter: {
-                compare: (a, b) => {
-                    switch (diffuser) {
-                        case 'no':
-                            return global.fan_velocity_pressure * ((a?.g / global.fan_velocity_constant) / a?.fan_area) * ((a?.g / global.fan_velocity_constant) / a?.fan_area) -
-                                global.fan_velocity_pressure * ((b?.g / global.fan_velocity_constant) / b?.fan_area) * ((b?.g / global.fan_velocity_constant) / b?.fan_area);
-                        case 'sd':
-                            return global.fan_velocity_pressure * ((a?.g / global.fan_velocity_constant) / a?.sd_area) * ((a?.g / global.fan_velocity_constant) / a?.sd_area) -
-                                global.fan_velocity_pressure * ((b?.g / global.fan_velocity_constant) / b?.sd_area) * ((b?.g / global.fan_velocity_constant) / b?.sd_area);
-                        case 'ld':
-                            return global.fan_velocity_pressure * ((a?.g / global.fan_velocity_constant) / a?.ld_area) * ((a?.g / global.fan_velocity_constant) / a?.ld_area) -
-                                global.fan_velocity_pressure * ((b?.g / global.fan_velocity_constant) / b?.ld_area) * ((b?.g / global.fan_velocity_constant) / b?.ld_area);
-                        default:
-                            return global.fan_velocity_pressure * ((a?.g / global.fan_velocity_constant) / a?.fan_area) * ((a?.g / global.fan_velocity_constant) / a?.fan_area) -
-                                global.fan_velocity_pressure * ((b?.g / global.fan_velocity_constant) / b?.fan_area) * ((b?.g / global.fan_velocity_constant) / b?.fan_area);
-                    }
-                }
-            },
-        },
-        {
-            title: 'Static Pressure(Pa)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => {
-                switch (diffuser) {
-                    case 'no':
-                        return (record?.p - (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.fan_area) * ((record?.g / global.fan_velocity_constant) / record?.fan_area))).toFixed(2)
-                    case 'sd':
-                        return (record?.p - (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.sd_area) * ((record?.g / global.fan_velocity_constant) / record?.sd_area))).toFixed(2)
-                    case 'ld':
-                        return (record?.p - (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.ld_area) * ((record?.g / global.fan_velocity_constant) / record?.ld_area))).toFixed(2)
-                    default:
-                        return (record?.p - (global.fan_velocity_pressure * ((record?.g / global.fan_velocity_constant) / record?.fan_area) * ((record?.g / global.fan_velocity_constant) / record?.fan_area))).toFixed(2)
-                }
-            },
-        },
-        {
-            title: 'Fan Speed(rpm)',
-            align: 'center',
-            dataIndex: 'n',
-            key: 'n',
-            render: (record) => (record).toFixed(2),
-            sorter: {
-                compare: (a, b) => a?.n - b?.n,
-            },
-        },
-        {
-            title: 'Power(kW)',
-            align: 'center',
-            dataIndex: 'N_FAN',
-            key: 'N_FAN',
-            sorter: {
-                compare: (a, b) => a?.N_FAN - b?.N_FAN,
-            },
-        },
-        {
-            title: 'Power VFD(kW)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => (record?.N_FAN * global.vfd_constant).toFixed(2),
-            sorter: {
-                compare: (a, b) => a?.N_FAN * global.vfd_constant - b?.N_FAN * global.vfd_constant,
-            },
-        },
-        {
-            title: 'Total Efficiency',
-            align: 'center',
-            dataIndex: 'EFF_TT',
-            key: 'EFF_TT',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.EFF_TT - b?.EFF_TT,
-            },
-        },
-        {
-            title: 'Total Static Efficiency',
-            align: 'center',
-            dataIndex: 'EFF_TS',
-            key: 'EFF_TS',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.EFF_TS - b?.EFF_TS,
-            },
-        },
-        {
-            title: 'Total Pressure(Pa)',
-            align: 'center',
-            dataIndex: 'PRTT',
-            key: 'PRTT',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.PRTT - b?.PRTT,
-            },
-        },
-        {
-            title: 'Static Pressure(Pa)',
-            align: 'center',
-            dataIndex: 'PRTS',
-            key: 'PRTS',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.PRTS - b?.PRTS,
-            },
-        },
-        {
-            title: 'LpA',
-            align: 'center',
-            dataIndex: 'LpA',
-            key: 'LpA',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.LpA - b?.LpA,
-            },
-        },
-        {
-            title: 'Lp',
-            align: 'center',
-            dataIndex: 'Lp',
-            key: 'Lp',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.Lp - b?.Lp,
-            },
-        },
-        {
-            title: 'LwAt',
-            align: 'center',
-            dataIndex: 'LwAt',
-            key: 'LwAt',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.LwAt - b?.LwAt,
-            },
-        },
-        {
-            title: 'Lwt',
-            align: 'center',
-            dataIndex: 'Lwt',
-            key: 'Lwt',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.Lwt - b?.Lwt,
-            },
-        },
-        {
-            title: 'LwAi',
-            align: 'center',
-            dataIndex: 'LwAi',
-            key: 'LwAi',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.LwAi - b?.LwAi,
-            },
-        },
-        {
-            title: 'Lwi',
-            align: 'center',
-            dataIndex: 'Lwi',
-            key: 'Lwi',
-            className: 'hidden',
-            sorter: {
-                compare: (a, b) => a?.Lwi - b?.Lwi,
-            },
-        },
-        {
-            title: 'Max Torque Required(Nm)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => (((record?.N_FAN * 1000) * 60) / (2 * 3.14 * record?.n)).toFixed(2),
-            sorter: {
-                compare: (a, b) => ((a?.N_FAN * 1000) * 60) / (2 * 3.14 * a?.n) - ((b?.N_FAN * 1000) * 60) / (2 * 3.14 * b?.n),
-            },
-        },
-        {
-            title: 'Total Efficiency(%)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => (record?.EFF_TT * 100).toFixed(2),
-            sorter: {
-                compare: (a, b) => a?.EFF_TT * 100 - b?.EFF_TT * 100,
-            },
-        },
-        {
-            title: 'Static Efficiency(%)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => ((((record?.g / global.fan_velocity_constant) * record?.p) / 1000) / record?.N_FAN).toFixed(2),
-            sorter: {
-                compare: (a, b) => (((a?.g / global.fan_velocity_constant) * a?.p) / 1000) / a?.N_FAN - (((b?.g / global.fan_velocity_constant) * b?.p) / 1000) / b?.N_FAN,
-            },
-        },
-        {
-            title: 'Inlet Sound Power Level(dbA)',
-            align: 'center',
-            dataIndex: 'LwAi',
-            key: 'LwAi',
-            sorter: {
-                compare: (a, b) => a?.LwAi - b?.LwAi,
-            },
-        },
-        {
-            title: 'Outlet Sound Power Level(dbA)',
-            align: 'center',
-            dataIndex: 'LwAi',
-            key: 'LwAi',
-            sorter: {
-                compare: (a, b) => a?.LwAi - b?.LwAi,
-            },
-        },
-        {
-            title: 'Sound Pressure Level(dbA)',
-            align: 'center',
-            dataIndex: 'LpA',
-            key: 'LpA',
-            sorter: {
-                compare: (a, b) => a?.LpA - b?.LpA,
-            },
-        },
-        {
-            title: 'Breakout Sound Power Level',
-            align: 'center',
-            key: Math.random(),
-            className: 'hidden'
-        },
-        {
-            title: 'Breakout Sound Pressure Level',
-            align: 'center',
-            key: Math.random(),
-            className: 'hidden'
-        },
-        {
-            title: 'Specific Fan Power(kw/m³s)',
-            align: 'center',
-            key: Math.random(),
-            render: (record) => (record?.N_FAN / (record?.g / global.fan_velocity_constant)).toFixed(2),
-            sorter: {
-                compare: (a, b) => a?.N_FAN / (a?.g / global.fan_velocity_constant) - b?.N_FAN / (b?.g / global.fan_velocity_constant),
-            },
-        }
-    ].filter(item => (item.diffuser == undefined || item.diffuser == diffuser));
-
     const _column = [
         {
             title: 'Action',
-            // dataIndex: 'unit_fan_id',
-            // key: 'unit_fan_id',
+            fixed: true,
+            width: 200,
             render: (record) => <div key={record?.unit_fan_id}>
                 <Radio value={record?.unit_fan_id} name='unit_fan_id' checked={record?.unit_fan_id == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record?.unit_fan_id)}></Radio>
-                <button className='btn btn-info mr-10' title='Check Motor' type='button' onClick={() => checkMotor(record)} ><img src={"../assets/images/electric-motor.png"} width={20} /></button>
+                <button className={record?.motor_id > 0 ? 'btn btn-info mr-10' : 'btn btn-light mr-10'} title='Check Motor' type='button' onClick={() => checkMotor(record)} ><img src={"../assets/images/electric-motor.png"} width={20} /></button>
                 <button className='btn btn-success' type='button' onClick={() => plotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
             </div>,
         },
@@ -398,30 +67,37 @@ const UnitData = () => {
             dataIndex: 'diameter',
             key: 'diameter',
             align: 'center',
+            fixed: true,
+            width: 150
         },
         {
             title: 'Angle(°)',
             dataIndex: 'angle',
             key: 'angle',
             align: 'center',
+            fixed: true,
+            width: 150
         },
         {
             title: 'Airflow(CFM)',
             dataIndex: 'air_flow',
             key: 'air_flow',
             align: 'center',
+            width: 150
         },
         {
             title: 'Pressure(Pa)',
             dataIndex: 'pressure',
             key: 'pressure',
             align: 'center',
+            width: 150
         },
         {
             title: 'Fan Velocity(m/s)',
             dataIndex: 'fan_velocity',
             key: 'fan_velocity',
             align: 'center',
+            width: 200,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -429,6 +105,7 @@ const UnitData = () => {
             dataIndex: 'velocity_pressure',
             key: 'velocity_pressure',
             align: 'center',
+            width: 200,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -436,6 +113,7 @@ const UnitData = () => {
             dataIndex: 'static_pressure',
             key: 'static_pressure',
             align: 'center',
+            width: 200,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -443,6 +121,7 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'fan_speed',
             key: 'fan_speed',
+            width: 150,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -450,12 +129,14 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'power',
             key: 'power',
+            width: 150
         },
         {
             title: 'Power VFD(kW)',
             align: 'center',
             dataIndex: 'power_vfd',
             key: 'power_vfd',
+            width: 150,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -463,76 +144,87 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'total_efficiency',
             key: 'total_efficiency',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Total Static Efficiency',
             align: 'center',
             dataIndex: 'total_static_efficiency',
             key: 'total_static_efficiency',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Total Pressure(Pa)',
             align: 'center',
             dataIndex: 'total_pressure',
             key: 'total_pressure',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Static Pressure(Pa)',
             align: 'center',
             dataIndex: 'static_pressure_prts',
             key: 'static_pressure_prts',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'LpA',
             align: 'center',
             dataIndex: 'lpa',
             key: 'lpa',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Lp',
             align: 'center',
             dataIndex: 'lp',
             key: 'lp',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'LwAt',
             align: 'center',
             dataIndex: 'lwat',
             key: 'lwat',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Lwt',
             align: 'center',
             dataIndex: 'lwt',
             key: 'lwt',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'LwAi',
             align: 'center',
             dataIndex: 'lwai',
             key: 'lwai',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Lwi',
             align: 'center',
             dataIndex: 'lwi',
             key: 'lwi',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Max Torque Required(Nm)',
             align: 'center',
             dataIndex: 'max_torque_required',
             key: 'max_torque_required',
+            width: 220,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -540,6 +232,7 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'total_efficiency_percentage',
             key: 'total_efficiency_percentage',
+            width: 200,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -547,6 +240,7 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'static_pressure_percentage',
             key: 'static_pressure_percentage',
+            width: 250,
             render: (record) => (record)?.toFixed(2),
         },
         {
@@ -554,41 +248,512 @@ const UnitData = () => {
             align: 'center',
             dataIndex: 'lwai',
             key: 'lwai',
+            width: 250
         },
         {
             title: 'Outlet Sound Power Level(dbA)',
             align: 'center',
             dataIndex: 'lwai',
             key: 'lwai',
+            width: 250
         },
         {
             title: 'Sound Pressure Level(dbA)',
             align: 'center',
             dataIndex: 'sound_pressure_level',
             key: 'sound_pressure_level',
+            width: 250
         },
         {
             title: 'Breakout Sound Power Level',
             align: 'center',
             dataIndex: 'breakout_sound_power_level',
             key: 'breakout_sound_power_level',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Breakout Sound Pressure Level',
             align: 'center',
             dataIndex: 'breakout_sound_pressure_level',
             key: 'breakout_sound_pressure_level',
-            className: 'hidden',
+            //className: 'hidden',
+            hidden: true,
         },
         {
             title: 'Specific Fan Power(kw/m³s)',
             align: 'center',
             dataIndex: 'specific_fan_power',
             key: 'specific_fan_power',
+            width: 250,
             render: (record) => (record)?.toFixed(2),
         },
-    ]
+    ].filter(item => !item.hidden);
+
+    const columns_ = [
+        {
+            title: 'Action',
+            fixed: true,
+            width: 200,
+            // key: 'pu_id',
+            render: (record) => <>
+                <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave} /></button>
+                <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} > <img src={"../assets/images/electric-motor.png"} width={20} /></button>
+                <button className='btn btn-success' type='button' onClick={() => checkPlotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
+            </>,
+        },
+        {
+            title: 'Diameter(mm)',
+            dataIndex: 'diameter',
+            key: 'diameter',
+            align: 'center',
+            fixed: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.diameter - b?.diameter
+            },
+        },
+        {
+            title: 'Angle(°)',
+            dataIndex: 'angle',
+            key: 'angle',
+            align: 'center',
+            fixed: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.angle - b?.angle
+            },
+        },
+        {
+            title: 'Airflow(CFM)',
+            dataIndex: 'air_flow',
+            key: 'air_flow',
+            align: 'center',
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.air_flow - b?.air_flow,
+            },
+        },
+        {
+            title: 'Pressure(Pa)',
+            dataIndex: 'pressure',
+            key: 'pressure',
+            align: 'center',
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.pressure - b?.pressure,
+            },
+        },
+        {
+            title: '*Fan Area',
+            key: Math.random(),
+            align: 'center',
+            width: 150,
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no':
+                        return (record?.fan_area)?.toFixed(2)
+                    case 'sd':
+                        return (record?.fan_area_sd)?.toFixed(2)
+                    case 'ld':
+                        return (record?.fan_area_ld)?.toFixed(2)
+                    default:
+                        return (record?.fan_area)?.toFixed(2)
+                }
+            },
+            sorter: {
+                compare: (a, b) => {
+                    switch (diffuser) {
+                        case 'no':
+                            return a?.fan_area - b?.fan_area;
+                        case 'sd':
+                            return a?.fan_area_sd - b?.fan_area_sd;
+                        case 'ld':
+                            return a?.fan_area_ld - b?.fan_area_ld;
+                        default:
+                            return a?.fan_area - b?.fan_area;
+                    }
+                }
+            },
+        },
+        {
+            title: 'Airflow(m3/s)',
+            dataIndex: 'air_flow_m3s',
+            key: 'air_flow_m3s',
+            align: 'center',
+            width: 150,
+            render: (record) => (record)?.toFixed(2),
+            sorter: {
+                compare: (a, b) => a?.air_flow_m3s - b?.air_flow_m3s,
+            },
+        },
+        {
+            title: 'Fan Velocity(m/s)',
+            align: 'center',
+            key: Math.random(),
+            width: 200,
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no':
+                        return (record?.fan_velocity)?.toFixed(2)
+                    case 'sd':
+                        return (record?.fan_velocity_sd)?.toFixed(2)
+                    case 'ld':
+                        return (record?.fan_velocity_ld)?.toFixed(2)
+                    default:
+                        return (record?.fan_velocity)?.toFixed(2)
+                }
+            },
+            sorter: {
+                compare: (a, b) => {
+                    switch (diffuser) {
+                        case 'no':
+                            return a?.fan_velocity - b?.fan_velocity;
+                        case 'sd':
+                            return a?.fan_velocity_sd - b?.fan_velocity_sd;
+                        case 'ld':
+                            return a?.fan_velocity_ld - b?.fan_velocity_ld;
+                        default:
+                            return a?.fan_velocity - b?.fan_velocity;
+                    }
+                }
+            },
+        },
+        {
+            title: 'Velocity Pressure(Pa)',
+            align: 'center',
+            key: Math.random(),
+            width: 200,
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no':
+                        return (record?.velocity_pressure)?.toFixed(2)
+                    case 'sd':
+                        return (record?.velocity_pressure_sd)?.toFixed(2)
+                    case 'ld':
+                        return (record?.fan_velocity_ld)?.toFixed(2)
+                    default:
+                        return (record?.velocity_pressure)?.toFixed(2)
+                }
+            },
+            sorter: {
+                compare: (a, b) => {
+                    switch (diffuser) {
+                        case 'no':
+                            return a?.velocity_pressure - b?.velocity_pressure;
+                        case 'sd':
+                            return a?.velocity_pressure_sd - b?.velocity_pressure_sd;
+                        case 'ld':
+                            return a?.velocity_pressure_ld - b?.velocity_pressure_ld;
+                        default:
+                            return a?.velocity_pressure - b?.velocity_pressure;
+                    }
+                }
+            },
+        },
+        {
+            title: 'Static Pressure(Pa)',
+            align: 'center',
+            key: Math.random(),
+            width: 200,
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no':
+                        return (record?.static_pressure)?.toFixed(2)
+                    case 'sd':
+                        return (record?.static_pressure_sd)?.toFixed(2)
+                    case 'ld':
+                        return (record?.static_pressure_ld)?.toFixed(2)
+                    default:
+                        return (record?.static_pressure)?.toFixed(2)
+                }
+            },
+            sorter: {
+                compare: (a, b) => {
+                    switch (diffuser) {
+                        case 'no':
+                            return a?.static_pressure - b?.static_pressure;
+                        case 'sd':
+                            return a?.static_pressure_sd - b?.static_pressure_sd;
+                        case 'ld':
+                            return a?.static_pressure_ld - b?.static_pressure_ld;
+                        default:
+                            return a?.static_pressure - b?.static_pressure;
+                    }
+                }
+            },
+        },
+        {
+            title: 'Fan Speed(rpm)',
+            align: 'center',
+            dataIndex: 'fan_speed',
+            key: 'fan_speed',
+            width: 150,
+            render: (record) => (record)?.toFixed(2),
+            sorter: {
+                compare: (a, b) => a?.fan_speed - b?.fan_speed,
+            },
+        },
+        {
+            title: 'Power(kW)',
+            align: 'center',
+            dataIndex: 'power',
+            key: 'power',
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.power - b?.power,
+            },
+        },
+        {
+            title: 'Power VFD(kW)',
+            align: 'center',
+            dataIndex: 'power_vfd',
+            key: 'power_vfd',
+            width: 150,
+            render: (record) => (record)?.toFixed(2),
+            sorter: {
+                compare: (a, b) => a?.power_vfd - b?.power_vfd,
+            },
+        },
+        {
+            title: 'Total Efficiency',
+            align: 'center',
+            dataIndex: 'total_efficiency',
+            key: 'total_efficiency',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.total_efficiency - b?.total_efficiency,
+            },
+        },
+        {
+            title: 'Total Static Efficiency',
+            align: 'center',
+            dataIndex: 'total_static_efficiency',
+            key: 'total_static_efficiency',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.total_static_efficiency - b?.total_static_efficiency,
+            },
+        },
+        {
+            title: 'Total Pressure(Pa)',
+            align: 'center',
+            dataIndex: 'total_pressure',
+            key: 'total_pressure',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.total_pressure - b?.total_pressure,
+            },
+        },
+        {
+            title: 'Static Pressure(Pa)',
+            align: 'center',
+            dataIndex: 'static_pressure_prts',
+            key: 'static_pressure_prts',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.static_pressure_prts - b?.static_pressure_prts,
+            },
+        },
+        {
+            title: 'LpA',
+            align: 'center',
+            dataIndex: 'lpa',
+            key: 'lpa',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.lpa - b?.lpa,
+            },
+        },
+        {
+            title: 'Lp',
+            align: 'center',
+            dataIndex: 'lp',
+            key: 'lp',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.lp - b?.lp,
+            },
+        },
+        {
+            title: 'LwAt',
+            align: 'center',
+            dataIndex: 'lwat',
+            key: 'lwat',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.lwat - b?.lwat,
+            },
+        },
+        {
+            title: 'Lwt',
+            align: 'center',
+            dataIndex: 'Lwt',
+            key: 'Lwt',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.lwt - b?.lwt,
+            },
+        },
+        {
+            title: 'LwAi',
+            align: 'center',
+            dataIndex: 'lwai',
+            key: 'lwai',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.lwai - b?.lwai,
+            },
+        },
+        {
+            title: 'Lwi',
+            align: 'center',
+            dataIndex: 'lwi',
+            key: 'lwi',
+            //className: 'hidden',
+            hidden: true,
+            width: 150,
+            sorter: {
+                compare: (a, b) => a?.lwi - b?.lwi,
+            },
+        },
+        {
+            title: 'Max Torque Required(Nm)',
+            align: 'center',
+            dataIndex: 'max_torque_required',
+            key: 'max_torque_required',
+            //className: 'hidden',  
+            //hidden: true,
+            width: 200,
+            render: (record) => (record)?.toFixed(2),
+            sorter: {
+                compare: (a, b) => a?.max_torque_required - b?.max_torque_required,
+            },
+        },
+        {
+            title: 'Total Efficiency(%)',
+            align: 'center',
+            dataIndex: 'total_efficiency_percentage',
+            key: 'total_efficiency_percentage',
+            //className: 'hidden',
+            //hidden: true,
+            width: 200,
+            render: (record) => (record)?.toFixed(2),
+            sorter: {
+                compare: (a, b) => a?.total_efficiency_percentage - b?.total_efficiency_percentage,
+            },
+        },
+        {
+            title: 'Static Efficiency(%)',
+            align: 'center',
+            key: Math.random(),
+            width: 200,
+            render: (record) => {
+                switch (diffuser) {
+                    case 'no':
+                        return (record?.static_pressure_percentage)?.toFixed(2)
+                    case 'sd':
+                        return (record?.static_pressure_percentage_sd)?.toFixed(2)
+                    case 'ld':
+                        return (record?.static_pressure_percentage_ld)?.toFixed(2)
+                    default:
+                        return (record?.static_pressure_percentage)?.toFixed(2)
+                }
+            },
+            sorter: {
+                compare: (a, b) => {
+                    switch (diffuser) {
+                        case 'no':
+                            return a?.static_pressure_percentage - b?.static_pressure_percentage;
+                        case 'sd':
+                            return a?.static_pressure_percentage_sd - b?.static_pressure_percentage_sd;
+                        case 'ld':
+                            return a?.static_pressure_percentage_ld - b?.static_pressure_percentage_ld;
+                        default:
+                            return a?.static_pressure_percentage - b?.static_pressure_percentage;
+                    }
+                }
+            },
+        },
+        {
+            title: 'Inlet Sound Power Level(dbA)',
+            align: 'center',
+            dataIndex: 'inlet_sound_power_level',
+            key: 'inlet_sound_power_level',
+            width: 250,
+            sorter: {
+                compare: (a, b) => a?.inlet_sound_power_level - b?.inlet_sound_power_level,
+            },
+        },
+        {
+            title: 'Outlet Sound Power Level(dbA)',
+            align: 'center',
+            dataIndex: 'outlet_sound_power_level',
+            key: 'outlet_sound_power_level',
+            width: 250,
+            sorter: {
+                compare: (a, b) => a?.outlet_sound_power_level - b?.outlet_sound_power_level,
+            },
+        },
+        {
+            title: 'Sound Pressure Level(dbA)',
+            align: 'center',
+            dataIndex: 'sound_pressure_level',
+            key: 'sound_pressure_level',
+            width: 250,
+            sorter: {
+                compare: (a, b) => a?.sound_pressure_level - b?.sound_pressure_level,
+            },
+        },
+        {
+            title: 'Breakout Sound Power Level',
+            align: 'center',
+            dataIndex: 'breakout_sound_power_level',
+            key: 'breakout_sound_power_level',
+            width: 150,
+            //className: 'hidden',
+            hidden: true,
+        },
+        {
+            title: 'Breakout Sound Pressure Level',
+            align: 'center',
+            dataIndex: 'breakout_sound_pressure_level',
+            key: 'breakout_sound_pressure_level',
+            width: 150,
+            //className: 'hidden',
+            hidden: true,
+        },
+        {
+            title: 'Specific Fan Power(kw/m³s)',
+            align: 'center',
+            dataIndex: 'specific_fan_power',
+            key: 'specific_fan_power',
+            width: 250,
+            render: (record) => (record)?.toFixed(2),
+            sorter: {
+                compare: (a, b) => a?.specific_fan_power - b?.specific_fan_power,
+            },
+        }
+    ].filter(item => !item.hidden);
+
 
     const [listData, setListData] = useState({
         data: [],
@@ -613,6 +778,8 @@ const UnitData = () => {
     });
 
     const searchfansdata = async (obj) => {
+        obj.created_by = loggedInUser?.emp_id;
+        obj.pu_id = id;
         setLoading(true);
         setListData((prev) => ({ ...prev, loading: true }));
         await FansDataService.searchfansdata(obj)
@@ -655,9 +822,12 @@ const UnitData = () => {
             .then(
                 (resp) => {
                     if (resp.is_success) {
-                        setUnit(
-                            resp?.data
-                        )
+                        let obj = resp?.data;
+                        obj.airflowwithunits = obj.airflow + " " + obj.airflow_luc_name;
+                        obj.pressurewithunits = obj.pressure + " " + obj.pressure_luc_name;
+                        obj.airflow_conversion_withunits = obj.airflow_conversion + " CFM";
+                        obj.pressure_conversion_withunits = obj.pressure_conversion + " Pa";
+                        setUnit(obj);
                     }
                     else {
                         setNotify((prev) => ({
@@ -737,22 +907,12 @@ const UnitData = () => {
         await FansDataService.getselectedfans(id)
             .then(
                 (resp) => {
-                    if (resp.is_success) {
-                        setListDataSelectedFans((prev) => ({
-                            ...prev,
-                            data: resp?.data,
-                            loading: false,
-                            pagination: false,
-                        }));
-                    }
-                    else {
-                        setNotify((prev) => ({
-                            ...prev, options: {
-                                type: "danger",
-                                message: resp?.message
-                            }, visible: true
-                        }));
-                    }
+                    setListDataSelectedFans((prev) => ({
+                        ...prev,
+                        data: resp?.data,
+                        loading: false,
+                        pagination: false,
+                    }));
                 },
                 (err) => {
                     setNotify((prev) => ({
@@ -829,68 +989,79 @@ const UnitData = () => {
     const saveselectedfandata = async (obj, event) => {
         setSelectedFan(
             {
-                diameter: obj?.mm,
-                angle: obj?.ang,
-                air_flow: obj?.g,
-                pressure: obj?.p,
+                diameter: obj?.diameter,
+                angle: obj?.angle,
+                air_flow: obj?.air_flow,
+                pressure: obj?.pressure,
                 fan_velocity: parseFloat((() => {
                     switch (diffuser) {
                         case 'no':
-                            return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
+                            return (obj?.fan_velocity)
                         case 'sd':
-                            return ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)
+                            return (obj?.fan_velocity_sd)
                         case 'ld':
-                            return ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)
+                            return (obj?.fan_velocity_ld)
                         default:
-                            return ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)
+                            return (obj?.fan_velocity)
                     }
                 })()),
                 velocity_pressure: parseFloat((() => {
                     switch (diffuser) {
                         case 'no':
-                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
+                            return (obj?.velocity_pressure)
                         case 'sd':
-                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area))
+                            return (obj?.velocity_pressure_sd)
                         case 'ld':
-                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area))
+                            return (obj?.fan_velocity_ld)
                         default:
-                            return (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area))
+                            return (obj?.velocity_pressure)
                     }
                 })()),
                 static_pressure: parseFloat((() => {
                     switch (diffuser) {
                         case 'no':
-                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
+                            return (obj?.static_pressure)
                         case 'sd':
-                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area) * ((obj?.g / global.fan_velocity_constant) / obj?.sd_area)))
+                            return (obj?.static_pressure_sd)
                         case 'ld':
-                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area) * ((obj?.g / global.fan_velocity_constant) / obj?.ld_area)))
+                            return (obj?.static_pressure_ld)
                         default:
-                            return (obj?.p - (global.fan_velocity_pressure * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area) * ((obj?.g / global.fan_velocity_constant) / obj?.fan_area)))
+                            return (obj?.static_pressure)
+                        }
+                })()),
+                fan_speed: Math.floor(obj?.fan_speed),
+                power: obj?.power,
+                power_vfd: obj?.power_vfd,
+                total_efficiency: obj?.total_efficiency,
+                total_static_efficiency: obj?.total_static_efficiency,
+                total_pressure: obj?.total_pressure,
+                static_pressure_prts: obj?.static_pressure_prts,
+                lpa: obj?.lpa,
+                lp: obj?.lp,
+                lwat: obj?.lwat,
+                lwt: obj?.lwt,
+                lwai: obj?.lwai,
+                lwi: obj?.lwi,
+                max_torque_required: obj?.max_torque_required,
+                total_efficiency_percentage: obj?.total_efficiency_percentage,
+                static_pressure_percentage: parseFloat((() => {
+                    switch (diffuser) {
+                        case 'no':
+                            return obj?.static_pressure_percentage
+                        case 'sd':
+                            return obj?.static_pressure_percentage_sd
+                        case 'ld':
+                            return obj?.static_pressure_percentage_ld
+                        default:
+                            return obj?.static_pressure_percentage  
                     }
                 })()),
-                fan_speed: obj?.n,
-                power: obj?.N_FAN,
-                power_vfd: (obj?.N_FAN * global.vfd_constant),
-                total_efficiency: obj?.EFF_TT,
-                total_static_efficiency: obj?.EFF_TS,
-                total_pressure: obj?.PRTT,
-                static_pressure_prts: obj?.PRTS,
-                lpa: obj?.LpA,
-                lp: obj?.Lp,
-                lwat: obj?.LwAt,
-                lwt: obj?.Lwt,
-                lwai: obj?.LwAi,
-                lwi: obj?.Lwi,
-                max_torque_required: (((obj?.N_FAN * 1000) * 60) / (2 * 3.14 * obj?.n)),
-                total_efficiency_percentage: (obj?.EFF_TT * 100),
-                static_pressure_percentage: ((((obj?.g / global.fan_velocity_constant) * obj?.p) / 1000) / obj?.N_FAN),
-                inlet_sound_power_level: obj?.LwAi,
-                outlet_sound_power_level: obj?.LwAi,
-                sound_pressure_level: obj?.LpA,
-                breakout_sound_power_level: null,
-                breakout_sound_pressure_level: null,
-                specific_fan_power: (obj?.N_FAN / (obj?.g / global.fan_velocity_constant)),
+                inlet_sound_power_level: obj?.inlet_sound_power_level,
+                outlet_sound_power_level: obj?.outlet_sound_power_level,
+                sound_pressure_level: obj?.sound_pressure_level,
+                breakout_sound_power_level: obj?.breakout_sound_power_level,
+                breakout_sound_pressure_level: obj?.breakout_sound_pressure_level,
+                specific_fan_power: obj?.specific_fan_power,
                 pu_id: id,
                 created_by: loggedInUser?.emp_id,
                 event: event
@@ -903,10 +1074,18 @@ const UnitData = () => {
     function toggleModal() {
         if (isOpen) {
             setPopupMode(null);
-            setImageData(null);
+            setImageData([]);
             onPageLoad();
         }
         setIsOpen(!isOpen);
+    }
+
+    function handleOK() {
+        debugger;
+        setIsOpen(!isOpen);
+        setPopupMode(null);
+        setImageData([]);
+        onPageLoad();
     }
 
     useEffect(() => {
@@ -914,6 +1093,17 @@ const UnitData = () => {
             toggleModal();
         }
     }, [popupMode]);
+
+    useEffect(() => {
+        if (listDataSelectedFans?.data?.length > 0) {
+            if (listDataSelectedFans?.data?.filter(item => (item?.unit_fan_id == unit?.unit_fan_id)).length > 0) {
+                if (listDataSelectedFans?.data?.filter(item => (item?.unit_fan_id == unit?.unit_fan_id))[0].motor_id) {
+                    setCheckSelectedFanMotor(listDataSelectedFans?.data?.filter(item => (item?.unit_fan_id == unit?.unit_fan_id))[0])
+                }
+
+            }
+        }
+    }, [listDataSelectedFans]);
 
     useEffect(() => {
         if (selectedFan) {
@@ -932,7 +1122,6 @@ const UnitData = () => {
         }
     }, [selectedFan]);
 
-
     const onPageLoad = () => {
         if (id) {
             getunitdatabyid();
@@ -946,7 +1135,6 @@ const UnitData = () => {
 
     useEffect(() => onPageLoad(), []);
 
-
     useEffect(() => {
         if (notify.visible) {
             setTimeout(() => { setNotify((prev) => ({ ...prev, visible: false })); }, 3000);
@@ -954,20 +1142,26 @@ const UnitData = () => {
     }, [notify]);
 
     const submit = async () => {
+        setLoading(true);
         await UnitService.saveselectedfandata(selectedFan)
             .then(
                 (resp) => {
                     if (resp.is_success) {
-                        setNotify((prev) => ({
-                            ...prev, options: {
-                                type: "success",
-                                message: resp?.message
-                            }, visible: true
+                        setAlert((prev) => ({
+                            ...prev, message: resp?.message, heading: "Saved"
                         }));
-                        onPageLoad();
+                        setPopupMode("alert");
                     }
+                    else {
+                        setAlert((prev) => ({
+                            ...prev, message: resp?.message, heading: "Already Exist"
+                        }));
+                        setPopupMode("alert");
+                    }
+                    setLoading(false);
                 },
                 (err) => {
+                    setLoading(false);
                     setNotify((prev) => ({
                         ...prev, options: {
                             type: "danger",
@@ -1012,11 +1206,11 @@ const UnitData = () => {
     };
 
     const checkMotor = (obj) => {
-        if(obj?.motor_id){
+        if (obj?.motor_id) {
             obj.event = "motordetail"
             setSelectedFan(obj);
         }
-        else{
+        else {
             obj.event = "selectmotor"
             setSelectedFan(obj);
         }
@@ -1030,29 +1224,32 @@ const UnitData = () => {
         }));
     }
 
-    const openGraph = (obj) => {
-        setSelectedFan(obj);
-        setPopupMode("graph");
-    }
-
-    const [imageData, setImageData] = useState(null);
+    const [imageData, setImageData] = useState([]);
 
 
     const plotgraph = async (sf) => {
-       
         setLoading(true);
         let obj = {
-          "diameter": sf?.diameter,
-          "airflow": sf?.air_flow,
-          "pressure": sf?.pressure,
+            "diameter": sf?.diameter,
+            "airflow": sf?.air_flow,
+            "pressure": sf?.pressure,
+            "rpm": Math.round(sf?.fan_speed)
         }
+        debugger;
         await FansDataService.generateorfetchfandatasheet(obj)
             .then(
                 (resp) => {
-                    console.log(resp);
-                    // const base64Image = `data:image/png;base64,${resp}`;
-                    setImageData(resp.data);
+                    debugger;
                     setLoading(false);
+                    if(resp?.is_success){
+                        setImageData(resp?.data);
+                    }
+                    else{
+                        setAlert((prev) => ({
+                            ...prev, message: resp?.message, heading: "Error"
+                        }));
+                        setPopupMode("alert");
+                    }
                 },
                 (err) => {
                     setLoading(false);
@@ -1064,39 +1261,61 @@ const UnitData = () => {
                     }));
                 }
             );
-        // await FansDataService.plotgraph(obj)
-        //     .then(
-        //         (resp) => {
-        //             const base64Image = `data:image/png;base64,${resp}`;
-        //             setImageData(base64Image);
-        //             setLoading(false);
-        //         },
-        //         (err) => {
-        //             setLoading(false);
-        //             setNotify((prev) => ({
-        //                 ...prev, options: {
-        //                     type: "danger",
-        //                     message: err?.message
-        //                 }, visible: true
-        //             }));
-        //         }
-        //     );
     };
 
 
     const checkPlotgraph = async (sf) => {
-        
         setLoading(true);
         let obj = {
-          "diameter": sf?.mm,
-          "airflow": sf?.g,
-          "pressure": sf?.p,
+            "diameter": sf?.diameter,
+            "airflow": sf?.air_flow,
+            "pressure": sf?.pressure,
+            "rpm": Math.floor(sf?.fan_speed)
         }
+       
         await FansDataService.plotgraph(obj)
             .then(
                 (resp) => {
-                    const base64Image = `data:image/png;base64,${resp}`;
-                    setImageData(base64Image);
+                    debugger;
+                    setLoading(false);
+                    if(resp?.is_success){
+                        setImageData(resp?.data);
+                    }
+                    else{
+                        setAlert((prev) => ({
+                            ...prev, message: resp?.message, heading: "Error"
+                        }));
+                        setPopupMode("alert");
+                    }
+                },
+                (err) => {
+                    setLoading(false);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
+            );
+    };
+
+    const generatefandatasheet = async (id) => {
+        setLoading(true);
+        await FansDataService.generatefandatasheet(id)
+            .then(
+                (resp) => {
+                    if (resp.is_success) {
+                        window.open(resp?.data, '_blank');
+                    }
+                    else {
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "danger",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
                     setLoading(false);
                 },
                 (err) => {
@@ -1112,8 +1331,8 @@ const UnitData = () => {
     };
 
     useEffect(() => {
-        
-        if (imageData) {
+
+        if (imageData?.length > 0) {
             setPopupMode("graph");
         }
     }, [imageData]);
@@ -1222,15 +1441,24 @@ const UnitData = () => {
                             {unit &&
                                 <UnitDataForm register={register} errors={errors} unit={unit} />
                             }
+                          
+                            {checkSelectedFanMotor &&
+                                <div className="" style={{ width: "100%", display: "inline-block", textAlign: "center", paddingTop: "20px", paddingBottom: "20px" }}>
+                                    <button className='btn btn-info mr-10' type='button' style={{ backgroundColor: "#5b65de", borderColor: "#5b65de" }}
+                                        onClick={() => { generatefandatasheet(unit?.pu_id); }} ><FontAwesomeIcon icon={faFilePdf} /> Generate Fan Data Sheet</button> </div>}
+
+
                             {listDataSelectedFans.data.length > 0 && <div style={{ paddingTop: "20px", paddingBottom: "20px" }}>
-                                <h5>Selected Fans</h5>
+                                <h4>Selected Fans</h4>
                                 <Table
                                     columns={_column}
                                     rowKey="unit_fan_id"
                                     dataSource={listDataSelectedFans.data}
                                     pagination={false}
                                     loading={listDataSelectedFans.loading}
-                                    scroll={{ x: "max-content" }}
+                                    //scroll={{ x: "max-content" }}
+                                    scroll={{ x: "750px", y: "600px" }}
+                                    useFixedHeader={true}
                                 />
                             </div>}
 
@@ -1268,7 +1496,7 @@ const UnitData = () => {
                                             checked={searchFanCriteria === "apd"}
                                         /> Airflow, Pressure, Diameter
                                     </label>
-                                    <label className="mr-40">
+                                    {/* <label className="mr-40">
                                         <input
                                             type='radio'
                                             className='mr-10'
@@ -1282,7 +1510,7 @@ const UnitData = () => {
                                             onChange={onChangeSearchFanValue}
                                             checked={searchFanCriteria === "apda"}
                                         /> Airflow, Pressure, Diameter & Angle
-                                    </label>
+                                    </label> */}
                                     <label className="mr-40">
                                         <input
                                             type='radio'
@@ -1298,7 +1526,7 @@ const UnitData = () => {
                                             checked={searchFanCriteria === "apdr"}
                                         /> Airflow, Pressure, Diameter Range
                                     </label>
-                                    <label className="mr-40">
+                                    {/* <label className="mr-40">
                                         <input
                                             type='radio'
                                             className='mr-10'
@@ -1312,7 +1540,7 @@ const UnitData = () => {
                                             onChange={onChangeSearchFanValue}
                                             checked={searchFanCriteria === "apdar"}
                                         />Airflow, Pressure, Diameter & Angle Range
-                                    </label>
+                                    </label> */}
                                 </div>
                             </div>
                             <div className="row">
@@ -1321,9 +1549,9 @@ const UnitData = () => {
                                     <input
                                         className="form-control"
                                         type="text"
-                                        name="airflow"
+                                        name="airflow_conversion_withunits"
                                         disabled={true}
-                                        {...register("airflow", {
+                                        {...register("airflow_conversion_withunits", {
                                             required: {
                                                 value: true,
                                             },
@@ -1335,9 +1563,9 @@ const UnitData = () => {
                                     <input
                                         className="form-control"
                                         type="text"
-                                        name="pressure"
+                                        name="pressure_conversion_withunits"
                                         disabled={true}
-                                        {...register("pressure", {
+                                        {...register("pressure_conversion_withunits", {
                                             required: {
                                                 value: true,
                                             },
@@ -1484,6 +1712,7 @@ const UnitData = () => {
                                 <button type="submit" className="btn btn-primary mr-10" onClick={handleSubmit(searchfansdata)}>Search</button>
                             </div>
                         </form>
+                        {notify?.visible && <Notify options={notify?.options} />}
                         {listData.display &&
                             <div>
                                 <div style={{ paddingTop: "20px", paddingBottom: "20px" }}>
@@ -1520,13 +1749,15 @@ const UnitData = () => {
                                 </div>
                                 {notify?.visible && <Notify options={notify?.options} />}
                                 <Table
-                                    columns={columns}
+                                    columns={columns_}
                                     className='fans-data'
-                                    rowKey="uuid"
+                                    rowKey="searched_unit_fan_id"
                                     dataSource={listData.data}
                                     pagination={false}
                                     loading={listData.loading}
-                                    scroll={{ x: "max-content" }}
+                                    // scroll={{ x: "max-content" }}
+                                    scroll={{ x: "750px", y: "600px" }}
+                                    useFixedHeader={true}
                                 />
                                 {notify?.visible && <Notify options={notify?.options} />}
                             </div>
@@ -1538,13 +1769,14 @@ const UnitData = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className={popupMode == "graph" ? "mygraphmodal" : "mymodal"}
+                className={popupMode == "graph" || popupMode == "alert" ? "mygraphmodal" : "mymodal"}
                 overlayClassName="myoverlay"
                 shouldCloseOnOverlayClick={false}
             >
+                {popupMode == "alert" && <Alert onClose={toggleModal} onOK={handleOK} heading={alert?.heading} message={alert?.message} />}
                 {popupMode == "selectmotor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
-                {popupMode == "motordetail" && <MotorsPopupDetail motor_id={selectedFan?.motor_id} onClose={toggleModal} changeMotor={changeMotor}/>}
+                {popupMode == "motordetail" && <MotorsPopupDetail motor_id={selectedFan?.motor_id} onClose={toggleModal} changeMotor={changeMotor} />}
                 {popupMode == "graph" && <GraphPopup onClose={toggleModal} selectedFan={selectedFan} imageData={imageData}></GraphPopup>}
             </Modal>
         </>

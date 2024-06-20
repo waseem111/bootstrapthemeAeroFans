@@ -19,6 +19,7 @@ const GraphPopup = (props) => {
       "diameter": selectedFan?.diameter,
       "airflow": selectedFan?.air_flow,
       "pressure": selectedFan?.pressure,
+      "rpm": Math.floor(selectedFan?.fan_speed)
     }
     await FansDataService.plotgraph(obj)
       .then(
@@ -50,7 +51,21 @@ const GraphPopup = (props) => {
       </div>
       <form>
         <div className="modal-body graph-modal">
-          <img src={imageData} alt="Base64 Image" style={{ width: "auto", height: "450px" }} />
+          <div className='row'>
+            <div className='col-md-6'>
+              <h3>GvP</h3>
+              <img src={imageData[0]?.base64} alt="Base64 Image" style={{ width: "auto", height: "420px" }} />
+            </div>
+            <div className='col-md-6'>
+              <h3>GvEFF</h3>
+              <img src={imageData[1]?.base64} alt="Base64 Image" style={{ width: "auto", height: "420px" }} />
+            </div>
+            <div className='col-md-6'>
+              <h3>GvN_FAN</h3>
+              <img src={imageData[2]?.base64} alt="Base64 Image" style={{ width: "auto", height: "420px" }} />
+            </div>
+          </div>
+
         </div>
         <div className="modal-footer">
           <button type="button" className="btn btn-light" onClick={() => { cancel(); }}>Cancel</button>

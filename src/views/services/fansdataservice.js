@@ -47,18 +47,29 @@ FansDataService.updatemotorforfan = (obj) =>
         });
 
 
-FansDataService.plotgraph = (query) =>
-    fetch({
-        url: `${global.fandata_api_url}plotgraph`,//"http://3.109.124.68/plotgraph",
-        method: "get",
-        params: query,
-    })
-        .then((data) => {
-            return data;
-        })
-        .catch((err) => {
-            return err;
-        });
+
+        FansDataService.plotgraph = (obj) =>
+        fetch
+            .put(`${endpoints.plotgraph}`, obj)
+            .then((data) => {
+                return data;
+            })
+            .catch((err) => {
+                return err;
+            });
+
+// FansDataService.plotgraph = (query) =>
+//     fetch({
+//         url: `${endpoints.plotgraph}`,//"http://3.109.124.68/plotgraph",
+//         method: "get",
+//         params: query,
+//     })
+//         .then((data) => {
+//             return data;
+//         })
+//         .catch((err) => {
+//             return err;
+//         });
 
 FansDataService.generatefandatasheet = (id) =>
     fetch

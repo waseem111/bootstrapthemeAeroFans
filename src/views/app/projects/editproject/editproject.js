@@ -20,6 +20,7 @@ import Confirmation from '../../../components/confirmation/confirmation';
 import LookupService from '../../../services/lookupservices';
 import Loader from '../../../components/loader/loader';
 import FansDataService from '../../../services/fansdataservice';
+import { global } from '../../../constants/global';
 
 Modal.setAppElement("#root")
 
@@ -155,17 +156,17 @@ const EditProject = () => {
             key: 'pu_id',
             render: (record) => <>
                 <button className='btn btn-primary mr-10' onClick={() => editToggleModal("edit", record)} ><FontAwesomeIcon icon={faEdit} /></button>
-                <button className='btn btn-danger mr-10' onClick={() =>{setSelectedId(record);toggleModal("delete")}} ><FontAwesomeIcon icon={faTrash} /></button>
-                <button className='btn btn-info mr-10' onClick={() =>{setUnit(JSON.parse(JSON.stringify(record)));toggleModal('single');}} ><FontAwesomeIcon icon={faClone} /></button>
-                
-                <button className='btn btn-success mr-10' onClick={() => navigate('/unitdata/'+record.pu_id)} >
+                <button className='btn btn-danger mr-10' onClick={() => { setSelectedId(record); toggleModal("delete") }} ><FontAwesomeIcon icon={faTrash} /></button>
+                <button className='btn btn-info mr-10' onClick={() => { setUnit(JSON.parse(JSON.stringify(record))); toggleModal('single'); }} ><FontAwesomeIcon icon={faClone} /></button>
+
+                <button className='btn btn-success mr-10' onClick={() => navigate('/unitdata/' + record.pu_id)} >
                     <img src={"../assets/images/fan.png"} width={20} />
                 </button>
-                {(record?.unit_fan_id && record?.motor_id) && <button className='btn btn-info mr-10' type='button' style={{backgroundColor:"#5b65de", borderColor:"#5b65de"}} onClick={() =>{generatefandatasheet(record?.pu_id);}} ><FontAwesomeIcon icon={faFilePdf} /></button>}
+                {(record?.unit_fan_id && record?.motor_id) && <button className='btn btn-info mr-10' type='button' style={{ backgroundColor: "#5b65de", borderColor: "#5b65de" }} onClick={() => { generatefandatasheet(record?.pu_id); }} ><FontAwesomeIcon icon={faFilePdf} /></button>}
             </>,
         },
     ];
-    
+
     const [listData, setListData] = useState({
         data: [],
         pagination: null,
@@ -188,7 +189,7 @@ const EditProject = () => {
                             data: resp?.data,
                         }));
                     }
-                    else{
+                    else {
                         setListData((prev) => ({ ...prev, data: [], loading: false }));
                     }
                 },
@@ -213,21 +214,21 @@ const EditProject = () => {
                     }
                     else {
                         setNotify((prev) => ({
-                          ...prev, options: {
-                            type: "danger",
-                            message: resp?.message
-                          }, visible: true
+                            ...prev, options: {
+                                type: "danger",
+                                message: resp?.message
+                            }, visible: true
                         }));
-                      }
-                    },
-                    (err) => {
-                      setNotify((prev) => ({
-                        ...prev, options: {
-                          type: "danger",
-                          message: err?.message
-                        }, visible: true
-                      }));
                     }
+                },
+                (err) => {
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: err?.message
+                        }, visible: true
+                    }));
+                }
             );
     };
 
@@ -323,31 +324,86 @@ const EditProject = () => {
                     const sheetName = workbook.SheetNames[0];
                     const worksheet = workbook.Sheets[sheetName];
                     const json = xlsx.utils.sheet_to_json(worksheet);
+                    debugger;
+                    console.log(json);
                     if ((json.every(obj => obj.hasOwnProperty('unit_name')))
                         && (json.every(obj => obj.hasOwnProperty('airflow')))
                         && (json.every(obj => obj.hasOwnProperty('pressure')))
+                        && (json.every(obj => obj.hasOwnProperty('airflow_unit')))
+                        && (json.every(obj => obj.hasOwnProperty('pressure_unit')))
+                        && (json.every(obj => obj.hasOwnProperty('pressure_type')))
                     ) {
+
                         var isTrue = json.every(obj => typeof obj?.airflow == "number") && json.every(obj => typeof obj?.pressure == "number");
-                        if (isTrue) {
-                            json.map(a => { a.created_by = loggedInUser?.emp_id; a.proj_id = id; a.com_id = project?.com_id; a.cb_id = project?.cb_id });
-                            setBulkUnits(json);
-                        }
-                        else {
+                        if (!isTrue) {
                             setBulkUnits([]);
                             setNotify((prev) => ({
                                 ...prev, options: {
                                     type: "danger",
-                                    message: "Incorrect excel file, Please upload format file"
+                                    message: "Airflow & Pressure value must be in number format"
                                 }, visible: true
                             }));
+                            return;
                         }
+                        
+
+                        const airflowUnits = ["CFM", "CMM", "m3/hr"];
+                        const pressureUnits = ["Pa", "inchH2O", "mmH2O"];
+                        const pressureTypes = ["Total", "Static"];
+
+                        const allObjectsContainAirflowUnitsValue = json.every(obj => {
+                            return airflowUnits.some(value => obj.airflow_unit.includes(value));
+                        });
+
+                        if (!allObjectsContainAirflowUnitsValue) {
+                            setBulkUnits([]);
+                            setNotify((prev) => ({
+                                ...prev, options: {
+                                    type: "danger",
+                                    message: "Invalid Airflow Unit Value"
+                                }, visible: true
+                            }));
+                            return;
+                        } 
+
+                        const allObjectsContainPresureUnitsValue = json.every(obj => {
+                            return pressureUnits.some(value => obj.pressure_unit.includes(value));
+                        });
+
+                        if (!allObjectsContainPresureUnitsValue) {
+                            setBulkUnits([]);
+                            setNotify((prev) => ({
+                                ...prev, options: {
+                                    type: "danger",
+                                    message: "Invalid Pressure Unit Value"
+                                }, visible: true
+                            }));
+                            return;
+                        } 
+
+                        const allObjectsContainPresureTypesValue = json.every(obj => {
+                            return pressureTypes.some(value => obj.pressure_type.includes(value));
+                        });
+
+                        if (!allObjectsContainPresureTypesValue) {
+                            setBulkUnits([]);
+                            setNotify((prev) => ({
+                                ...prev, options: {
+                                    type: "danger",
+                                    message: "Invalid Pressure Type Value"
+                                }, visible: true
+                            }));
+                            return;
+                        } 
+                        json.map(a => { a.created_by = loggedInUser?.emp_id; a.proj_id = id; a.com_id = project?.com_id; a.cb_id = project?.cb_id });
+                        setBulkUnits(json);
                     }
                     else {
                         setBulkUnits([]);
                         setNotify((prev) => ({
                             ...prev, options: {
                                 type: "danger",
-                                message: "Incorrect excel file, Please upload format file"
+                                message: "Invalid column names/value missing in the excel file uploaded"
                             }, visible: true
                         }));
                     }
@@ -361,6 +417,10 @@ const EditProject = () => {
 
         }
     }
+
+    const downloadSampleUpload = () => {
+        window.open( global.web_url + "testupload.xlsx", '_blank');
+    };
 
     const bulkaddunit = async () => {
         await UnitService.bulkaddunit(bulkUnits)
@@ -398,53 +458,61 @@ const EditProject = () => {
 
 
     const [selectedId, setSelectedId] = useState(null);
-  
+
 
     const handleDelete = async () => {
         await UnitService.deleteunit(selectedId.pu_id)
-          .then((resp) => {
-            if (resp.is_success) {
-                setSelectedId(null);
-                setIsOpen(false);
-                onPageLoad();
-              setNotify((prev) => ({
-                ...prev, options: {
-                  type: "success",
-                  message: resp?.message
-                }, visible: true
-              }));
-            }
-            else {
-                setSelectedId(null);
-              setNotify((prev) => ({
-                ...prev, options: {
-                  type: "danger",
-                  message: resp?.message
-                }, visible: true
-              }));
-            }
-    
-          })
-          .catch((err) => {
-            setSelectedId(null);
-            setNotify((prev) => ({
-              ...prev, options: {
-                type: "danger",
-                message: err?.message
-              }, visible: true
-            }));
-          });
-      };
+            .then((resp) => {
+                if (resp.is_success) {
+                    setSelectedId(null);
+                    setIsOpen(false);
+                    onPageLoad();
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "success",
+                            message: resp?.message
+                        }, visible: true
+                    }));
+                }
+                else {
+                    setSelectedId(null);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: resp?.message
+                        }, visible: true
+                    }));
+                }
 
-      const generatefandatasheet = async (id) => {
+            })
+            .catch((err) => {
+                setSelectedId(null);
+                setNotify((prev) => ({
+                    ...prev, options: {
+                        type: "danger",
+                        message: err?.message
+                    }, visible: true
+                }));
+            });
+    };
+
+    const generatefandatasheet = async (id) => {
         setLoading(true);
         await FansDataService.generatefandatasheet(id)
             .then(
                 (resp) => {
                     if (resp.is_success) {
-                        setLoading(false);
                         window.open(resp?.data, '_blank');
                     }
+                    else {
+                        setNotify((prev) => ({
+                            ...prev, options: {
+                                type: "danger",
+                                message: resp?.message
+                            }, visible: true
+                        }));
+                    }
+                    setLoading(false);
                 },
                 (err) => {
                     setLoading(false);
@@ -489,7 +557,7 @@ const EditProject = () => {
                     <div className="page-content" style={{ marginTop: "20px" }}>
                         <div style={{ display: "inline" }}>
                             <span className="page-title">Units</span>
-                            <button type="button" className="btn btn-primary mr-10 pull-right" onClick={() =>{setUnit(null);toggleModal('single');} } >Add Unit</button>
+                            <button type="button" className="btn btn-primary mr-10 pull-right" onClick={() => { setUnit(null); toggleModal('single'); }} >Add Unit</button>
                             <button type="button" className="btn btn-primary mr-10 pull-right" onClick={() => toggleModal('bulk')}
                                 style={{ backgroundColor: "#9ec023", borderColor: "#9ec023" }}>Upload Units</button>
                         </div>
@@ -505,10 +573,10 @@ const EditProject = () => {
                         onRequestClose={toggleModal}
                         contentLabel="My dialog"
                         overlayClassName="myoverlay"
-                        className={popupDisplay == "delete" ? "mydeletemodal" : "mymodal"}
+                        className={popupDisplay == "delete" || popupDisplay == "bulk" ? "mydeletemodal" : "mymodal"}
                         shouldCloseOnOverlayClick={false}
                     >
-                        {popupDisplay == "delete" && <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId}/>}
+                        {popupDisplay == "delete" && <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId} />}
                         {popupDisplay == "edit" && <div><EditUnit project={project} unit={unit} loggedInUser={loggedInUser} lookupUnitConversion={lookupUnitConversion} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}
                         {popupDisplay == "single" && <div><Addunits project={project} loggedInUser={loggedInUser} unit={unit} lookupUnitConversion={lookupUnitConversion} onClose={toggleModal} onSubmit={handleUnitSubmit} /></div>}
                         {popupDisplay == "bulk" && <div>
@@ -520,6 +588,7 @@ const EditProject = () => {
                                 <div className="modal-body">
                                     {notify?.visible && <Notify options={notify?.options} />}
                                     <div className="row">
+                                        <div className="col-md-12">  <button type="button" className="btn btn-link" onClick={() => { downloadSampleUpload(); }} style={{ float: "right" }}>Sample Upload</button></div>
                                         <div className="form-group col-md-12">
                                             <label>Upload File</label>
                                             <input

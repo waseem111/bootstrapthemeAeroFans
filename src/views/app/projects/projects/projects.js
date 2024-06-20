@@ -14,7 +14,8 @@ Modal.setAppElement("#root");
 const Projects = () => {
     const navigate = useNavigate();
     const { id } = useParams();
-
+    const [selectedCompany, setSelectedCompany] = useState(null);
+    const [selectedBranch, setSelectedBranch] = useState(null);
     const [notify, setNotify] = useState({ options: [], visible: false });
 
     const columns = [
@@ -77,6 +78,7 @@ const Projects = () => {
                         pagination.total = resp?.count;
                         pagination.current = resp?.current_page;
                         pagination.pageSize = pagination.pageSize === undefined ? 10 : pagination.pageSize;
+                       
                         setListData((prev) => ({
                             ...prev,
                             data: resp?.data,
@@ -145,7 +147,7 @@ const Projects = () => {
             .then(
                 (resp) => {
                     if (resp.is_success) {
-                        setBranches(resp?.data);
+                        setLookupBranches(resp?.data);
                     }
                     else {
                         setNotify((prev) => ({
@@ -195,9 +197,12 @@ const Projects = () => {
         }
     }, [listData]);
 
-    const handleCompanyFilter = (e) => {
+    const handleCompanyFilter = (e, h) => {
         const filters = { ...listData.filter };
         filters.com_id = e.target.value;
+        filters.cb_id = null;
+        setSelectedCompany(e.target.value);
+        setSelectedBranch(null);
         setListData((prev) => ({
             ...prev,
             tableChange: true,
@@ -206,10 +211,22 @@ const Projects = () => {
 
     }
 
+    const handleBranchFilter = (e, h) => {
+        const filters = { ...listData.filter };
+        filters.cb_id = e.target.value;
+        setSelectedBranch(e.target.value);
+        setListData((prev) => ({
+            ...prev,
+            tableChange: true,
+            filter: filters,
+        }));
+
+    }
 
     const onPageLoad = () => {
         Promise.all([
             getcompanies(),
+            getbranches()
         ]).then(() => {
             if (id) {
                 const filters = { ...listData.filter };
@@ -330,10 +347,10 @@ const Projects = () => {
                                     className="form-control"
                                     defaultValue=""
                                     name="cb_id"
-                                    onChange={(e) => handleCompanyFilter(e)}
+                                    onChange={(e) => handleBranchFilter(e)}
                                 >
                                     <option value="" >Select Company</option>
-                                    {lookupBranches?.map((elm) => (
+                                    {lookupBranches?.filter(item => item.com_id == selectedCompany).map((elm) => (
                                         <option key={elm.cb_id} value={elm.cb_id}>
                                             {elm.com_branch_name}
                                         </option>

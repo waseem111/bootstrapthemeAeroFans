@@ -103,7 +103,7 @@ const Dashboard = () => {
                         </div>
                     </div>
 
-                    <div className="alert alert-primary" role="alert">
+                    {/* <div className="alert alert-primary" role="alert">
                         This is a primary alert with <a href="#" className="alert-link">an example link</a>. Give it a click if you like.
                     </div>
                     <div className="alert alert-secondary" role="alert">
@@ -126,7 +126,7 @@ const Dashboard = () => {
                     </div>
                     <div className="alert alert-dark" role="alert">
                         This is a dark alert with <a href="#" className="alert-link">an example link</a>. Give it a click if you like.
-                    </div>
+                    </div> */}
                 </div>
             </main>
         </>
