@@ -41,7 +41,7 @@ export const endpoints = {
     getunitdatabyid: global.api_url + "unitdata/",
     saveselectedfandata: global.api_url + "selected_fan_data/create",
     getselectedfans: global.api_url +"unit/selectedfans/",
-
+    deleteselectedfan:  global.api_url + "selectedfan/delete/",
     //motors
     getmotors: global.api_url + "motors",
     getmotorbyid: global.api_url + "motor/",

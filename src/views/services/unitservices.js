@@ -31,16 +31,16 @@ UnitService.getunitbyid = (id) =>
         });
 
 UnitService.getunitdatabyid = (id) =>
-        fetch({
-            url: `${endpoints.getunitdatabyid}${id}`,
-            method: "get",
+    fetch({
+        url: `${endpoints.getunitdatabyid}${id}`,
+        method: "get",
+    })
+        .then((data) => {
+            return data;
         })
-            .then((data) => {
-                return data;
-            })
-            .catch((err) => {
-                return err;
-            });
+        .catch((err) => {
+            return err;
+        });
 
 
 UnitService.addunit = (obj) =>
@@ -75,25 +75,36 @@ UnitService.bulkaddunit = (obj) =>
             return err;
         });
 
-        UnitService.deleteunit = (id) =>
-        fetch
-            .get(`${endpoints.deleteunit}${id}`)
-            .then((data) => {
-                return data;
-            })
-            .catch((err) => {
-                return err;
-            });
-            
-    UnitService.saveselectedfandata = (obj) =>
-        fetch
-            .post(`${endpoints.saveselectedfandata}`, obj)
-            .then((data) => {
-                return data;
-            })
-            .catch((err) => {
-                return err;
-            });
+UnitService.deleteunit = (id) =>
+    fetch
+        .get(`${endpoints.deleteunit}${id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+UnitService.saveselectedfandata = (obj) =>
+    fetch
+        .post(`${endpoints.saveselectedfandata}`, obj)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
+
+
+UnitService.deleteselectedfan = (unit_fan_id, pu_id) =>
+    fetch
+        .get(`${endpoints.deleteselectedfan}${unit_fan_id}/${pu_id}`)
+        .then((data) => {
+            return data;
+        })
+        .catch((err) => {
+            return err;
+        });
 
 
 export default UnitService;

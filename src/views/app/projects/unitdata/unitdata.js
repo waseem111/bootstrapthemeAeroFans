@@ -8,7 +8,7 @@ import CompanyService from '../../../services/companyservices';
 import authContext from '../../../../auth-context';
 import ProjectForm from '../../../components/forms/projectform';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilePdf, faSave, faChartArea } from '@fortawesome/fontawesome-free-solid'
+import { faFilePdf, faSave, faChartArea, faTrash } from '@fortawesome/fontawesome-free-solid'
 import * as xlsx from "xlsx";
 import UnitService from '../../../services/unitservices';
 import LookupService from '../../../services/lookupservices';
@@ -23,6 +23,7 @@ import GraphPopup from '../../../components/graph/graphpopup';
 import Loader from '../../../components/loader/loader';
 import MotorsPopupDetail from '../../motors/motorspopup/motorspopupdetail';
 import Alert from '../../../components/alert/alert';
+import Confirmation from '../../../components/confirmation/confirmation';
 const UnitData = () => {
     const { token, userLogin, logout, isLoggedIn, loggedInUser } = useContext(authContext);
     const navigate = useNavigate();
@@ -41,6 +42,8 @@ const UnitData = () => {
     const [selectedFan, setSelectedFan] = useState(null);
     const [checkSelectedFanMotor, setCheckSelectedFanMotor] = useState(null);
     const [popupMode, setPopupMode] = useState(null);
+    const [selectedId, setSelectedId] = useState(null);
+
     const {
         register,
         watch,
@@ -51,15 +54,17 @@ const UnitData = () => {
     } = useForm({ mode: "all" });
 
 
+
     const _column = [
         {
             title: 'Action',
             fixed: true,
-            width: 200,
+            width: 220,
             render: (record) => <div key={record?.unit_fan_id}>
                 <Radio value={record?.unit_fan_id} name='unit_fan_id' checked={record?.unit_fan_id == unit?.unit_fan_id} onClick={() => setfanfromselectedfans(record?.unit_fan_id)}></Radio>
                 <button className={record?.motor_id > 0 ? 'btn btn-info mr-10' : 'btn btn-light mr-10'} title='Check Motor' type='button' onClick={() => checkMotor(record)} ><img src={"../assets/images/electric-motor.png"} width={20} /></button>
-                <button className='btn btn-success' type='button' onClick={() => plotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
+                <button className='btn btn-success mr-10' type='button' onClick={() => plotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
+                <button className='btn btn-danger' type='button' onClick={() => { setSelectedId(record);}} ><FontAwesomeIcon icon={faTrash} /></button>
             </div>,
         },
         {
@@ -299,6 +304,7 @@ const UnitData = () => {
             render: (record) => <>
                 <button className='btn btn-primary mr-10' title='Save Fan' onClick={() => saveselectedfandata(record, "save")} ><FontAwesomeIcon icon={faSave} /></button>
                 <button className='btn btn-info mr-10' title='Check Motor' onClick={() => saveselectedfandata(record, "motor")} > <img src={"../assets/images/electric-motor.png"} width={20} /></button>
+                
                 <button className='btn btn-success' type='button' onClick={() => checkPlotgraph(record)} title='Show Graph'><FontAwesomeIcon icon={faChartArea} /></button>
             </>,
         },
@@ -1075,6 +1081,7 @@ const UnitData = () => {
         if (isOpen) {
             setPopupMode(null);
             setImageData([]);
+            setSelectedId(null);
             onPageLoad();
         }
         setIsOpen(!isOpen);
@@ -1329,6 +1336,50 @@ const UnitData = () => {
                 }
             );
     };
+
+
+    const handleDelete = async () => {
+        await UnitService.deleteselectedfan(selectedId?.unit_fan_id, selectedId?.pu_id)
+            .then((resp) => {
+                if (resp.is_success) {
+                    setSelectedId(null);
+                    setIsOpen(false);
+                    onPageLoad();
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "success",
+                            message: resp?.message
+                        }, visible: true
+                    }));
+                }
+                else {
+                    setSelectedId(null);
+                    setNotify((prev) => ({
+                        ...prev, options: {
+                            type: "danger",
+                            message: resp?.message
+                        }, visible: true
+                    }));
+                }
+
+            })
+            .catch((err) => {
+                setSelectedId(null);
+                setNotify((prev) => ({
+                    ...prev, options: {
+                        type: "danger",
+                        message: err?.message
+                    }, visible: true
+                }));
+            });
+    };
+
+    useEffect(() => {
+
+        if (selectedId) {
+            setPopupMode("delete");
+        }
+    }, [selectedId]);
 
     useEffect(() => {
 
@@ -1769,10 +1820,11 @@ const UnitData = () => {
                 isOpen={isOpen}
                 onRequestClose={toggleModal}
                 contentLabel="My dialog"
-                className={popupMode == "graph" || popupMode == "alert" ? "mygraphmodal" : "mymodal"}
+                className={popupMode == "graph" || popupMode == "alert" || popupMode == "delete"? "mygraphmodal" : "mymodal"}
                 overlayClassName="myoverlay"
                 shouldCloseOnOverlayClick={false}
             >
+                {popupMode == "delete" && <Confirmation onClose={toggleModal} onDelete={handleDelete} notification={notify} id={selectedId} />}
                 {popupMode == "alert" && <Alert onClose={toggleModal} onOK={handleOK} heading={alert?.heading} message={alert?.message} />}
                 {popupMode == "selectmotor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
                 {popupMode == "motor" && <MotorsPopup onClose={toggleModal} selectedFan={selectedFan}></MotorsPopup>}
